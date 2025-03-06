@@ -1,11 +1,14 @@
 import React from "react";
-import { Button } from "~/components/ui/button";
+import UploadArea from "./UploadArea";
+import UploadFileList from "./UploadFileList";
 
 const UploadSection = () => {
   return (
-    <div>
-      <Button>Upload file in this area</Button>
+    <div className="flex">
+      <UploadArea/>
+      <UploadFileList/>
     </div>
+    
   );
 };
 
