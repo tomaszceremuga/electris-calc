@@ -4,6 +4,7 @@ const FormSection = () => {
   return (
     <div>
       <p>Formularz</p>
+      <p>cos 123</p>
     </div>
   );
 };
