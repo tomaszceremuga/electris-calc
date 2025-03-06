@@ -5,6 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import UploadSection from "./UploadSection";
+import FormSection from "./FormSection";
+import SummarySection from "./SummarySection";
 
 export function MainAccordion() {
   return (
@@ -20,14 +22,14 @@ export function MainAccordion() {
         <AccordionItem value="item-2" className="border-b">
           <AccordionTrigger>Formularz</AccordionTrigger>
           <AccordionContent>
-            Yes. It adheres to the WAI-ARIA design pattern.
+            <FormSection />
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="item-3">
           <AccordionTrigger>Podsumowanie</AccordionTrigger>
           <AccordionContent>
-            Yes. It adheres to the WAI-ARIA design pattern.
+            <SummarySection />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
