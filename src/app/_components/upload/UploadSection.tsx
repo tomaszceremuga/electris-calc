@@ -4,7 +4,7 @@ import UploadFileList from "./UploadFileList";
 
 const UploadSection = () => {
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <UploadArea/>
       <UploadFileList/>
     </div>
