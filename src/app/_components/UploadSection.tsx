@@ -5,7 +5,6 @@ const UploadSection = () => {
   return (
     <div>
       <Button>Upload file in this area</Button>
-      <p>New line</p>
     </div>
   );
 };
