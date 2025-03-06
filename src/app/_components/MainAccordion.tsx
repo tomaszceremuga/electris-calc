@@ -4,9 +4,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import UploadSection from "./UploadSection";
-import FormSection from "./FormSection";
-import SummarySection from "./SummarySection";
+import UploadSection from "./upload/UploadSection";
+import FormSection from "./form/FormSection";
+import SummarySection from "./summary/SummarySection";
 
 export function MainAccordion() {
   return (
