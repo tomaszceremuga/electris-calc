@@ -14,8 +14,8 @@ const DeliveryOptions = () => {
           <Label htmlFor="option-two">Option Two</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="option-two" id="option-two" />
-          <Label htmlFor="option-two">Option Three</Label>
+          <RadioGroupItem value="option-three" id="option-three" />
+          <Label htmlFor="option-three">Option Three</Label>
         </div>
       </RadioGroup>
     </div>
