@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 const UploadSection = () => {
   return (
     <div>
-      <Button>przycisk</Button>
+      <Button>Upload file in this area</Button>
     </div>
   );
 };
