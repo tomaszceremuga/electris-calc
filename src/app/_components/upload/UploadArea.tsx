@@ -19,8 +19,9 @@ const UploadArea = () => {
             />
           </svg>
         </button>
+        <Button className="mt-6 bg-zinc-600 absolute bottom-4">Wybierz plik</Button>
       </div>
-      <Button className="mt-6 bg-zinc-600">Wybierz plik</Button>
+      
     </div>
   
     
