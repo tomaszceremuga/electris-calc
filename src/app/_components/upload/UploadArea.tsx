@@ -1,8 +1,27 @@
+"use client"
 import React from "react";
 import { Button } from "~/components/ui/button";
-import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
+
 
 const UploadArea = () => {
+
+  const getDate = ():string => {
+    const actualDate=new Date()
+    const formatDate= actualDate.toLocaleDateString("pl-PL",{
+      weekday: "long", 
+      day: "numeric", 
+      month: "long", 
+      year: "numeric", 
+      hour: "2-digit", 
+      minute: "2-digit"   
+    })
+    return formatDate.replace(/^(\w)/, (match) => match.toUpperCase())
+    .replace(/ (\d+) /, ", $1 ") 
+    .replace(/ (\d{4}) /, ", $1, ");
+  }
+  
+
   return (
     <div className="flex flex-col items-center justify-center border-4 border-dashed bg-neutral-100 w-72 h-72 p-4">
           <button className="mb-4">
@@ -13,7 +32,11 @@ const UploadArea = () => {
               />
             </svg>
           </button>
-          <Button >Wybierz plik</Button>
+          <Button onClick={()=>{
+            toast("Plik został wczytany",{
+              description:getDate()
+            })
+          }}>Wybierz plik</Button>
         </div>
     
     
