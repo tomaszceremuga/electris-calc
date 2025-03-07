@@ -15,6 +15,7 @@ import RadioElements from "./RadioElements";
 import SelectElement from "./SelectElement";
 import TextAreaElement from "./TextAreaElement";
 import UploadElement from "./UploadElement";
+import QuantityElement from "./QuantityElement";
 
 const FormSection = () => {
   return (
@@ -47,6 +48,7 @@ const FormSection = () => {
         info="cos tu jest cos tu jest cos tu jest"
         description="Prześlij jakiś bardzo fajny rysunek"
       />
+      <QuantityElement name="Podaj ilość" />
     </div>
   );
 };

@@ -25,7 +25,7 @@ const SelectElement: React.FC<SelectGroupProps> = ({
   return (
     <div>
       <div className="mb-3 mt-2 flex flex-wrap items-center">
-        <div className="ml-2 flex flex-wrap gap-2">
+        <div className="ml-2 w-full">
           <div className="flex items-center">
             <p className="flex flex-wrap items-center whitespace-nowrap text-wrap p-[6px] text-base">
               {isImportant && <span className="mr-1 text-red-500">*</span>}
@@ -33,18 +33,20 @@ const SelectElement: React.FC<SelectGroupProps> = ({
             </p>
             {info != "" && <InfoButton info={info} />}
           </div>
-          <Select>
-            <SelectTrigger className="w-full max-w-80">
-              <SelectValue placeholder="Wybierz opcję..." />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((option, index) => (
-                <SelectItem key={index} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="ml-5 w-full max-w-80">
+            <Select>
+              <SelectTrigger className="w-full max-w-80">
+                <SelectValue placeholder="Wybierz opcję..." />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((option, index) => (
+                  <SelectItem key={index} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
     </div>
