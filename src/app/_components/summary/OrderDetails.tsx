@@ -8,20 +8,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 const OrderDetails = () => {
   return (
-    <div>
+    <div className="w-full">
       <AlertDialog>
-        <AlertDialogTrigger className="rounded-lg bg-neutral-950 px-4 py-2 text-sm font-medium text-neutral-50 transition-all hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-700 active:bg-neutral-700">
-          ZOBACZ SZCZEGÓŁY ZAMÓWIENIA
+        <AlertDialogTrigger asChild>
+          <Button variant="default" className="w-full">
+            SZCZEGÓŁY ZAMÓWIENIA
+          </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>SZCZEGÓŁY ZAMÓWIENIA</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              <p>Data zamówienia: 07.03.2025</p>
+              <p>RESZTA BĘDZIE Z SEKCJI FORMULARZA</p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
