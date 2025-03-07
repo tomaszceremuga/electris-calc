@@ -1,5 +1,5 @@
 import "~/styles/globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
-        <Toaster className=""/>
+        <Toaster className="" />
       </body>
     </html>
   );

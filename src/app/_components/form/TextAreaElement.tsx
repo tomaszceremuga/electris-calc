@@ -14,7 +14,7 @@ const TextAreaElement: React.FC<TextAreaProps> = ({
   isImportant = "",
 }) => {
   return (
-    <div className="mb-5 p-2">
+    <div className="p-2">
       <div className="flex items-center">
         <p className="whitespace-nowrap p-[6px] text-base">
           {isImportant && <span className="mr-1 text-red-500">*</span>}

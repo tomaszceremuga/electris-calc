@@ -55,6 +55,9 @@ const UploadElement: React.FC<UploadElementProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
+      toast("Plik został dodany", {
+        description: getDate(),
+      });
       setFiles((prev) => [...prev, ...newFiles]);
     }
   };
@@ -72,9 +75,10 @@ const UploadElement: React.FC<UploadElementProps> = ({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
+
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const newFiles = Array.from(e.dataTransfer.files);
-      toast("Plik został wczytany", {
+      toast("Plik został dodany", {
         description: getDate(),
       });
       setFiles((prev) => [...prev, ...newFiles]);
@@ -83,6 +87,9 @@ const UploadElement: React.FC<UploadElementProps> = ({
 
   const handleRemoveFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
+    toast("Plik został usunięty", {
+      description: getDate(),
+    });
   };
 
   const handleUploadClick = () => {
