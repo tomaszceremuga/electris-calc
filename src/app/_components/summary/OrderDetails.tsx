@@ -11,6 +11,14 @@ import {
 import { Button } from "@/components/ui/button";
 
 const OrderDetails = () => {
+  const getCurrentDate = () => {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // January is 0
+    const year = today.getFullYear();
+
+    return `${day}.${month}.${year}`;
+  };
   return (
     <div className="w-full">
       <AlertDialog>
@@ -23,7 +31,7 @@ const OrderDetails = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>SZCZEGÓŁY ZAMÓWIENIA</AlertDialogTitle>
             <AlertDialogDescription>
-              <p>Data zamówienia: 07.03.2025</p>
+              <p>Data zamówienia: {getCurrentDate()}</p>
               <p>RESZTA BĘDZIE Z SEKCJI FORMULARZA</p>
             </AlertDialogDescription>
           </AlertDialogHeader>
