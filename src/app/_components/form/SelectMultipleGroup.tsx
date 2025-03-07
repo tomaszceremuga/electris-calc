@@ -1,25 +1,31 @@
 import React from "react";
 
 import { Toggle } from "@/components/ui/toggle";
+import InfoButton from "./InfoButton";
 
 interface SelectGroupProps {
   name: string;
+  info?: string;
   options: string[];
   isImportant?: boolean;
 }
 
 const SelectMultipleGroup: React.FC<SelectGroupProps> = ({
   name,
+  info = "",
   options,
   isImportant = false,
 }) => {
   return (
-    <div className="mb-3 flex flex-wrap items-center">
+    <div className="mb-5 flex flex-wrap items-center">
       <div className="ml-2 flex flex-wrap gap-2">
-        <p className="whitespace-nowrap p-[6px] text-base">
-          {isImportant && <span className="mr-1 text-red-500">*</span>}
-          {name}
-        </p>
+        <div className="flex items-center">
+          <p className="whitespace-nowrap p-[6px] text-base">
+            {isImportant && <span className="mr-1 text-red-500">*</span>}
+            {name}
+          </p>
+          {info != "" && <InfoButton info={info} />}{" "}
+        </div>
         {options.map((option, index) => (
           <Toggle key={index} size="sm" variant={"outline"}>
             {option}

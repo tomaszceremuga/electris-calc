@@ -1,14 +1,17 @@
 "use client";
 import React, { useState } from "react";
+import InfoButton from "./InfoButton";
 
 interface SelectGroupProps {
   name: string;
+  info?: string;
   options: string[];
   isImportant?: boolean;
 }
 
 const SelectGroup: React.FC<SelectGroupProps> = ({
   name,
+  info = "",
   options,
   isImportant = false,
 }) => {
@@ -21,10 +24,13 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
   return (
     <div className="mb-3 flex flex-wrap items-center">
       <div className="ml-2 flex flex-wrap gap-2">
-        <p className="whitespace-nowrap p-[6px] text-base">
-          {isImportant && <span className="mr-1 text-red-500">*</span>}
-          {name}
-        </p>
+        <div className="flex items-center">
+          <p className="flex items-center whitespace-nowrap p-[6px] text-base">
+            {isImportant && <span className="mr-1 text-red-500">*</span>}
+            {name}
+          </p>
+          {info != "" && <InfoButton info={info} />}
+        </div>
         {options.map((option, index) => (
           <button
             key={index}

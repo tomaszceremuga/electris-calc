@@ -2,11 +2,12 @@ import React from "react";
 
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import InfoTooltip from "./InfoTooltip";
+import InfoButton from "./InfoButton";
 
 interface RadioElementsProps {
   name: string;
   description?: string;
+  info?: string;
   options: string[];
   isImportant?: boolean;
 }
@@ -14,16 +15,19 @@ interface RadioElementsProps {
 const RadioElements: React.FC<RadioElementsProps> = ({
   name,
   description = "",
+  info = "",
   options,
   isImportant = false,
 }) => {
   return (
     <div className="mb-5 p-2">
-      <InfoTooltip>pomoc tu jest</InfoTooltip>
-      <p className="whitespace-nowrap p-[6px] text-base">
-        {isImportant && <span className="mr-1 text-red-500">*</span>}
-        {name}
-      </p>
+      <div className="flex items-center">
+        <p className="whitespace-nowrap p-[6px] text-base">
+          {isImportant && <span className="mr-1 text-red-500">*</span>}
+          {name}
+        </p>
+        {info != "" && <InfoButton info={info} />}{" "}
+      </div>
       {description != "" && (
         <p className="ml-5 pb-1 text-neutral-500">{description}</p>
       )}
