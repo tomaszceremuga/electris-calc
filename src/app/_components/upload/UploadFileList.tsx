@@ -5,17 +5,16 @@ import UploadElement from "./UploadElement"
 
 const UploadFileList = () => {
   return (
-  
-    <div className=" ml-8">
-      <p className="text-[20px] font-bold mb-4">WCZYTANE PLIKI</p> 
-        <ul>
-          <UploadElement/>
-          <UploadElement/>
-          <UploadElement/>
-          <UploadElement/>
-          <UploadElement/>
-        </ul>
+    <div className=" p-4 rounded-lg  w-full">
+    <p className="text-lg font-semibold mb-2">WCZYTANE PLIKI</p>
+    <div className="space-y-2">
+      <UploadElement/>
+      <UploadElement/>
+      <UploadElement/>
+      <UploadElement/>
     </div>
+  </div>
+
   )
 }
 
