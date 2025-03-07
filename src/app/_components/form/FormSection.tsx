@@ -44,7 +44,7 @@ const FormSection = () => {
       <TextAreaElement name="wpisz cos" info="no" />
       <UploadElement
         name="Prześlij rysunek"
-        info="cos tu jest"
+        info="cos tu jest cos tu jest cos tu jest"
         description="Prześlij jakiś bardzo fajny rysunek"
       />
     </div>
