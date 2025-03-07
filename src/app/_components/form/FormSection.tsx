@@ -13,6 +13,8 @@ import SelectMultipleGroup from "./SelectMultipleGroup";
 
 import RadioElements from "./RadioElements";
 import SelectElement from "./SelectElement";
+import TextAreaElement from "./TextAreaElement";
+import UploadElement from "./UploadElement";
 
 const FormSection = () => {
   return (
@@ -38,6 +40,11 @@ const FormSection = () => {
         options={["cos", "cos1", "cos2", "cos3"]}
         info="cos cos cos"
         isImportant={true}
+      />
+      <TextAreaElement name="wpisz cos" info="no" />
+      <UploadElement
+        name="prześlij rysunek"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
     </div>
   );

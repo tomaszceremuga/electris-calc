@@ -28,9 +28,7 @@ const RadioElements: React.FC<RadioElementsProps> = ({
         </p>
         {info != "" && <InfoButton info={info} />}{" "}
       </div>
-      {description != "" && (
-        <p className="ml-5 pb-1 text-neutral-500">{description}</p>
-      )}
+
       <RadioGroup className="ml-5 flex pt-2" defaultValue="option-0">
         {options.map((option, index) => (
           <div key={index} className="mr-3 flex items-center space-x-2">

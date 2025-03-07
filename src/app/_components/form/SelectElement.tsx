@@ -34,7 +34,7 @@ const SelectElement: React.FC<SelectGroupProps> = ({
             {info != "" && <InfoButton info={info} />}
           </div>
           <Select>
-            <SelectTrigger className="w-80">
+            <SelectTrigger className="w-full max-w-80">
               <SelectValue placeholder="Wybierz opcję..." />
             </SelectTrigger>
             <SelectContent>
