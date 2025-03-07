@@ -1,57 +1,15 @@
-// "use client"
-// import React from "react";
-// import { Button } from "~/components/ui/button";
-// import { toast } from "sonner"
 
-
-// const UploadArea = () => {
-
-//   const getDate = ():string => {
-//     const actualDate=new Date()
-//     const formatDate= actualDate.toLocaleDateString("pl-PL",{
-//       weekday: "long", 
-//       day: "numeric", 
-//       month: "long", 
-//       year: "numeric", 
-//       hour: "2-digit", 
-//       minute: "2-digit"   
-//     })
-//     return formatDate.replace(/^(\w)/, (match) => match.toUpperCase())
-//     .replace(/ (\d+) /, ", $1 ") 
-//     .replace(/ (\d{4}) /, ", $1, ");
-//   }
-  
-
-//   return (
-//     <div className="flex flex-col items-center justify-center border-4 border-dashed bg-neutral-100 w-72 h-72 p-4">
-//           <button className="mb-4">
-//             <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
-//               <path
-//                 fill="currentColor"
-//                 d="M12 15.575q-.2 0-.375-.062T11.3 15.3l-3.6-3.6q-.3-.3-.288-.7t.288-.7q.3-.3.713-.312t.712.287L11 12.15V5q0-.425.288-.712T12 4t.713.288T13 5v7.15l1.875-1.875q.3-.3.713-.288t.712.313q.275.3.288.7t-.288.7l-3.6 3.6q-.15.15-.325.213t-.375.062M6 20q-.825 0-1.412-.587T4 18v-2q0-.425.288-.712T5 15t.713.288T6 16v2h12v-2q0-.425.288-.712T19 15t.713.288T20 16v2q0 .825-.587 1.413T18 20z"
-//               />
-//             </svg>
-//           </button>
-//           <Button onClick={()=>{
-//             toast("Plik został wczytany",{
-//               description:getDate()
-//             })
-//           }}>Wybierz plik</Button>
-//         </div>
-    
-    
-    
-//   );
-// };
-
-// export default UploadArea;
 "use client"
 import type React from "react"
 import { useState, useRef } from "react"
 import { Button } from "~/components/ui/button" // Updated import path to match your project structure
 import { toast } from "sonner"
 
-const UploadArea = () => {
+interface UploadAreaProps {
+  setFileList: React.Dispatch<React.SetStateAction<string[]>>; // Change to handle an array of strings
+}
+
+const UploadArea = ({setFileList}:UploadAreaProps) => {
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -110,12 +68,29 @@ const UploadArea = () => {
   const handleFiles = (files: FileList) => {
     // Here you can process the files as needed
     // For now, just showing a toast notification
-    toast("Plik został wczytany", {
-      description: getDate(),
-    })
-
+    try {
+      // Assuming you're trying to set the name of the first file
+      if ( files.length > 0) {
+        // const fileName = files[0]?.name ?? ""
+        const fileNames = Array.from(files).map(file => file.name)
+        setFileList((prev: string[]) => [...prev, ...fileNames])
+        // setFileList(fileName) // Call setFileList with the file name
+        toast("Plik został wczytany", {
+          description: getDate(),
+        })
+      } else {
+        throw new Error("No files selected")
+      }
+    } catch (error) {
+      console.error("Error setting file list:", error)
+      toast.error("Wystąpił błąd przy wczytywaniu pliku")
+    }
+    // toast("Plik został wczytany", {
+    //   description: getDate(),
+    // })
+    // setFileList(files[0].name)
     // You can add additional file processing logic here
-    console.log("Uploaded files:", files)
+    // console.log("Uploaded files:", files[0].name)
   }
 
   const openFileSelector = () => {
