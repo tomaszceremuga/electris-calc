@@ -13,7 +13,7 @@ const UploadSection = () => {
         <UploadArea setFileList={setFileList}/>
         <Requirements/>
       </div>
-     <UploadFileList fileList={fileList}/>
+     <UploadFileList fileList={fileList} setFileList={setFileList}/>
     </div>
   );
 };
