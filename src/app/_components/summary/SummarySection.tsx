@@ -1,6 +1,5 @@
 import DeliveryOptions from "./DeliveryOptions";
 import SummaryButtons from "./SummaryButtons";
-import OrderDetails from "./OrderDetails";
 
 const SummarySection = () => {
   return (
