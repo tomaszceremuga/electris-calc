@@ -2,8 +2,9 @@ import React from "react";
 
 const UploadElement = () => {
   return (
-    <div className="flex border  items-center mb-2">
-      <div>
+    <div className="flex items-center justify-between p-2 border rounded-md bg-neutral-50">
+          <div className="flex items-center gap-2">
+          <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="35"
@@ -17,24 +18,25 @@ const UploadElement = () => {
           <path fill="currentColor" d="M8 12h8v2H8zm0 4h8v2H8zm0-8h2v2H8z" />
         </svg>
       </div>
-      <div className="ml-2">
-        <p>sciezkadoobrazka.png</p>
-        <p>12MB</p>
-      </div>
-      <button className="ml-8">
-        <svg
+            <div>
+              <p className="text-sm">sciezkadoobrazka.png</p>
+              <p className="text-xs text-neutral-400">12MB</p>
+            </div>
+          </div>
+          <button className=" hover:text-red-600"><svg
           xmlns="http://www.w3.org/2000/svg"
           width="35"
           height="35"
           viewBox="0 0 24 24"
+          
         >
           <path
             fill="currentColor"
             d="M7 4V2h10v2h5v2h-2v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6H2V4zM6 6v14h12V6zm3 3h2v8H9zm4 0h2v8h-2z"
           />
-        </svg>
-      </button>
-    </div>
+        </svg></button>
+        </div>
+  
   );
 };
 
