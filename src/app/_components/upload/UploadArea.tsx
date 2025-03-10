@@ -6,10 +6,12 @@ import { Button } from "~/components/ui/button" // Updated import path to match 
 import { toast } from "sonner"
 
 interface UploadAreaProps {
-  setFileList: React.Dispatch<React.SetStateAction<string[]>>; // Change to handle an array of strings
+  setFileList: React.Dispatch<React.SetStateAction<string[]>>;
+  setFileSize:React.Dispatch<React.SetStateAction<number[]>>
+  // Change to handle an array of strings
 }
 
-const UploadArea = ({setFileList}:UploadAreaProps) => {
+const UploadArea = ({setFileList,setFileSize}:UploadAreaProps) => {
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -53,28 +55,29 @@ const UploadArea = ({setFileList}:UploadAreaProps) => {
     setIsDragging(false)
 
     const files = e.dataTransfer.files
+    let size: number
     if (files && files.length > 0) {
-      handleFiles(files)
+      size=files[0]?.size ?? 0
+      handleFiles(files,size)
     }
   }
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    let size: number
     if (files && files.length > 0) {
-      handleFiles(files)
+      size=files[0]?.size ?? 0
+      console.log(size)
+      handleFiles(files,size)
     }
   }
 
-  const handleFiles = (files: FileList) => {
-    // Here you can process the files as needed
-    // For now, just showing a toast notification
+  const handleFiles = (files: FileList,size: number) => {
     try {
-      // Assuming you're trying to set the name of the first file
       if ( files.length > 0) {
-        // const fileName = files[0]?.name ?? ""
         const fileNames = Array.from(files).map(file => file.name)
         setFileList((prev: string[]) => [...prev, ...fileNames])
-        // setFileList(fileName) // Call setFileList with the file name
+        setFileSize((prev:number[])=>[...prev,size])
         toast("Plik został wczytany", {
           description: getDate(),
         })
@@ -85,12 +88,7 @@ const UploadArea = ({setFileList}:UploadAreaProps) => {
       console.error("Error setting file list:", error)
       toast.error("Wystąpił błąd przy wczytywaniu pliku")
     }
-    // toast("Plik został wczytany", {
-    //   description: getDate(),
-    // })
-    // setFileList(files[0].name)
-    // You can add additional file processing logic here
-    // console.log("Uploaded files:", files[0].name)
+
   }
 
   const openFileSelector = () => {

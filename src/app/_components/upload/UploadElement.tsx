@@ -5,10 +5,16 @@ interface UploadElementProps{
   index:number
   fileName:string
   onDelete: (index: number) => void;
+  fileSize:number
   
 }
 
-const UploadElement = ({index,fileName,onDelete}:UploadElementProps) => {
+const UploadElement = ({index,fileName,onDelete, fileSize}:UploadElementProps) => {
+  const formatFileSize = (size: number): string => {
+    return size >= 1_048_576
+      ? `${(size / 1_048_576).toFixed(2)} MB`
+      : `${(size / 1024).toFixed(2)} KB`;
+  };
 
   return (
     <div className="flex items-center justify-between p-2 border rounded-md bg-neutral-50">
@@ -18,7 +24,7 @@ const UploadElement = ({index,fileName,onDelete}:UploadElementProps) => {
       </div>
             <div>
               <p className="text-sm">{fileName}</p>
-              <p className="text-xs text-neutral-400">12MB</p>
+              <p className="text-xs text-neutral-400">{formatFileSize(fileSize)}</p>
             </div>
           </div>
           <button className=" hover:text-red-600" onClick={()=>{
