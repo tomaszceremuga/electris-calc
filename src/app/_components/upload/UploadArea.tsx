@@ -55,29 +55,25 @@ const UploadArea = ({setFileList,setFileSize}:UploadAreaProps) => {
     setIsDragging(false)
 
     const files = e.dataTransfer.files
-    let size: number
     if (files && files.length > 0) {
-      size=files[0]?.size ?? 0
-      handleFiles(files,size)
+      handleFiles(files)
     }
   }
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    let size: number
     if (files && files.length > 0) {
-      size=files[0]?.size ?? 0
-      console.log(size)
-      handleFiles(files,size)
+      handleFiles(files)
     }
   }
 
-  const handleFiles = (files: FileList,size: number) => {
+  const handleFiles = (files: FileList) => {
     try {
       if ( files.length > 0) {
         const fileNames = Array.from(files).map(file => file.name)
+        const fileSizes = Array.from(files).map(file => file.size)
         setFileList((prev: string[]) => [...prev, ...fileNames])
-        setFileSize((prev:number[])=>[...prev,size])
+        setFileSize((prev:number[])=>[...prev,...fileSizes])
         toast("Plik został wczytany", {
           description: getDate(),
         })

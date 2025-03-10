@@ -6,16 +6,20 @@ interface UploadFileProps {
   setFileList: (newList: string[]) => void;
   fileSize: number[];
   // Function to update the file list
+  setFileSize: (newList: number[]) => void;
 }
 
 const UploadFileList = ({
   fileList,
   setFileList,
   fileSize,
+  setFileSize
 }: UploadFileProps) => {
   const handleDeleteButton = (i: number) => {
     const updatedList = fileList.filter((_, index) => index !== i);
+    const updatedSize = fileSize.filter((_, index) => index !== i);
     setFileList(updatedList);
+    setFileSize(updatedSize);
   };
 
   return (
