@@ -5,7 +5,7 @@ import OrderDetails from "./OrderDetails";
 const DeliveryOptions = () => {
   return (
     <div>
-      <h3 className="mb-2 text-xl font-semibold text-neutral-700">
+      <h3 className="mb-5 text-xl font-semibold text-neutral-700">
         Opcje Dostawy
       </h3>
 
@@ -25,10 +25,7 @@ const DeliveryOptions = () => {
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="option-three" id="option-three" />
-          <Label
-            htmlFor="option-three"
-            className="md: mb-3 text-lg font-semibold"
-          >
+          <Label htmlFor="option-three" className="md: text-lg font-semibold">
             &lt; 14 dni
           </Label>
         </div>

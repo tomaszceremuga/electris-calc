@@ -14,7 +14,7 @@ const OrderDetails = () => {
   const getCurrentDate = () => {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0"); // January is 0
+    const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
 
     return `${day}.${month}.${year}`;
@@ -23,7 +23,7 @@ const OrderDetails = () => {
     <div className="w-full">
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="default" className="w-full">
+          <Button variant="default" className="mt-5 w-full">
             SZCZEGÓŁY ZAMÓWIENIA
           </Button>
         </AlertDialogTrigger>
