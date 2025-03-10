@@ -16,6 +16,7 @@ import SelectElement from "./SelectElement";
 import TextAreaElement from "./TextAreaElement";
 import UploadElement from "./UploadElement";
 import QuantityElement from "./QuantityElement";
+import SelectMaterial from "./SelectMaterial";
 
 const FormSection = () => {
   return (
@@ -43,6 +44,7 @@ const FormSection = () => {
         isImportant={true}
       />
       <TextAreaElement name="wpisz cos" info="no" />
+      <SelectMaterial name="wwwww" />
       <UploadElement
         name="Prześlij rysunek"
         info="cos tu jest cos tu jest cos tu jest"
