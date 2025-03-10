@@ -4,12 +4,17 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { Button } from "~/components/ui/button" // Updated import path to match your project structure
 import { toast } from "sonner"
+import {Download} from "lucide-react"
 
 interface UploadAreaProps {
-  setFileList: React.Dispatch<React.SetStateAction<string[]>>; // Change to handle an array of strings
+  setFileList: React.Dispatch<React.SetStateAction<string[]>>;
+  setFileSize:React.Dispatch<React.SetStateAction<number[]>>
+  count:number
+  setCount:React.Dispatch<React.SetStateAction<number>>
+  // Change to handle an array of strings
 }
 
-const UploadArea = ({setFileList}:UploadAreaProps) => {
+const UploadArea = ({setFileList,setFileSize,count,setCount}:UploadAreaProps) => {
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -53,31 +58,35 @@ const UploadArea = ({setFileList}:UploadAreaProps) => {
     setIsDragging(false)
 
     const files = e.dataTransfer.files
-    if (files && files.length > 0) {
+    if (files && files.length > 0 ) {
       handleFiles(files)
     }
   }
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files && files.length > 0) {
+    if (files && files.length > 0 ) {
       handleFiles(files)
     }
   }
 
   const handleFiles = (files: FileList) => {
-    // Here you can process the files as needed
-    // For now, just showing a toast notification
     try {
-      // Assuming you're trying to set the name of the first file
       if ( files.length > 0) {
-        // const fileName = files[0]?.name ?? ""
+        if(count+files.length>12){
+          toast("Nie możesz dodać więcej niż 12 plików")
+          return
+        }
+        setCount(prev=>prev+files.length)
+        
         const fileNames = Array.from(files).map(file => file.name)
+        const fileSizes = Array.from(files).map(file => file.size)
         setFileList((prev: string[]) => [...prev, ...fileNames])
-        // setFileList(fileName) // Call setFileList with the file name
+        setFileSize((prev:number[])=>[...prev,...fileSizes])
         toast("Plik został wczytany", {
           description: getDate(),
         })
+        
       } else {
         throw new Error("No files selected")
       }
@@ -85,12 +94,7 @@ const UploadArea = ({setFileList}:UploadAreaProps) => {
       console.error("Error setting file list:", error)
       toast.error("Wystąpił błąd przy wczytywaniu pliku")
     }
-    // toast("Plik został wczytany", {
-    //   description: getDate(),
-    // })
-    // setFileList(files[0].name)
-    // You can add additional file processing logic here
-    // console.log("Uploaded files:", files[0].name)
+
   }
 
   const openFileSelector = () => {
@@ -103,19 +107,14 @@ const UploadArea = ({setFileList}:UploadAreaProps) => {
     <div
       className={`flex flex-col items-center justify-center border-4 border-dashed ${
         isDragging ? "border-primary bg-primary/10" : "bg-neutral-100"
-      } w-72 h-72 p-4 transition-colors duration-200`}
+      } md:w-72 sm:full h-72 p-4 transition-colors duration-200 `}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       <button className="mb-4" onClick={openFileSelector}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M12 15.575q-.2 0-.375-.062T11.3 15.3l-3.6-3.6q-.3-.3-.288-.7t.288-.7q.3-.3.713-.312t.712.287L11 12.15V5q0-.425.288-.712T12 4t.713.288T13 5v7.15l1.875-1.875q.3-.3.713-.288t.712.313q.275.3.288.7t-.288.7l-3.6 3.6q-.15.15-.325.213t-.375.062M6 20q-.825 0-1.412-.587T4 18v-2q0-.425.288-.712T5 15t.713.288T6 16v2h12v-2q0-.425.288-.712T19 15t.713.288T20 16v2q0 .825-.587 1.413T18 20z"
-          />
-        </svg>
+        <Download size={80} strokeWidth={2.25} />
       </button>
 
       <input type="file" ref={fileInputRef} onChange={handleFileInputChange} className="hidden" />
