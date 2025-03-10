@@ -4,6 +4,7 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { Button } from "~/components/ui/button" // Updated import path to match your project structure
 import { toast } from "sonner"
+import {Download} from "lucide-react"
 
 interface UploadAreaProps {
   setFileList: React.Dispatch<React.SetStateAction<string[]>>;
@@ -106,19 +107,14 @@ const UploadArea = ({setFileList,setFileSize,count,setCount}:UploadAreaProps) =>
     <div
       className={`flex flex-col items-center justify-center border-4 border-dashed ${
         isDragging ? "border-primary bg-primary/10" : "bg-neutral-100"
-      } w-72 h-72 p-4 transition-colors duration-200`}
+      } md:w-72 sm:full h-72 p-4 transition-colors duration-200 `}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       <button className="mb-4" onClick={openFileSelector}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M12 15.575q-.2 0-.375-.062T11.3 15.3l-3.6-3.6q-.3-.3-.288-.7t.288-.7q.3-.3.713-.312t.712.287L11 12.15V5q0-.425.288-.712T12 4t.713.288T13 5v7.15l1.875-1.875q.3-.3.713-.288t.712.313q.275.3.288.7t-.288.7l-3.6 3.6q-.15.15-.325.213t-.375.062M6 20q-.825 0-1.412-.587T4 18v-2q0-.425.288-.712T5 15t.713.288T6 16v2h12v-2q0-.425.288-.712T19 15t.713.288T20 16v2q0 .825-.587 1.413T18 20z"
-          />
-        </svg>
+        <Download size={80} strokeWidth={2.25} />
       </button>
 
       <input type="file" ref={fileInputRef} onChange={handleFileInputChange} className="hidden" />

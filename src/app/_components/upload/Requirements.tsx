@@ -2,7 +2,7 @@ import React from 'react'
 
 const Requirements = () => {
   return (
-    <div className="p-4 bg-neutral-100 rounded-lg shadow-md w-full max-w-md">
+    <div className="p-4 bg-neutral-100 rounded-lg shadow-md w-full md:max-w-md">
           <p className="text-lg font-semibold mb-2">WYMAGANIA</p>
           <div className="text-neutral-700 text-sm">
             <p>Rozmiar &lt;<span className='text-neutral-950 font-bold'> 200MB</span></p>
