@@ -73,12 +73,30 @@ const UploadArea = ({setFileList,setFileSize,count,setCount}:UploadAreaProps) =>
   const handleFiles = (files: FileList) => {
     try {
       if ( files.length > 0) {
+        
+
+        const hasLargeFile = Array.from(files).some(file => file.size > 209715200)
+        if (hasLargeFile) {
+          toast("Zbyt duży plik. Możesz przesłać do 200MB")
+          return
+        }
+
+        const rightExtensions=["step","stp","x_t","iges","igs","sldprt","dwg","dxf","pdf"]
+        const hasGreatExtension=Array.from(files).every(file=>{
+          return rightExtensions.includes(file.name.split('.').pop()?.toLowerCase()??"")
+        })
+        
+        if(!hasGreatExtension){
+          toast("Możesz przesyłać pliki tylko z odpowiednim rozszerzeniem")
+          return
+        }
+
         if(count+files.length>12){
           toast("Nie możesz dodać więcej niż 12 plików")
           return
         }
         setCount(prev=>prev+files.length)
-        
+        // console.log(files[0].name.split('.').pop())
         const fileNames = Array.from(files).map(file => file.name)
         const fileSizes = Array.from(files).map(file => file.size)
         setFileList((prev: string[]) => [...prev, ...fileNames])
