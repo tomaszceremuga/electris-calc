@@ -15,13 +15,13 @@ const SummarySection = () => {
         <p className="text-lg font-bold text-neutral-800">
           CENA: <span className="text-neutral-900">xxx ZŁ</span>
         </p>
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="text-sm text-neutral-600">
           <sup className="font-bold text-neutral-700">
             <span>*</span>
           </sup>
           W cenę wliczony jest podatek VAT
         </p>
-        <div className="mt-4">
+        <div className="mt-11">
           <SummaryButtons />
         </div>
       </div>
