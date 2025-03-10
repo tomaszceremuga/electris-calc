@@ -8,10 +8,12 @@ import { toast } from "sonner"
 interface UploadAreaProps {
   setFileList: React.Dispatch<React.SetStateAction<string[]>>;
   setFileSize:React.Dispatch<React.SetStateAction<number[]>>
+  count:number
+  setCount:React.Dispatch<React.SetStateAction<number>>
   // Change to handle an array of strings
 }
 
-const UploadArea = ({setFileList,setFileSize}:UploadAreaProps) => {
+const UploadArea = ({setFileList,setFileSize,count,setCount}:UploadAreaProps) => {
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -55,14 +57,14 @@ const UploadArea = ({setFileList,setFileSize}:UploadAreaProps) => {
     setIsDragging(false)
 
     const files = e.dataTransfer.files
-    if (files && files.length > 0) {
+    if (files && files.length > 0 ) {
       handleFiles(files)
     }
   }
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files && files.length > 0) {
+    if (files && files.length > 0 ) {
       handleFiles(files)
     }
   }
@@ -70,6 +72,12 @@ const UploadArea = ({setFileList,setFileSize}:UploadAreaProps) => {
   const handleFiles = (files: FileList) => {
     try {
       if ( files.length > 0) {
+        if(count+files.length>12){
+          toast("Nie możesz dodać więcej niż 12 plików")
+          return
+        }
+        setCount(prev=>prev+files.length)
+        
         const fileNames = Array.from(files).map(file => file.name)
         const fileSizes = Array.from(files).map(file => file.size)
         setFileList((prev: string[]) => [...prev, ...fileNames])
@@ -77,6 +85,7 @@ const UploadArea = ({setFileList,setFileSize}:UploadAreaProps) => {
         toast("Plik został wczytany", {
           description: getDate(),
         })
+        
       } else {
         throw new Error("No files selected")
       }

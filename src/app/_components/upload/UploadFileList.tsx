@@ -1,25 +1,29 @@
 import * as React from "react";
 import UploadElement from "./UploadElement";
 
+
 interface UploadFileProps {
   fileList: string[]; // File list passed from parent
   setFileList: (newList: string[]) => void;
   fileSize: number[];
   // Function to update the file list
   setFileSize: (newList: number[]) => void;
+  setCount:(count:number)=>void
 }
 
 const UploadFileList = ({
   fileList,
   setFileList,
   fileSize,
-  setFileSize
+  setFileSize,
+  setCount
 }: UploadFileProps) => {
   const handleDeleteButton = (i: number) => {
     const updatedList = fileList.filter((_, index) => index !== i);
     const updatedSize = fileSize.filter((_, index) => index !== i);
     setFileList(updatedList);
     setFileSize(updatedSize);
+    setCount(updatedList.length)
   };
 
   return (
