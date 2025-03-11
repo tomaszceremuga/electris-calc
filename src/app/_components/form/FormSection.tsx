@@ -22,6 +22,11 @@ const FormSection = () => {
   return (
     <div className="pr-16">
       <SelectGroup
+        name="jestesmy na devie"
+        info="jakas informacja wazna"
+        options={["cos", "cos1", "cos2", "cos3"]}
+      />
+      <SelectGroup
         name="Wybierz cosia"
         info="jakas informacja wazna"
         options={["cos", "cos1", "cos2", "cos3"]}
