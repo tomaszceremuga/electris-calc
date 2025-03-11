@@ -18,19 +18,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-interface UploadElementProps {
-  name: string;
-  description?: string;
-  info?: string;
-  isImportant?: boolean;
-}
-
-const UploadElement: React.FC<UploadElementProps> = ({
+const UploadElement: React.FC<formElementsInterfaces> = ({
   name,
   description = "",
   info = "",
   isImportant = false,
+  options = [""],
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -105,9 +100,9 @@ const UploadElement: React.FC<UploadElementProps> = ({
           {isImportant && <span className="mr-1 text-red-500">*</span>}
           {name}
         </p>
-        {info !== "" && <InfoButton info={info} />}
+        {info && <InfoButton info={info} />}
       </div>
-      {description !== "" && (
+      {description && (
         <p className="ml-5 pb-1 text-neutral-500">{description}</p>
       )}
       <div className="ml-5 mt-2">

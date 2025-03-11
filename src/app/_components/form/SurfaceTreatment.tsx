@@ -18,6 +18,7 @@ import { Button } from "~/components/ui/button";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Pencil } from "lucide-react";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
 const configuratorData = {
   categories: [

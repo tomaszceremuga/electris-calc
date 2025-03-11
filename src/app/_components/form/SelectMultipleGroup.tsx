@@ -2,19 +2,14 @@ import React from "react";
 
 import { Toggle } from "@/components/ui/toggle";
 import InfoButton from "./InfoButton";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-interface SelectGroupProps {
-  name: string;
-  info?: string;
-  options: string[];
-  isImportant?: boolean;
-}
-
-const SelectMultipleGroup: React.FC<SelectGroupProps> = ({
+const SelectMultipleGroup: React.FC<formElementsInterfaces> = ({
   name,
   info = "",
-  options,
+  options = [""],
   isImportant = false,
+  description = [""],
 }) => {
   return (
     <div className="mb-5 flex flex-wrap items-center">
@@ -24,7 +19,7 @@ const SelectMultipleGroup: React.FC<SelectGroupProps> = ({
             {isImportant && <span className="mr-1 text-red-500">*</span>}
             {name}
           </p>
-          {info != "" && <InfoButton info={info} />}{" "}
+          {info && <InfoButton info={info} />}{" "}
         </div>
         {options.map((option, index) => (
           <Toggle key={index} size="sm" variant={"outline"}>

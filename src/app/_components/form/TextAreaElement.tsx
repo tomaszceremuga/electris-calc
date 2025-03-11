@@ -1,17 +1,14 @@
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import InfoButton from "./InfoButton";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-interface TextAreaProps {
-  name: string;
-  info?: string;
-  isImportant?: boolean;
-}
-
-const TextAreaElement: React.FC<TextAreaProps> = ({
+const TextAreaElement: React.FC<formElementsInterfaces> = ({
   name,
   info = "",
-  isImportant = "",
+  options = [""],
+  isImportant = false,
+  description = [""],
 }) => {
   return (
     <div className="p-2">
@@ -20,7 +17,7 @@ const TextAreaElement: React.FC<TextAreaProps> = ({
           {isImportant && <span className="mr-1 text-red-500">*</span>}
           {name}
         </p>
-        {info != "" && <InfoButton info={info} />}{" "}
+        {info && <InfoButton info={info} />}{" "}
       </div>
       <Textarea className="my-[8px] ml-[20px]" />
     </div>
