@@ -1,29 +1,3 @@
-// import React from "react";
-
-// import { InfoIcon } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover";
-
-// interface InfoButtonProps {
-//   info: string;
-// }
-
-// const InfoButton: React.FC<InfoButtonProps> = ({ info }) => {
-//   return (
-//     <Popover>
-//       <PopoverTrigger>
-//         <p>i</p>
-//       </PopoverTrigger>
-//       <PopoverContent>{info}</PopoverContent>
-//     </Popover>
-//   );
-// };
-
-// export default InfoButton;
 import type React from "react";
 
 import { InfoIcon } from "lucide-react";
