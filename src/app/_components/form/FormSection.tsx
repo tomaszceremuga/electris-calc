@@ -22,7 +22,7 @@ const FormSection = () => {
   return (
     <div className="pr-16">
       <SelectGroup
-        name="jestesmy na devie"
+        name="jestesmy na devie 12211212"
         info="jakas informacja wazna"
         options={["cos", "cos1", "cos2", "cos3"]}
       />
