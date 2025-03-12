@@ -66,7 +66,7 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
             <div className="mt-3 flex items-center gap-[6px]">
               <Star className="w-4" />
               <p className="font-semibold">{selectedMaterial.rate} </p>
-              <p className="ml-1">( {selectedMaterial.rates} ocen)</p>
+              <p className="ml-1">({selectedMaterial.rates} ocen)</p>
             </div>
           </div>
         </div>

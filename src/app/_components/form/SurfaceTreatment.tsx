@@ -125,12 +125,6 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
           </AlertDialogHeader>
 
           <div className="mx-auto h-[600px] w-[1000px]">
-            <div className="flex h-[50px] items-center border-b px-4">
-              <div className="text-xl font-semibold text-primary">
-                {currentCategory?.name}
-              </div>
-            </div>
-
             <div className="grid h-[550px] grid-cols-[250px_1fr_300px]">
               <div className="border-r">
                 <div className="h-full overflow-auto">
