@@ -119,7 +119,7 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
             </p>
           )}
         </AlertDialogTrigger>
-        <AlertDialogContent className="w-full max-w-min">
+        <AlertDialogContent className="w-full max-w-min pb-0">
           <AlertDialogHeader>
             <AlertDialogTitle>{currentCategory?.name}</AlertDialogTitle>
           </AlertDialogHeader>

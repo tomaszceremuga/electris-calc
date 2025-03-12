@@ -80,8 +80,8 @@ const FloatingCart = () => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="w-full max-w-sm rounded-lg border border-border bg-card shadow-sm">
-      <div className="rounded-t-lg border-b border-border bg-muted/50 p-4">
+    <div className="sticky top-[105px] h-min w-full max-w-sm self-start rounded-lg border bg-card shadow-sm">
+      <div className="rounded-t-lg border-b border-border p-4">
         <h2 className="flex items-center gap-2 font-medium text-card-foreground">
           <ShoppingCart size={18} />
           Koszyk{" "}

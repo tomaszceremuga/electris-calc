@@ -162,6 +162,7 @@ const formData = {
             ],
             requiredOption: "anodized",
           },
+
           {
             id: "anodized-simple",
             categoryId: "surface",

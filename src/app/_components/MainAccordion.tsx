@@ -10,8 +10,8 @@ import SummarySection from "./summary/SummarySection";
 
 export function MainAccordion() {
   return (
-    <div className="w-full max-w-4xl rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-      <Accordion type="single" collapsible>
+    <div className="h-min w-full max-w-4xl rounded-lg border bg-white p-8 shadow-sm">
+      <Accordion defaultValue="item-1" type="single" collapsible>
         <AccordionItem value="item-1" className="border-b">
           <AccordionTrigger>Pliki</AccordionTrigger>
           <AccordionContent>
