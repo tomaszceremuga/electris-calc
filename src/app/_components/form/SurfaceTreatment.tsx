@@ -108,7 +108,7 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                 {selectedColor && (
                   <p>
                     <span className="font-medium">Kolor:</span>{" "}
-                    {colorMap[selectedColor].name}
+                    {colorMap[selectedColor]?.name}
                   </p>
                 )}
               </div>
@@ -197,13 +197,13 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                           key={color}
                           className={cn(
                             "h-12 w-12 rounded-md border",
-                            colorMap[color].bg,
+                            colorMap[color]?.bg,
                             selectedColor === color
                               ? "ring-2 ring-gray-500 ring-offset-2"
                               : "",
                           )}
                           onClick={() => setSelectedColor(color)}
-                          aria-label={colorMap[color].name}
+                          aria-label={colorMap[color]?.name}
                         />
                       ))}
                     </div>
