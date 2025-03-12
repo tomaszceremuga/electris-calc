@@ -9,7 +9,7 @@ const SelectMultipleGroup: React.FC<formElementsInterfaces> = ({
   info = "",
   options = [""],
   isImportant = false,
-  description = [""],
+  description = "",
 }) => {
   return (
     <div className="mb-5 flex flex-wrap items-center">

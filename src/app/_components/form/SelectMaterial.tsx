@@ -2,7 +2,6 @@ import React from "react";
 
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "~/components/ui/button";
 import { TriangleAlert } from "lucide-react";
 import {
@@ -11,12 +10,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import SurfaceTreatment from "./SurfaceTreatment";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-interface SelectMaterialProps {
-  name: string;
-}
-
-const SelectMaterial: React.FC<SelectMaterialProps> = ({ name }) => {
+const SelectMaterial: React.FC<formElementsInterfaces> = ({
+  name,
+  info = "",
+  options = [""],
+  isImportant = false,
+  description = "",
+}) => {
   return (
     <div className="flex h-min w-full p-3">
       <div className="w-full">

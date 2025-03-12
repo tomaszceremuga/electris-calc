@@ -8,19 +8,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-interface SelectGroupProps {
-  name: string;
-  info?: string;
-  options: string[];
-  isImportant?: boolean;
-}
-
-const SelectElement: React.FC<SelectGroupProps> = ({
+const SelectElement: React.FC<formElementsInterfaces> = ({
   name,
   info = "",
-  options,
+  options = [""],
   isImportant = false,
+  description = "",
 }) => {
   return (
     <div>
@@ -31,7 +26,7 @@ const SelectElement: React.FC<SelectGroupProps> = ({
               {isImportant && <span className="mr-1 text-red-500">*</span>}
               {name}
             </p>
-            {info != "" && <InfoButton info={info} />}
+            {info && <InfoButton info={info} />}
           </div>
           <div className="ml-5 w-full max-w-80">
             <Select>

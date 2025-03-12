@@ -3,21 +3,14 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import InfoButton from "./InfoButton";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-interface RadioElementsProps {
-  name: string;
-  description?: string;
-  info?: string;
-  options: string[];
-  isImportant?: boolean;
-}
-
-const RadioElements: React.FC<RadioElementsProps> = ({
+const RadioElements: React.FC<formElementsInterfaces> = ({
   name,
-  description = "",
   info = "",
-  options,
+  options = [""],
   isImportant = false,
+  description = "",
 }) => {
   return (
     <div className="mb-5 p-2">
@@ -26,7 +19,7 @@ const RadioElements: React.FC<RadioElementsProps> = ({
           {isImportant && <span className="mr-1 text-red-500">*</span>}
           {name}
         </p>
-        {info != "" && <InfoButton info={info} />}{" "}
+        {info && <InfoButton info={info} />}{" "}
       </div>
 
       <RadioGroup className="ml-5 flex pt-2" defaultValue="option-0">

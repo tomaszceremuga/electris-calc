@@ -8,7 +8,7 @@ const TextAreaElement: React.FC<formElementsInterfaces> = ({
   info = "",
   options = [""],
   isImportant = false,
-  description = [""],
+  description = "",
 }) => {
   return (
     <div className="p-2">

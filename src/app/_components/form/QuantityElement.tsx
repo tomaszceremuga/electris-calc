@@ -11,17 +11,14 @@ import {
 import { Button } from "~/components/ui/button";
 import QuantityTable from "./QuantityTable";
 import { number, set } from "zod";
+import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-interface QuantityElementProps {
-  name: string;
-  info?: string;
-  isImportant?: boolean;
-}
-
-const QuantityElement: React.FC<QuantityElementProps> = ({
+const QuantityElement: React.FC<formElementsInterfaces> = ({
   name,
   info = "",
+  options = [""],
   isImportant = false,
+  description = "",
 }) => {
   const [quantity, setQuantity] = useState<number>(0);
 
@@ -33,7 +30,7 @@ const QuantityElement: React.FC<QuantityElementProps> = ({
             {isImportant && <span className="mr-1 text-red-500">*</span>}
             {name}
           </p>
-          {info != "" && <InfoButton info={info} />}{" "}
+          {info && <InfoButton info={info} />}{" "}
         </div>
         <Popover>
           <PopoverTrigger>
