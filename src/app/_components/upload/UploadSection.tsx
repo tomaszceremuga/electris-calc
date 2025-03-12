@@ -5,6 +5,7 @@ import UploadArea from './UploadArea';
 import UploadFileList from './UploadFileList';
 
 
+
 const UploadSection = () => {
   const [fileList,setFileList]=useState<string[]>([])
   const [fileSize,setFileSize]=useState<number[]>([])
