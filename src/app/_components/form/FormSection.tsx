@@ -1,5 +1,13 @@
 import React from "react";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import SelectGroup from "./SelectGroup";
 import SelectMultipleGroup from "./SelectMultipleGroup";
 
@@ -10,44 +18,87 @@ import UploadElement from "./UploadElement";
 import QuantityElement from "./QuantityElement";
 import SelectMaterial from "./SelectMaterial";
 
+import formData from "~/lib/formData";
+
 const FormSection = () => {
   return (
     <div className="pr-16">
-      <SelectGroup
-        name="jestesmy na devie 12211212"
-        info="jakas informacja wazna"
-        options={["cos", "cos1", "cos2", "cos3"]}
-      />
-      <SelectGroup
-        name="Wybierz cosia"
-        info="jakas informacja wazna"
-        options={["cos", "cos1", "cos2", "cos3"]}
-      />
-      <RadioElements
-        name="Wybierz opcje"
-        info="no spoko"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam convallis libero in ullamcorper iaculis."
-        options={["cos", "cos1", "cos2"]}
-      />
-      <SelectMultipleGroup
-        name="Wybierz kilka cosiów"
-        options={["cos", "cos1", "cos2", "cos3"]}
-        isImportant={true}
-      />
-      <SelectElement
-        name="cos"
-        options={["cos", "cos1", "cos2", "cos3"]}
-        info="cos cos cos"
-        isImportant={true}
-      />
-      <TextAreaElement name="wpisz cos" info="no" />
-      <SelectMaterial data={[]} />
-      <UploadElement
-        name="Prześlij rysunek"
-        info="cos tu jest cos tu jest cos tu jest"
-        description="Prześlij jakiś bardzo fajny rysunek"
-      />
-      <QuantityElement name="Podaj ilość" />
+      {formData.formElements.map((el, index) => {
+        switch (el.type) {
+          case "selectGroup":
+            return (
+              <SelectGroup
+                name={el.name}
+                info={el.info}
+                description={el.decription}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+            break;
+          case "radioElements":
+            return (
+              <RadioElements
+                name={el.name}
+                info={el.info}
+                description={el.decription}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+            break;
+          case "textArea":
+            return (
+              <TextAreaElement
+                name={el.name}
+                info={el.info}
+                description={el.decription}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+            break;
+          case "quantity":
+            return (
+              <QuantityElement
+                name={el.name}
+                info={el.info}
+                description={el.decription}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+            break;
+          case "uploadElement":
+            return (
+              <UploadElement
+                name={el.name}
+                info={el.info}
+                description={el.decription}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+            break;
+          case "selectMaterial":
+            return (
+              <SelectMaterial
+                key={index}
+                selectedMaterial={el.selectedMaterial}
+                data={el.data}
+              />
+            );
+            break;
+
+          default:
+            return <p className="bg-red-600">Błędny element</p>;
+        }
+      })}
     </div>
   );
 };
