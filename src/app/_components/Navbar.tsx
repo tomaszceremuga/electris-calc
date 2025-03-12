@@ -27,7 +27,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="mx-auto flex hidden flex-1 items-center justify-center gap-6 md:flex">
+        <nav className="mx-auto flex flex-1 items-center justify-center gap-6 md:flex">
           <Link
             href="/"
             className="text-sm font-medium transition-colors hover:text-primary"
