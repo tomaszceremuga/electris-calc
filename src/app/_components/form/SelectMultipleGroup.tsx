@@ -2,14 +2,13 @@ import React from "react";
 
 import { Toggle } from "@/components/ui/toggle";
 import InfoButton from "./InfoButton";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const SelectMultipleGroup: React.FC<formElementsInterfaces> = ({
+const SelectMultipleGroup: React.FC<formElementsInterface> = ({
   name,
   info = "",
   options = [""],
   isImportant = false,
-  description = "",
 }) => {
   return (
     <div className="mb-5 flex flex-wrap items-center">

@@ -18,14 +18,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
+import { type formElementsInterfaces } from "~/lib/formElementsInterface";
 
 const UploadElement: React.FC<formElementsInterfaces> = ({
   name,
   description = "",
   info = "",
   isImportant = false,
-  options = "",
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);

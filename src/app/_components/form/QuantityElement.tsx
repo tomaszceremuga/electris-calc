@@ -11,7 +11,7 @@ import {
 import { Button } from "~/components/ui/button";
 import QuantityTable from "./QuantityTable";
 import { number, set } from "zod";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
+import { formElementsInterfaces } from "~/lib/formElementsInterface";
 
 const QuantityElement: React.FC<formElementsInterfaces> = ({
   name,

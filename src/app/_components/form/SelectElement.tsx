@@ -8,14 +8,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const SelectElement: React.FC<formElementsInterfaces> = ({
+const SelectElement: React.FC<formElementsInterface> = ({
   name,
   info = "",
   options = [""],
   isImportant = false,
-  description = "",
 }) => {
   return (
     <div>

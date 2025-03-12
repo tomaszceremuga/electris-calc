@@ -10,20 +10,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import SurfaceTreatment from "./SurfaceTreatment";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
 
-const SelectMaterial: React.FC<formElementsInterfaces> = ({
-  name,
-  info = "",
-  options = [""],
-  isImportant = false,
-  description = "",
-}) => {
+interface selectMaterialProps {
+  data: object;
+}
+
+const SelectMaterial: React.FC<selectMaterialProps> = ({ data }) => {
   return (
     <div className="flex h-min w-full p-3">
       <div className="w-full">
         <p className="">Wybrany materiał</p>
-        {/* elementy tego diva maja byc wycentrowane */}
         <div className="flex h-full items-center border-r-[1px]">
           <div className="flex h-full items-center">
             <Image

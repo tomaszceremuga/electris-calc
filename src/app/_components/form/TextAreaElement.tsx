@@ -1,14 +1,12 @@
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import InfoButton from "./InfoButton";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const TextAreaElement: React.FC<formElementsInterfaces> = ({
+const TextAreaElement: React.FC<formElementsInterface> = ({
   name,
   info = "",
-  options = [""],
   isImportant = false,
-  description = "",
 }) => {
   return (
     <div className="p-2">

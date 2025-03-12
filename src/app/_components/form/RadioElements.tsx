@@ -3,14 +3,13 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import InfoButton from "./InfoButton";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const RadioElements: React.FC<formElementsInterfaces> = ({
+const RadioElements: React.FC<formElementsInterface> = ({
   name,
   info = "",
   options = [""],
   isImportant = false,
-  description = "",
 }) => {
   return (
     <div className="mb-5 p-2">

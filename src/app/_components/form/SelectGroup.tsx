@@ -1,14 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import InfoButton from "./InfoButton";
-import { formElementsInterfaces } from "@/lib/formElementsInterfaces";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const SelectGroup: React.FC<formElementsInterfaces> = ({
+const SelectGroup: React.FC<formElementsInterface> = ({
   name,
   info = "",
   options = [""],
   isImportant = false,
-  description = "",
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
