@@ -18,9 +18,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { type formElementsInterfaces } from "~/lib/formElementsInterface";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const UploadElement: React.FC<formElementsInterfaces> = ({
+const UploadElement: React.FC<formElementsInterface> = ({
   name,
   description = "",
   info = "",

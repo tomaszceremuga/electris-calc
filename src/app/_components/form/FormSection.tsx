@@ -1,13 +1,5 @@
 import React from "react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import SelectGroup from "./SelectGroup";
 import SelectMultipleGroup from "./SelectMultipleGroup";
 
@@ -49,7 +41,7 @@ const FormSection = () => {
         isImportant={true}
       />
       <TextAreaElement name="wpisz cos" info="no" />
-      <SelectMaterial name="wwwww" />
+      <SelectMaterial data={[]} />
       <UploadElement
         name="Prześlij rysunek"
         info="cos tu jest cos tu jest cos tu jest"

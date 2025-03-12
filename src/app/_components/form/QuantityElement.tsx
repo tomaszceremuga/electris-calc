@@ -8,17 +8,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "~/components/ui/button";
 import QuantityTable from "./QuantityTable";
-import { number, set } from "zod";
-import { formElementsInterfaces } from "~/lib/formElementsInterface";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const QuantityElement: React.FC<formElementsInterfaces> = ({
+const QuantityElement: React.FC<formElementsInterface> = ({
   name,
   info = "",
-  options = [""],
   isImportant = false,
-  description = "",
 }) => {
   const [quantity, setQuantity] = useState<number>(0);
 
