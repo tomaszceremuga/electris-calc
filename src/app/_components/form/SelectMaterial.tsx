@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import Image from "next/image";
 import { Star } from "lucide-react";
@@ -12,6 +12,9 @@ import {
 import SurfaceTreatment from "./SurfaceTreatment";
 
 interface SurfaceTreatmentProps {
+  id: number;
+  onChange: (id: number, value: string) => void;
+
   selectedMaterial: {
     image: string;
     name: string;
@@ -42,9 +45,22 @@ interface SurfaceTreatmentProps {
 }
 
 const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
+  id,
+  onChange,
   selectedMaterial,
   data,
 }) => {
+  const [selectedSurface, setSelectedSurface] = useState<string>("");
+
+  const prevSurface = useRef<string | null>(selectedSurface);
+
+  useEffect(() => {
+    if (prevSurface.current !== selectedSurface) {
+      onChange(id, selectedSurface ?? "");
+      prevSurface.current = selectedSurface;
+    }
+  }, [selectedSurface, id, onChange]);
+
   return (
     <div className="flex h-min w-full p-3">
       <div className="w-full">
@@ -91,7 +107,7 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
             </PopoverContent>
           </Popover>
         </div>
-        <SurfaceTreatment data={data} />
+        <SurfaceTreatment setSelectedSurface={setSelectedSurface} data={data} />
       </div>
     </div>
   );

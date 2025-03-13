@@ -11,6 +11,8 @@ import {
 import { type formElementsInterface } from "~/lib/formElementsInterface";
 
 const SelectElement: React.FC<formElementsInterface> = ({
+  id,
+  onChange,
   name,
   info = "",
   options = [""],

@@ -1,19 +1,28 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InfoButton from "./InfoButton";
 import { type formElementsInterface } from "~/lib/formElementsInterface";
 
 const SelectGroup: React.FC<formElementsInterface> = ({
+  id,
+  onChange,
   name,
   info = "",
   options = [""],
   isImportant = false,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const prevOption = useRef<string | null>(selectedOption);
 
   const handleClick = (option: string) => {
     setSelectedOption((prev) => (prev === option ? null : option));
   };
+
+  useEffect(() => {
+    if (prevOption.current !== selectedOption) {
+      onChange(id, selectedOption ?? "");
+      prevOption.current = selectedOption;
+    }
+  }, [selectedOption, id, onChange]);
 
   return (
     <div className="mb-5 flex flex-wrap items-center">

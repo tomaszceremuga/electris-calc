@@ -4,6 +4,9 @@ import InfoButton from "./InfoButton";
 import { type formElementsInterface } from "~/lib/formElementsInterface";
 
 const TextAreaElement: React.FC<formElementsInterface> = ({
+  id,
+  onChange,
+
   name,
   info = "",
   isImportant = false,
@@ -17,7 +20,10 @@ const TextAreaElement: React.FC<formElementsInterface> = ({
         </p>
         {info && <InfoButton info={info} />}{" "}
       </div>
-      <Textarea className="my-[8px] ml-[20px]" />
+      <Textarea
+        onChange={(e) => onChange(id, e.target.value)}
+        className="my-[8px] ml-[20px]"
+      />
     </div>
   );
 };

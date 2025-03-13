@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   AlertDialog,
@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 import { Pencil } from "lucide-react";
 
 interface SurfaceTreatmentProps {
+  setSelectedSurface: React.Dispatch<React.SetStateAction<string>>;
+
   data: {
     alertMesage: string;
     categories: {
@@ -40,7 +42,6 @@ interface SurfaceTreatmentProps {
   };
 }
 
-// Color mapping for display
 const colorMap: Record<string, { bg: string; name: string }> = {
   blue: { bg: "bg-blue-500", name: "Niebieski" },
   black: { bg: "bg-black", name: "Czarny" },
@@ -55,6 +56,8 @@ const colorMap: Record<string, { bg: string; name: string }> = {
 };
 
 const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
+  setSelectedSurface,
+
   data = {
     categories: [],
     tiles: [],
@@ -78,6 +81,17 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     ? data?.tiles?.find((tile) => tile.id === selectedTile)
     : null;
 
+  useEffect(() => {
+    setSelectedSurface(
+      `${selectedCategory ?? ""};${selectedOption ?? ""};${selectedTile ?? ""};${selectedColor ?? ""}`,
+    );
+  }, [
+    selectedCategory,
+    selectedOption,
+    selectedTile,
+    selectedColor,
+    setSelectedSurface,
+  ]);
   return (
     <div>
       <AlertDialog>

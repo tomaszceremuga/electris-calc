@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Upload, X, FileText, File } from "lucide-react";
 
 import InfoButton from "./InfoButton";
@@ -21,14 +21,30 @@ import { toast } from "sonner";
 import { type formElementsInterface } from "~/lib/formElementsInterface";
 
 const UploadElement: React.FC<formElementsInterface> = ({
+  id,
+  onChange,
   name,
   description = "",
   info = "",
   isImportant = false,
 }) => {
   const [files, setFiles] = useState<File[]>([]);
+  const [filesString, setFilesString] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const prevOption = useRef<File[] | null>(files);
+
+  useEffect(() => {
+    const fileNames = files.map((file) => file.name).join(";");
+    setFilesString(fileNames);
+
+    if (prevOption.current !== files) {
+      onChange(id, fileNames);
+      prevOption.current = files;
+    }
+  }, [files, id, onChange]);
 
   const getDate = (): string => {
     const actualDate = new Date();
@@ -188,8 +204,7 @@ const UploadElement: React.FC<formElementsInterface> = ({
                 <AlertDialogAction
                   disabled={files.length === 0}
                   onClick={() => {
-                    // Here you would typically handle the upload
-                    // For now we'll just close the dialog
+                    // tutaj przesyłanie na backend
                   }}
                 >
                   Zatwierdź

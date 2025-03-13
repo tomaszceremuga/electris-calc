@@ -5,6 +5,8 @@ import InfoButton from "./InfoButton";
 import { type formElementsInterface } from "~/lib/formElementsInterface";
 
 const SelectMultipleGroup: React.FC<formElementsInterface> = ({
+  id,
+  onChange,
   name,
   info = "",
   options = [""],

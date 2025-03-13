@@ -1,24 +1,18 @@
-import React from "react";
-
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
+import React, { useEffect, useState } from "react";
 
 import SelectGroup from "./SelectGroup";
-// import SelectMultipleGroup from "./SelectMultipleGroup";
-
 import RadioElements from "./RadioElements";
-// import SelectElement from "./SelectElement";
 import TextAreaElement from "./TextAreaElement";
 import UploadElement from "./UploadElement";
 import QuantityElement from "./QuantityElement";
 import SelectMaterial from "./SelectMaterial";
 
 import formData from "~/lib/formData";
+
+type FormResultState = {
+  id: number;
+  values: Record<number, string>[];
+};
 
 const FormSection = () => {
   const defaultMaterial = {
@@ -33,6 +27,30 @@ const FormSection = () => {
     categories: [],
     tiles: [],
   };
+
+  const [formResult, setFormResult] = useState<FormResultState>({
+    id: formData.id,
+    values: [],
+  });
+
+  useEffect(() => {
+    const initialState: FormResultState = {
+      id: formData.id,
+      values: formData.formElements.map((element) => ({ [element.id]: "" })),
+    };
+
+    setFormResult(initialState);
+  }, []);
+
+  const handleChange = (id: number, value: string) => {
+    setFormResult((prev) => ({
+      ...prev,
+      values: prev.values.map((item) =>
+        item[id] !== undefined ? { ...item, [id]: value } : item,
+      ),
+    }));
+  };
+
   return (
     <div className="pr-16">
       {formData.formElements.map((el, index) => {
@@ -40,6 +58,8 @@ const FormSection = () => {
           case "selectGroup":
             return (
               <SelectGroup
+                id={el.id}
+                onChange={handleChange}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -52,6 +72,8 @@ const FormSection = () => {
           case "radioElements":
             return (
               <RadioElements
+                id={el.id}
+                onChange={handleChange}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -64,6 +86,8 @@ const FormSection = () => {
           case "textArea":
             return (
               <TextAreaElement
+                id={el.id}
+                onChange={handleChange}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -76,6 +100,8 @@ const FormSection = () => {
           case "quantity":
             return (
               <QuantityElement
+                id={el.id}
+                onChange={handleChange}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -88,6 +114,8 @@ const FormSection = () => {
           case "uploadElement":
             return (
               <UploadElement
+                id={el.id}
+                onChange={handleChange}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -100,6 +128,8 @@ const FormSection = () => {
           case "selectMaterial":
             return (
               <SelectMaterial
+                id={el.id}
+                onChange={handleChange}
                 key={index}
                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
                 data={el.data ?? defaultData}
@@ -111,6 +141,8 @@ const FormSection = () => {
             return <p className="bg-red-600">Błędny element</p>;
         }
       })}
+
+      <pre className="bg-purple-300">{JSON.stringify(formResult, null, 2)}</pre>
     </div>
   );
 };

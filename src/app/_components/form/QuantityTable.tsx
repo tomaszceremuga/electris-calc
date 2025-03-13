@@ -14,9 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Check } from "lucide-react";
 
 const QuantityTable = ({
+  id,
+  onChange,
   setQuantity,
 }: {
   setQuantity: (value: number) => void;
+  id: number;
+  onChange: (id: number, value: string) => void;
 }) => {
   const [customQuantity, setCustomQuantity] = React.useState("");
   const [selectedQty, setSelectedQty] = React.useState<number | null>(null);
