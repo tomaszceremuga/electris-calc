@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Requirements from "./Requirements";
 import UploadArea from "./UploadArea";
 import UploadFileList from "./UploadFileList";
-import { Button } from "~/components/ui/button";
+// import { Button } from "~/components/ui/button";
 
 const UploadSection = () => {
   const [fileList, setFileList] = useState<string[]>([]);
@@ -11,7 +11,7 @@ const UploadSection = () => {
   const [count, setCount] = useState<number>(0);
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-6 md:flex-row md:justify-between md:gap-6">
+      <div className="flex flex-col gap-6 md:flex-row md:justify-between md:gap-6 ">
         <div className="w-full md:w-[48%]">
           <UploadArea
             setFileList={setFileList}
