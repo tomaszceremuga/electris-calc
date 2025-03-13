@@ -14,11 +14,20 @@ import { type formElementsInterface } from "~/lib/formElementsInterface";
 const QuantityElement: React.FC<formElementsInterface> = ({
   id,
   onChange,
+  filled,
   name,
   info = "",
   isImportant = false,
 }) => {
-  const [quantity, setQuantity] = useState<number>(0);
+  const convertToNumber = (filled: string): number => {
+    const result = Number(filled);
+    return isNaN(result) ? 0 : result;
+  };
+
+  // Przypisujemy domyślną wartość (np. pusty string) jeśli `filled` jest null lub undefined
+  const [quantity, setQuantity] = useState<number>(
+    convertToNumber(filled ?? ""),
+  );
   const prevQuantity = useRef<number>(quantity);
 
   useEffect(() => {
@@ -48,6 +57,7 @@ const QuantityElement: React.FC<formElementsInterface> = ({
             <QuantityTable
               setQuantity={setQuantity}
               onChange={onChange}
+              filled={typeof filled === "number" ? filled : Number(filled ?? 0)}
               id={id}
             />
           </PopoverContent>

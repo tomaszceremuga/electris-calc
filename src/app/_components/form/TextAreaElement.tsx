@@ -6,7 +6,7 @@ import { type formElementsInterface } from "~/lib/formElementsInterface";
 const TextAreaElement: React.FC<formElementsInterface> = ({
   id,
   onChange,
-
+  filled,
   name,
   info = "",
   isImportant = false,
@@ -22,6 +22,7 @@ const TextAreaElement: React.FC<formElementsInterface> = ({
       </div>
       <Textarea
         onChange={(e) => onChange(id, e.target.value)}
+        defaultValue={filled}
         className="my-[8px] ml-[20px]"
       />
     </div>

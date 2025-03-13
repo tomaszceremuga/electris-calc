@@ -19,7 +19,7 @@ import { Pencil } from "lucide-react";
 
 interface SurfaceTreatmentProps {
   setSelectedSurface: React.Dispatch<React.SetStateAction<string>>;
-
+  filled: string[];
   data: {
     alertMesage: string;
     categories: {
@@ -57,26 +57,43 @@ const colorMap: Record<string, { bg: string; name: string }> = {
 
 const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
   setSelectedSurface,
-
+  filled,
   data = {
     categories: [],
     tiles: [],
   },
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState("surface");
-  const [selectedOption, setSelectedOption] = useState("anodized");
-  const [selectedTile, setSelectedTile] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[0] ? filled[0] : "surface";
+  });
+
+  const [selectedOption, setSelectedOption] = useState(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[1] ? filled[1] : "anodized";
+  });
+
+  const [selectedTile, setSelectedTile] = useState<string | null>(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[2] ? filled[2] : null;
+  });
+
+  const [selectedColor, setSelectedColor] = useState<string | null>(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[3] ? filled[3] : null;
+  });
 
   const currentCategory = data?.categories?.find(
     (cat) => cat.id === selectedCategory,
   );
+
   const availableTiles =
     data?.tiles?.filter(
       (tile) =>
         tile.categoryId === selectedCategory &&
         (tile.requiredOption === selectedOption || !tile.requiredOption),
     ) || [];
+
   const selectedTileData = selectedTile
     ? data?.tiles?.find((tile) => tile.id === selectedTile)
     : null;
@@ -92,6 +109,7 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     selectedColor,
     setSelectedSurface,
   ]);
+
   return (
     <div>
       <AlertDialog>

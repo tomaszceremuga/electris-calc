@@ -8,12 +8,16 @@ import { type formElementsInterface } from "~/lib/formElementsInterface";
 const RadioElements: React.FC<formElementsInterface> = ({
   id,
   onChange,
+  filled,
+
   name,
   info = "",
   options = [""],
   isImportant = false,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(
+    filled ?? null,
+  );
   const prevOption = useRef<string | null>(selectedOption);
 
   const handleChange = (value: string) => {

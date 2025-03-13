@@ -13,11 +13,40 @@ import FormSection from "./form/FormSection";
 import UploadSection from "./upload/UploadSection";
 import SummarySection from "./summary/SummarySection";
 
+type FilledFormData = {
+  id: number;
+  values: Array<Record<string, string>>;
+};
+
 export default function AccordionWithNavigation() {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
 
   const handleNavigation = (targetIndex: string) => {
     setActiveIndex(targetIndex);
+  };
+
+  const filledFormData: FilledFormData = {
+    id: 1,
+    values: [
+      { "1": "213213" },
+      { "2": "mm" },
+      { "3": "Stal nierdzewna" },
+      { "4": "Aluminium 5052" },
+      { "5": "Srebrno-biały" },
+      { "6": "1.0mm" },
+      { "777": "surface;anodized;anodized-simple;purple" },
+      { "8": "" },
+      { "9": "Tak" },
+      { "10": "Tak" },
+      { "11": "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)" },
+      { "12": "Tak" },
+      { "13": "Grawerowanie laserowe" },
+      { "14": "Testy montażowe" },
+      { "15": "Premium (dodatkowe opłaty)" },
+      { "16": "Standardowa inspekcja (brak raportu)" },
+      { "17": "Sprzęt biurowy i akcesoria" },
+      { "18": "ewqeqwe" },
+    ],
   };
 
   return (
@@ -59,7 +88,7 @@ export default function AccordionWithNavigation() {
           <span className="text-left font-medium">Formularz</span>
         </AccordionTrigger>
         <AccordionContent className="px-4 pb-4">
-          <FormSection />
+          <FormSection filledFormData={filledFormData} />
           <div className="mt-4 flex gap-2">
             <Button
               onClick={() => handleNavigation("item-0")}

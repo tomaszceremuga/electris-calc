@@ -16,15 +16,14 @@ import { Check } from "lucide-react";
 const QuantityTable = ({
   id,
   onChange,
+  filled,
   setQuantity,
 }: {
   setQuantity: (value: number) => void;
   id: number;
   onChange: (id: number, value: string) => void;
+  filled: number;
 }) => {
-  const [customQuantity, setCustomQuantity] = React.useState("");
-  const [selectedQty, setSelectedQty] = React.useState<number | null>(null);
-
   const quantities = [
     { qty: 1, unitPrice: "-/pc", totalPrice: "RFQ" },
     { qty: 2, unitPrice: "-/pc", totalPrice: "RFQ" },
@@ -38,6 +37,15 @@ const QuantityTable = ({
     },
   ];
 
+  const [customQuantity, setCustomQuantity] = React.useState(
+    quantities.some((item) => item.qty === Number(filled))
+      ? ""
+      : (filled ?? ""),
+  );
+  const [selectedQty, setSelectedQty] = React.useState<number | null>(
+    filled ?? null,
+  );
+
   const handleSelect = (qty: number) => {
     setQuantity(qty);
     setSelectedQty(qty);
@@ -45,7 +53,7 @@ const QuantityTable = ({
 
   const handleSubmitCustom = () => {
     if (customQuantity) {
-      const qty = Number.parseInt(customQuantity, 10);
+      const qty = Number.parseInt(String(customQuantity), 10);
       setQuantity(qty);
       setSelectedQty(qty);
     }

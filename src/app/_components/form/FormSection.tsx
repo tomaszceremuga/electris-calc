@@ -1,3 +1,357 @@
+// // import React, { useEffect, useState } from "react";
+
+// // import SelectGroup from "./SelectGroup";
+// // import RadioElements from "./RadioElements";
+// // import TextAreaElement from "./TextAreaElement";
+// // import UploadElement from "./UploadElement";
+// // import QuantityElement from "./QuantityElement";
+// // import SelectMaterial from "./SelectMaterial";
+
+// // import formData from "~/lib/formData";
+
+// // type FormResultState = {
+// //   id: number;
+// //   values: Record<number, string>[];
+// // };
+
+// // type FilledFormData = {
+// //   id: number;
+// //   values: Array<Record<string, string>>;
+// // };
+
+// // type FormSectionProps = {
+// //   filledFormData: FilledFormData;
+// // };
+// // const FormSection = ({ filledFormData }: FormSectionProps) => {
+// //   const defaultMaterial = {
+// //     image: "",
+// //     name: "Unknown",
+// //     infoLink: "#",
+// //     rate: 0,
+// //     rates: 0,
+// //   };
+// //   const defaultData = {
+// //     alertMesage: "",
+// //     categories: [],
+// //     tiles: [],
+// //   };
+
+// //   const [formResult, setFormResult] = useState<FormResultState>({
+// //     id: formData.id,
+// //     values: [],
+// //   });
+
+// //   useEffect(() => {
+// //     const initialState: FormResultState = {
+// //       id: formData.id,
+// //       values: formData.formElements.map((element) => ({ [element.id]: "" })),
+// //     };
+
+// //     setFormResult(initialState);
+// //   }, []);
+
+// //   const handleChange = (id: number, value: string) => {
+// //     setFormResult((prev) => ({
+// //       ...prev,
+// //       values: prev.values.map((item) =>
+// //         item[id] !== undefined ? { ...item, [id]: value } : item,
+// //       ),
+// //     }));
+// //   };
+
+// //   return (
+// //     <div className="pr-16">
+// //       {formData.formElements.map((el, index) => {
+// //         switch (el.type) {
+// //           case "selectGroup":
+// //             return (
+// //               <SelectGroup
+// //                 id={el.id}
+// //                 onChange={handleChange}
+// //                 filled={
+// //                   filledFormData.values.find((item) => item[el.id])?.[el.id] ??
+// //                   ""
+// //                 }
+// //                 name={el.name}
+// //                 info={el.info}
+// //                 description={el.decription}
+// //                 options={el.options}
+// //                 key={index}
+// //                 isImportant={el.isImportant}
+// //               />
+// //             );
+// //             break;
+// //           case "radioElements":
+// //             return (
+// //               <RadioElements
+// //                 id={el.id}
+// //                 onChange={handleChange}
+// //                 filled={
+// //                   filledFormData.values.find((item) => item[el.id])?.[el.id] ??
+// //                   ""
+// //                 }
+// //                 name={el.name}
+// //                 info={el.info}
+// //                 description={el.decription}
+// //                 options={el.options}
+// //                 key={index}
+// //                 isImportant={el.isImportant}
+// //               />
+// //             );
+// //             break;
+// //           case "textArea":
+// //             return (
+// //               <TextAreaElement
+// //                 id={el.id}
+// //                 onChange={handleChange}
+// //                 filled={
+// //                   filledFormData.values.find((item) => item[el.id])?.[el.id] ??
+// //                   ""
+// //                 }
+// //                 name={el.name}
+// //                 info={el.info}
+// //                 description={el.decription}
+// //                 options={el.options}
+// //                 key={index}
+// //                 isImportant={el.isImportant}
+// //               />
+// //             );
+// //             break;
+// //           case "quantity":
+// //             return (
+// //               <QuantityElement
+// //                 id={el.id}
+// //                 onChange={handleChange}
+// //                 filled={
+// //                   filledFormData.values.find((item) => item[el.id])?.[el.id] ??
+// //                   ""
+// //                 }
+// //                 name={el.name}
+// //                 info={el.info}
+// //                 description={el.decription}
+// //                 options={el.options}
+// //                 key={index}
+// //                 isImportant={el.isImportant}
+// //               />
+// //             );
+// //             break;
+// //           case "uploadElement":
+// //             return (
+// //               <UploadElement
+// //                 id={el.id}
+// //                 onChange={handleChange}
+// //                 filled={
+// //                   filledFormData.values.find((item) => item[el.id])?.[el.id] ??
+// //                   ""
+// //                 }
+// //                 name={el.name}
+// //                 info={el.info}
+// //                 description={el.decription}
+// //                 options={el.options}
+// //                 key={index}
+// //                 isImportant={el.isImportant}
+// //               />
+// //             );
+// //             break;
+// //           case "selectMaterial":
+// //             return (
+// //               <SelectMaterial
+// //                 id={el.id}
+// //                 onChange={handleChange}
+// //                 filled={
+// //                   filledFormData.values.find((item) => item[el.id])?.[el.id] ??
+// //                   ""
+// //                 }
+// //                 key={index}
+// //                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
+// //                 data={el.data ?? defaultData}
+// //               />
+// //             );
+// //             break;
+
+// //           default:
+// //             return <p className="bg-red-600">Błędny element</p>;
+// //         }
+// //       })}
+
+// //       <pre className="bg-purple-300">{JSON.stringify(formResult, null, 2)}</pre>
+// //     </div>
+// //   );
+// // };
+
+// // export default FormSection;
+
+// import React, { useEffect, useState } from "react";
+
+// import SelectGroup from "./SelectGroup";
+// import RadioElements from "./RadioElements";
+// import TextAreaElement from "./TextAreaElement";
+// import UploadElement from "./UploadElement";
+// import QuantityElement from "./QuantityElement";
+// import SelectMaterial from "./SelectMaterial";
+
+// import formData from "~/lib/formData";
+
+// type FormResultState = {
+//   id: number;
+//   values: Record<number, string>[]; // przechowuje wartości formularza
+// };
+
+// type FilledFormData = {
+//   id: number;
+//   values: Array<Record<string, string>>;
+// };
+
+// type FormSectionProps = {
+//   filledFormData: FilledFormData;
+// };
+
+// const FormSection = ({ filledFormData }: FormSectionProps) => {
+//   const defaultMaterial = {
+//     image: "",
+//     name: "Unknown",
+//     infoLink: "#",
+//     rate: 0,
+//     rates: 0,
+//   };
+//   const defaultData = {
+//     alertMesage: "",
+//     categories: [],
+//     tiles: [],
+//   };
+
+//   const [formResult, setFormResult] = useState<FormResultState>({
+//     id: formData.id,
+//     values: [],
+//   });
+
+//   // Ustawienie domyślnych danych formularza po pierwszym renderze
+//   useEffect(() => {
+//     const initialState: FormResultState = {
+//       id: formData.id,
+//       values: formData.formElements.map((element) => {
+//         const filledValue = filledFormData.values.find(
+//           (item) => item[element.id],
+//         );
+//         return {
+//           [element.id]: filledValue ? filledValue[element.id] : "",
+//         };
+//       }),
+//     };
+
+//     setFormResult(initialState);
+//   }, [filledFormData]);
+
+//   // Funkcja obsługująca zmiany w formularzu
+//   const handleChange = (id: number, value: string) => {
+//     setFormResult((prev) => ({
+//       ...prev,
+//       values: prev.values.map((item) =>
+//         item[id] !== undefined ? { ...item, [id]: value } : item,
+//       ),
+//     }));
+//   };
+
+//   return (
+//     <div className="pr-16">
+//       {formData.formElements.map((el, index) => {
+//         const filledValue =
+//           filledFormData.values.find((item) => item[el.id])?.[el.id] ?? "";
+
+//         switch (el.type) {
+//           case "selectGroup":
+//             return (
+//               <SelectGroup
+//                 id={el.id}
+//                 onChange={handleChange}
+//                 filled={filledValue}
+//                 name={el.name}
+//                 info={el.info}
+//                 description={el.decription}
+//                 options={el.options}
+//                 key={index}
+//                 isImportant={el.isImportant}
+//               />
+//             );
+//           case "radioElements":
+//             return (
+//               <RadioElements
+//                 id={el.id}
+//                 onChange={handleChange}
+//                 filled={filledValue}
+//                 name={el.name}
+//                 info={el.info}
+//                 description={el.decription}
+//                 options={el.options}
+//                 key={index}
+//                 isImportant={el.isImportant}
+//               />
+//             );
+//           case "textArea":
+//             return (
+//               <TextAreaElement
+//                 id={el.id}
+//                 onChange={handleChange}
+//                 filled={filledValue}
+//                 name={el.name}
+//                 info={el.info}
+//                 description={el.decription}
+//                 options={el.options}
+//                 key={index}
+//                 isImportant={el.isImportant}
+//               />
+//             );
+//           case "quantity":
+//             return (
+//               <QuantityElement
+//                 id={el.id}
+//                 onChange={handleChange}
+//                 filled={filledValue}
+//                 name={el.name}
+//                 info={el.info}
+//                 description={el.decription}
+//                 options={el.options}
+//                 key={index}
+//                 isImportant={el.isImportant}
+//               />
+//             );
+//           case "uploadElement":
+//             return (
+//               <UploadElement
+//                 id={el.id}
+//                 onChange={handleChange}
+//                 filled={filledValue}
+//                 name={el.name}
+//                 info={el.info}
+//                 description={el.decription}
+//                 options={el.options}
+//                 key={index}
+//                 isImportant={el.isImportant}
+//               />
+//             );
+//           case "selectMaterial":
+//             return (
+//               <SelectMaterial
+//                 id={el.id}
+//                 onChange={handleChange}
+//                 filled={filledValue}
+//                 key={index}
+//                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
+//                 data={el.data ?? defaultData}
+//               />
+//             );
+//           default:
+//             return <p className="bg-red-600">Błędny element</p>;
+//         }
+//       })}
+
+//       <pre className="bg-purple-300">{JSON.stringify(formResult, null, 2)}</pre>
+//     </div>
+//   );
+// };
+
+// export default FormSection;
+
 import React, { useEffect, useState } from "react";
 
 import SelectGroup from "./SelectGroup";
@@ -11,10 +365,19 @@ import formData from "~/lib/formData";
 
 type FormResultState = {
   id: number;
-  values: Record<number, string>[];
+  values: Record<number, string>[]; // Tablica obiektów, gdzie klucz to numer id, a wartość to string
 };
 
-const FormSection = () => {
+type FilledFormData = {
+  id: number;
+  values: Array<Record<string, string>>;
+};
+
+type FormSectionProps = {
+  filledFormData: FilledFormData;
+};
+
+const FormSection = ({ filledFormData }: FormSectionProps) => {
   const defaultMaterial = {
     image: "",
     name: "Unknown",
@@ -33,15 +396,25 @@ const FormSection = () => {
     values: [],
   });
 
+  // Ustawienie domyślnych danych formularza po pierwszym renderze
   useEffect(() => {
     const initialState: FormResultState = {
       id: formData.id,
-      values: formData.formElements.map((element) => ({ [element.id]: "" })),
+      values: formData.formElements.map((element) => {
+        // Używamy ?? aby upewnić się, że wartości są zawsze typu string
+        const filledValue = filledFormData.values.find(
+          (item) => item[element.id],
+        );
+        return {
+          [element.id]: filledValue ? (filledValue[element.id] ?? "") : "", // Domyślnie pusty string w przypadku undefined
+        };
+      }),
     };
 
     setFormResult(initialState);
-  }, []);
+  }, [filledFormData]);
 
+  // Funkcja obsługująca zmiany w formularzu
   const handleChange = (id: number, value: string) => {
     setFormResult((prev) => ({
       ...prev,
@@ -54,12 +427,16 @@ const FormSection = () => {
   return (
     <div className="pr-16">
       {formData.formElements.map((el, index) => {
+        const filledValue =
+          filledFormData.values.find((item) => item[el.id])?.[el.id] ?? ""; // Jeżeli brak wypełnionej wartości, domyślnie pusty string
+
         switch (el.type) {
           case "selectGroup":
             return (
               <SelectGroup
                 id={el.id}
                 onChange={handleChange}
+                filled={filledValue}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -68,12 +445,12 @@ const FormSection = () => {
                 isImportant={el.isImportant}
               />
             );
-            break;
           case "radioElements":
             return (
               <RadioElements
                 id={el.id}
                 onChange={handleChange}
+                filled={filledValue}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -82,12 +459,12 @@ const FormSection = () => {
                 isImportant={el.isImportant}
               />
             );
-            break;
           case "textArea":
             return (
               <TextAreaElement
                 id={el.id}
                 onChange={handleChange}
+                filled={filledValue}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -96,12 +473,12 @@ const FormSection = () => {
                 isImportant={el.isImportant}
               />
             );
-            break;
           case "quantity":
             return (
               <QuantityElement
                 id={el.id}
                 onChange={handleChange}
+                filled={filledValue}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -110,12 +487,12 @@ const FormSection = () => {
                 isImportant={el.isImportant}
               />
             );
-            break;
           case "uploadElement":
             return (
               <UploadElement
                 id={el.id}
                 onChange={handleChange}
+                filled={filledValue}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -124,19 +501,17 @@ const FormSection = () => {
                 isImportant={el.isImportant}
               />
             );
-            break;
           case "selectMaterial":
             return (
               <SelectMaterial
                 id={el.id}
                 onChange={handleChange}
+                filled={filledValue}
                 key={index}
                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
                 data={el.data ?? defaultData}
               />
             );
-            break;
-
           default:
             return <p className="bg-red-600">Błędny element</p>;
         }

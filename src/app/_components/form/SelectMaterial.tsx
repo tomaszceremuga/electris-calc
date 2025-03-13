@@ -14,6 +14,7 @@ import SurfaceTreatment from "./SurfaceTreatment";
 interface SurfaceTreatmentProps {
   id: number;
   onChange: (id: number, value: string) => void;
+  filled: string;
 
   selectedMaterial: {
     image: string;
@@ -47,6 +48,7 @@ interface SurfaceTreatmentProps {
 const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   id,
   onChange,
+  filled,
   selectedMaterial,
   data,
 }) => {
@@ -107,7 +109,11 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
             </PopoverContent>
           </Popover>
         </div>
-        <SurfaceTreatment setSelectedSurface={setSelectedSurface} data={data} />
+        <SurfaceTreatment
+          setSelectedSurface={setSelectedSurface}
+          data={data}
+          filled={filled.split(";")}
+        />
       </div>
     </div>
   );

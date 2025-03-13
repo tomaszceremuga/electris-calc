@@ -23,6 +23,7 @@ import { type formElementsInterface } from "~/lib/formElementsInterface";
 const UploadElement: React.FC<formElementsInterface> = ({
   id,
   onChange,
+  filled,
   name,
   description = "",
   info = "",
