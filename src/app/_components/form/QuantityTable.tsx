@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -13,16 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Check } from "lucide-react";
 
-
 const QuantityTable = ({
-  id,
-  onChange,
   filled,
+  finalQuantity,
   setQuantity,
 }: {
   setQuantity: (value: number) => void;
-  id: number;
-  onChange: (id: number, value: string) => void;
+  finalQuantity: number;
   filled: number;
 }) => {
   const quantities = [
@@ -31,11 +28,7 @@ const QuantityTable = ({
     { qty: 5, unitPrice: "-/pc", totalPrice: "RFQ" },
     { qty: 10, unitPrice: "-/pc", totalPrice: "RFQ" },
     { qty: 50, unitPrice: "-/pc", totalPrice: "RFQ" },
-    {
-      qty: 100,
-      unitPrice:"-/pc",
-      totalPrice: "RFQ",
-    },
+    { qty: 100, unitPrice: "-/pc", totalPrice: "RFQ" },
   ];
 
   const [customQuantity, setCustomQuantity] = React.useState(
@@ -44,16 +37,25 @@ const QuantityTable = ({
       : (filled ?? ""),
   );
   const [selectedQty, setSelectedQty] = React.useState<number | null>(
-    filled ?? null,
+    quantities.some((item) => item.qty === Number(finalQuantity))
+      ? finalQuantity
+      : null,
   );
 
+  useEffect(() => {
+    if (!quantities.some((item) => item.qty === Number(finalQuantity))) {
+      setCustomQuantity(finalQuantity.toString());
+    } else {
+      setCustomQuantity("");
+    }
+    setSelectedQty(finalQuantity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [finalQuantity]);
 
   const handleSelect = (qty: number) => {
     setQuantity(qty);
     setSelectedQty(qty);
   };
-  
-
 
   return (
     <div className="rounded-md bg-white">
@@ -78,10 +80,9 @@ const QuantityTable = ({
               </TableCell>
               <TableCell className="text-center">{item.unitPrice}</TableCell>
               <TableCell className="text-center">{item.totalPrice}</TableCell>
-              <TableCell className="flex justify-center text-center items-center">
+              <TableCell className="flex items-center justify-center text-center">
                 {selectedQty === item.qty && (
-                  <Check className="h-5 w-5 text-green-500 " />
-
+                  <Check className="h-5 w-5 text-green-500" />
                 )}
               </TableCell>
             </TableRow>
@@ -89,7 +90,7 @@ const QuantityTable = ({
         </TableBody>
       </Table>
 
-      <div className="flex items-center gap-2 p-3 hover:bg-gray-50 cursor-pointer border-t">
+      <div className="flex cursor-pointer items-center gap-2 border-t p-3 hover:bg-gray-50">
         <Input
           type="number"
           value={customQuantity}
@@ -108,7 +109,6 @@ const QuantityTable = ({
           className="max-w-[120px]"
         />
 
-
         <div
           className="flex w-full justify-between pr-4"
           onClick={() => {
@@ -119,10 +119,10 @@ const QuantityTable = ({
           }}
         >
           <span className="flex-1 text-neutral-500">Podaj własną wartość</span>
-          {customQuantity != 0 &&
+          {customQuantity !== "" &&
             selectedQty &&
             !quantities.some((q) => q.qty === selectedQty) && (
-              <Check className="h-5 w-5 text-green-500 " />
+              <Check className="h-5 w-5 text-green-500" />
             )}
         </div>
       </div>

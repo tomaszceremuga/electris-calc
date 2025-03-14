@@ -14,6 +14,7 @@ import {
 import InfoButton from "./InfoButton";
 import QuantityTable from "./QuantityTable";
 import { type formElementsInterface } from "~/lib/formElementsInterface";
+import { X } from "lucide-react";
 
 const QuantityElement: React.FC<formElementsInterface> = ({
   id,
@@ -28,9 +29,13 @@ const QuantityElement: React.FC<formElementsInterface> = ({
     return isNaN(result) ? 0 : result;
   };
 
-  const [quantity, setQuantity] = useState<number>(convertToNumber(filled ?? ""));
+  const [quantity, setQuantity] = useState<number>(
+    convertToNumber(filled ?? ""),
+  );
   const prevQuantity = useRef<number>(quantity);
-  const [finalQuantity, setFinalQuantity] = useState<number>(convertToNumber(filled ?? ""));
+  const [finalQuantity, setFinalQuantity] = useState<number>(
+    convertToNumber(filled ?? ""),
+  );
 
   useEffect(() => {
     if (prevQuantity.current !== quantity) {
@@ -57,20 +62,34 @@ const QuantityElement: React.FC<formElementsInterface> = ({
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Wybierz ilość</AlertDialogTitle>
-              {/* ✅ Zmieniono z <AlertDialogDescription> na <div> */}
+              <div className="flex items-center justify-between">
+                <AlertDialogTitle>Wybierz ilość</AlertDialogTitle>
+                <AlertDialogCancel
+                  className="w-min border-none"
+                  onClick={() => setQuantity(finalQuantity)}
+                >
+                  <X />
+                </AlertDialogCancel>
+              </div>
               <div className="w-full max-w-[700px]">
                 <QuantityTable
                   setQuantity={setQuantity}
                   onChange={onChange}
-                  filled={typeof filled === "number" ? filled : Number(filled ?? 0)}
+                  filled={
+                    typeof filled === "number" ? filled : Number(filled ?? 0)
+                  }
+                  finalQuantity={finalQuantity}
                   id={id}
                 />
               </div>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setQuantity(finalQuantity)}>Anuluj</AlertDialogCancel>
-              <AlertDialogAction onClick={() => setFinalQuantity(quantity)}>Zapisz</AlertDialogAction>
+              <AlertDialogCancel onClick={() => setQuantity(finalQuantity)}>
+                Anuluj
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={() => setFinalQuantity(quantity)}>
+                Zapisz
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

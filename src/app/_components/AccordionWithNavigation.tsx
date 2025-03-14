@@ -28,7 +28,7 @@ export default function AccordionWithNavigation() {
   const filledFormData: FilledFormData = {
     id: 1,
     values: [
-      { "1": "213213" },
+      { "1": "13213" },
       { "2": "mm" },
       { "3": "Stal nierdzewna" },
       { "4": "Aluminium 5052" },
@@ -55,17 +55,17 @@ export default function AccordionWithNavigation() {
       value={activeIndex}
       onValueChange={setActiveIndex}
       collapsible
-      className="w-full h-min max-w-4xl "
+      className="h-min w-full max-w-4xl"
     >
       {/* Upload Section */}
       <AccordionItem
         value="item-0"
-        className="mb-2 lg:rounded-md lg:border border-b bg-white p-2"
+        className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-left font-medium">Prześlij pliki</span>
         </AccordionTrigger>
-        <AccordionContent className="xl:px-4 pb-4">
+        <AccordionContent className="pb-4 xl:px-4">
           <UploadSection />
           <div className="mt-4 flex gap-2">
             <Button
@@ -82,12 +82,12 @@ export default function AccordionWithNavigation() {
       {/* Form Section */}
       <AccordionItem
         value="item-1"
-        className="mb-2 lg:rounded-md lg:border border-b  bg-white p-2"
+        className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-left font-medium">Formularz</span>
         </AccordionTrigger>
-        <AccordionContent className="xl:px-4 pb-4">
+        <AccordionContent className="pb-4 xl:px-4">
           <FormSection filledFormData={filledFormData} />
           <div className="mt-4 flex gap-2">
             <Button
@@ -112,12 +112,12 @@ export default function AccordionWithNavigation() {
       {/* Summary Section */}
       <AccordionItem
         value="item-2"
-        className="mb-2 lg:rounded-md lg:border border-b bg-white p-2"
+        className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-left font-medium">Podsumowanie</span>
         </AccordionTrigger>
-        <AccordionContent className="xl:px-4 pb-4">
+        <AccordionContent className="pb-4 xl:px-4">
           <SummarySection />
           <div className="mt-4 flex gap-2">
             <Button

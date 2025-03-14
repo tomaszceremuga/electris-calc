@@ -3,6 +3,10 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 
+import { X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { ChevronUp } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -63,6 +67,7 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     tiles: [],
   },
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedCategory, setSelectedCategory] = useState(() => {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return filled[0] ? filled[0] : "surface";
@@ -82,6 +87,8 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return filled[3] ? filled[3] : null;
   });
+
+  const [optionsPanelExpanded, setOptionsPanelExpanded] = useState(true);
 
   const currentCategory = data?.categories?.find(
     (cat) => cat.id === selectedCategory,
@@ -110,6 +117,7 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     setSelectedSurface,
   ]);
 
+  console.log("OBECNY KAFELEK " + selectedTile);
   return (
     <div>
       <AlertDialog>
@@ -120,7 +128,7 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
 
               <div className="space-y-2">
                 <p>
-                  <span className="font-medium">Kategoria:</span>{" "}
+                  <span className="font-medium">Kategoria</span>{" "}
                   {currentCategory?.name}
                 </p>
                 <p>
@@ -151,15 +159,49 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
             </p>
           )}
         </AlertDialogTrigger>
-        <AlertDialogContent className="w-full max-w-min pb-0">
+        <AlertDialogContent className="w-full max-w-[95vw] overflow-hidden pb-0 md:max-w-[90vw] lg:max-w-[1000px]">
           <AlertDialogHeader>
-            <AlertDialogTitle>{currentCategory?.name}</AlertDialogTitle>
+            <div className="flex items-center justify-between">
+              <AlertDialogTitle>{currentCategory?.name}</AlertDialogTitle>
+              <AlertDialogCancel className="w-min border-none">
+                <X />
+              </AlertDialogCancel>
+            </div>
           </AlertDialogHeader>
 
-          <div className="mx-auto h-[600px] w-[1000px]">
-            <div className="grid h-[550px] grid-cols-[250px_1fr_300px]">
-              <div className="border-r">
-                <div className="h-full overflow-auto">
+          <div className="w-full overflow-hidden md:h-[600px]">
+            <div className="flex h-[70vh] flex-col overflow-y-auto md:hidden">
+              <div className="rounded border">
+                <div
+                  className="flex h-[50px] items-center justify-between px-4"
+                  onClick={() => setOptionsPanelExpanded(!optionsPanelExpanded)}
+                >
+                  <span className="text-sm font-medium">
+                    {
+                      currentCategory?.options.find(
+                        (o) => o.id === selectedOption,
+                      )?.name
+                    }
+                  </span>
+                  <button
+                    className="rounded-md p-2"
+                    onClick={() =>
+                      setOptionsPanelExpanded(!optionsPanelExpanded)
+                    }
+                  >
+                    {optionsPanelExpanded ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                <div
+                  className={cn(
+                    "overflow-hidden transition-all duration-300",
+                    optionsPanelExpanded ? "max-h-[300px]" : "max-h-0",
+                  )}
+                >
                   {currentCategory?.options.map((option) => (
                     <button
                       key={option.id}
@@ -169,10 +211,12 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                           ? "bg-gray-200 font-medium"
                           : "hover:bg-gray-100",
                       )}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setSelectedOption(option.id);
                         setSelectedTile(null);
                         setSelectedColor(null);
+                        setOptionsPanelExpanded(false);
                       }}
                     >
                       {option.name}
@@ -181,7 +225,106 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                 </div>
               </div>
 
-              <div className="h-full overflow-y-auto border-r p-4">
+              <div className="p-4">
+                <div
+                  className={`${selectedTile != null && "align-center"} sm:baseline flex flex-wrap content-start gap-4 align-baseline`}
+                >
+                  {availableTiles.map((tile) => {
+                    console.log(selectedTile);
+                    console.log(tile);
+                    return (
+                      <div
+                        key={tile.id}
+                        className={cn(
+                          `${selectedTile != tile.id && selectedTile != null && "hidden"} h-[200px] w-full cursor-pointer overflow-hidden rounded-lg border transition-all sm:visible md:w-[calc(50%-8px)]`,
+                          selectedTile === tile.id
+                            ? "ring-2 ring-gray-400"
+                            : "hover:shadow-md",
+                        )}
+                        onClick={() => {
+                          setSelectedTile(tile.id);
+                          setSelectedColor(null);
+                        }}
+                      >
+                        <div className="relative h-[150px] w-full">
+                          <Image
+                            src={tile.image || "/placeholder.svg"}
+                            alt={tile.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="flex h-[50px] items-center justify-center p-3 text-center">
+                          <h3 className="font-medium">{tile.name}</h3>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Details Section */}
+              {selectedTileData && (
+                <div className={`border-t p-4`}>
+                  <h3 className="mb-3 font-medium">
+                    Informacje o {selectedTileData.name}
+                  </h3>
+                  <p className="mb-4 break-words text-sm">
+                    {selectedTileData.description}
+                  </p>
+
+                  {selectedTileData.colors.length > 0 && (
+                    <>
+                      <h3 className="mb-2 font-medium">Wybierz kolor</h3>
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        {selectedTileData.colors.map((color) => (
+                          <button
+                            key={color}
+                            className={cn(
+                              "h-12 w-12 rounded-md border",
+                              colorMap[color]?.bg,
+                              selectedColor === color
+                                ? "ring-2 ring-gray-500 ring-offset-2"
+                                : "",
+                            )}
+                            onClick={() => setSelectedColor(color)}
+                            aria-label={colorMap[color]?.name}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <AlertDialogFooter className="sticky bottom-0 mt-auto flex items-center justify-end gap-2 border-t bg-background p-4">
+                <AlertDialogAction>Zatwierdź</AlertDialogAction>
+              </AlertDialogFooter>
+            </div>
+
+            <div className="hidden h-full grid-cols-[200px_1fr] md:grid lg:grid-cols-[250px_1fr_300px]">
+              <div className="overflow-auto border-r">
+                {currentCategory?.options.map((option) => (
+                  <button
+                    key={option.id}
+                    className={cn(
+                      "h-[50px] w-full border-b px-4 py-3 text-left transition-colors last:border-b-0",
+                      selectedOption === option.id
+                        ? "bg-gray-200 font-medium"
+                        : "hover:bg-gray-100",
+                    )}
+                    onClick={() => {
+                      setSelectedOption(option.id);
+                      setSelectedTile(null);
+                      setSelectedColor(null);
+                    }}
+                  >
+                    {option.name}
+                  </button>
+                ))}
+              </div>
+
+              <div className="overflow-y-auto border-r p-4">
                 <div className="flex flex-wrap content-start gap-4">
                   {availableTiles.map((tile) => (
                     <div
@@ -217,12 +360,12 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                 {selectedTileData?.colors.length ? (
                   <>
                     <h3 className="mb-2 font-medium">Wybierz kolor</h3>
-                    <div className="mb-6 grid grid-cols-5 gap-2">
+                    <div className="mb-6 grid grid-cols-3 gap-2 lg:grid-cols-4">
                       {selectedTileData.colors.map((color) => (
                         <button
                           key={color}
                           className={cn(
-                            "h-12 w-12 rounded-md border",
+                            "h-10 w-10 rounded-md border",
                             colorMap[color]?.bg,
                             selectedColor === color
                               ? "ring-2 ring-gray-500 ring-offset-2"
@@ -237,15 +380,17 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                 ) : null}
 
                 {selectedTileData && (
-                  <div className="flex-1">
+                  <div className="flex-1 overflow-y-auto">
                     <h3 className="mb-2 font-medium">
                       Informacje o {selectedTileData.name}
                     </h3>
-                    <p className="text-sm">{selectedTileData.description}</p>
+                    <p className="break-words text-sm">
+                      {selectedTileData.description}
+                    </p>
                   </div>
                 )}
 
-                <AlertDialogFooter className="mt-auto flex justify-end gap-2">
+                <AlertDialogFooter className="sticky bottom-0 mt-auto flex justify-end gap-2 bg-background py-2">
                   <AlertDialogCancel>Zamknij</AlertDialogCancel>
                   <AlertDialogAction>Zatwierdź</AlertDialogAction>
                 </AlertDialogFooter>
