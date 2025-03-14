@@ -1,109 +1,52 @@
 "use client";
 
-import React from "react";
-import { useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
+
+import { X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "~/components/ui/button";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Pencil } from "lucide-react";
 
-const configuratorData = {
-  categories: [
-    {
-      id: "surface",
-      name: "Powierzchnia",
-      options: [
-        { id: "standard", name: "Standardowa (Frezowana)" },
-        { id: "anodized", name: "Anodowana" },
-        { id: "brushed", name: "Szczotkowana" },
-        { id: "bead-blast", name: "Piaskowana" },
-        { id: "spray-painting", name: "Malowanie natryskowe" },
-        { id: "powder-coat", name: "Malowanie proszkowe" },
-        { id: "spray-plating", name: "Natryskowe powlekanie" },
-        { id: "detail-sanding", name: "Szlifowanie detali" },
-      ],
-    },
-  ],
-  tiles: [
-    {
-      id: "bead-blast-anodized",
-      categoryId: "surface",
-      name: "Piaskowanie + Anodowanie",
-      description:
-        "Anodowanie tworzy powłokę odporną na korozję. Części mogą być anodowane w różnych kolorach — przezroczysty, czarny, czerwony i złoty są najczęściej spotykane — i zwykle jest związane z aluminium. A dzięki piaskowaniu powierzchnia części pozostaje gładka, z matowym wyglądem.",
-      image: "/placeholder.svg?height=150&width=250",
-      colors: [
-        "blue",
-        "black",
-        "gray",
-        "yellow",
-        "orange",
-        "red",
-        "teal",
-        "purple",
-        "brown",
-        "beige",
-      ],
-      requiredOption: "anodized",
-    },
-    {
-      id: "anodized-simple",
-      categoryId: "surface",
-      name: "Anodowanie",
-      description:
-        "Anodowanie tworzy powłokę odporną na korozję. Części mogą być anodowane w różnych kolorach — przezroczysty, czarny, czerwony i złoty są najczęściej spotykane — i zwykle jest związane z aluminium.",
-      image: "/placeholder.svg?height=150&width=250",
-      colors: [
-        "blue",
-        "black",
-        "gray",
-        "yellow",
-        "orange",
-        "red",
-        "teal",
-        "purple",
-        "brown",
-        "beige",
-      ],
-      requiredOption: "anodized",
-    },
-    {
-      id: "standard-finish",
-      categoryId: "surface",
-      name: "Wykończenie standardowe",
-      description:
-        "Standardowe wykończenie frezowane zapewnia podstawową obróbkę powierzchni bez dodatkowego przetwarzania.",
-      image: "/placeholder.svg?height=150&width=250",
-      colors: [],
-      requiredOption: "standard",
-    },
-    {
-      id: "brushed-finish",
-      categoryId: "surface",
-      name: "Wykończenie szczotkowane",
-      description:
-        "Wykończenie szczotkowane tworzy serię drobnych linii na powierzchni, nadając jej charakterystyczny wygląd i teksturę.",
-      image: "/placeholder.svg?height=150&width=250",
-      colors: [],
-      requiredOption: "brushed",
-    },
-  ],
-};
+interface SurfaceTreatmentProps {
+  setSelectedSurface: React.Dispatch<React.SetStateAction<string>>;
+  filled: string[];
+  data: {
+    alertMesage: string;
+    categories: {
+      id: string;
+      name: string;
+      options: {
+        id: string;
+        name: string;
+      }[];
+    }[];
+    tiles: {
+      id: string;
+      categoryId: string;
+      name: string;
+      description: string;
+      image: string;
+      colors: string[];
+      requiredOption?: string;
+    }[];
+  };
+}
 
-// Color mapping for display
-const colorMap = {
+const colorMap: Record<string, { bg: string; name: string }> = {
   blue: { bg: "bg-blue-500", name: "Niebieski" },
   black: { bg: "bg-black", name: "Czarny" },
   gray: { bg: "bg-gray-400", name: "Szary" },
@@ -116,24 +59,65 @@ const colorMap = {
   beige: { bg: "bg-amber-200", name: "Beżowy" },
 };
 
-const SurfaceTreatment = () => {
-  const [selectedCategory, setSelectedCategory] = useState("surface");
-  const [selectedOption, setSelectedOption] = useState("anodized");
-  const [selectedTile, setSelectedTile] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
+  setSelectedSurface,
+  filled,
+  data = {
+    categories: [],
+    tiles: [],
+  },
+}) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[0] ? filled[0] : "surface";
+  });
 
-  const currentCategory = configuratorData.categories.find(
+  const [selectedOption, setSelectedOption] = useState(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[1] ? filled[1] : "anodized";
+  });
+
+  const [selectedTile, setSelectedTile] = useState<string | null>(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[2] ? filled[2] : null;
+  });
+
+  const [selectedColor, setSelectedColor] = useState<string | null>(() => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return filled[3] ? filled[3] : null;
+  });
+
+  const [optionsPanelExpanded, setOptionsPanelExpanded] = useState(true);
+
+  const currentCategory = data?.categories?.find(
     (cat) => cat.id === selectedCategory,
   );
-  const availableTiles = configuratorData.tiles.filter(
-    (tile) =>
-      tile.categoryId === selectedCategory &&
-      (tile.requiredOption === selectedOption || !tile.requiredOption),
-  );
+
+  const availableTiles =
+    data?.tiles?.filter(
+      (tile) =>
+        tile.categoryId === selectedCategory &&
+        (tile.requiredOption === selectedOption || !tile.requiredOption),
+    ) || [];
+
   const selectedTileData = selectedTile
-    ? configuratorData.tiles.find((tile) => tile.id === selectedTile)
+    ? data?.tiles?.find((tile) => tile.id === selectedTile)
     : null;
 
+  useEffect(() => {
+    setSelectedSurface(
+      `${selectedCategory ?? ""};${selectedOption ?? ""};${selectedTile ?? ""};${selectedColor ?? ""}`,
+    );
+  }, [
+    selectedCategory,
+    selectedOption,
+    selectedTile,
+    selectedColor,
+    setSelectedSurface,
+  ]);
+
+  console.log("OBECNY KAFELEK " + selectedTile);
   return (
     <div>
       <AlertDialog>
@@ -144,7 +128,7 @@ const SurfaceTreatment = () => {
 
               <div className="space-y-2">
                 <p>
-                  <span className="font-medium">Kategoria:</span>{" "}
+                  <span className="font-medium">Kategoria</span>{" "}
                   {currentCategory?.name}
                 </p>
                 <p>
@@ -164,7 +148,7 @@ const SurfaceTreatment = () => {
                 {selectedColor && (
                   <p>
                     <span className="font-medium">Kolor:</span>{" "}
-                    {colorMap[selectedColor].name}
+                    {colorMap[selectedColor]?.name}
                   </p>
                 )}
               </div>
@@ -175,48 +159,84 @@ const SurfaceTreatment = () => {
             </p>
           )}
         </AlertDialogTrigger>
-        <AlertDialogContent className="w-full max-w-min">
+        <AlertDialogContent className="w-full max-w-[95vw] overflow-hidden pb-0 md:max-w-[90vw] lg:max-w-[1000px]">
           <AlertDialogHeader>
-            <AlertDialogTitle></AlertDialogTitle>
+            <div className="flex items-center justify-between">
+              <AlertDialogTitle>{currentCategory?.name}</AlertDialogTitle>
+              <AlertDialogCancel className="w-min border-none">
+                <X />
+              </AlertDialogCancel>
+            </div>
+          </AlertDialogHeader>
 
-            <AlertDialogDescription className="mx-auto h-[600px] w-[1000px]">
-              <div className="flex h-[50px] items-center border-b px-4">
-                <h1 className="text-xl font-semibold text-primary">
-                  {currentCategory?.name}
-                </h1>
+          <div className="w-full overflow-hidden md:h-[600px]">
+            <div className="flex h-[70vh] flex-col overflow-y-auto md:hidden">
+              <div className="rounded border">
+                <div
+                  className="flex h-[50px] items-center justify-between px-4"
+                  onClick={() => setOptionsPanelExpanded(!optionsPanelExpanded)}
+                >
+                  <span className="text-sm font-medium">
+                    {
+                      currentCategory?.options.find(
+                        (o) => o.id === selectedOption,
+                      )?.name
+                    }
+                  </span>
+                  <button
+                    className="rounded-md p-2"
+                    onClick={() =>
+                      setOptionsPanelExpanded(!optionsPanelExpanded)
+                    }
+                  >
+                    {optionsPanelExpanded ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                <div
+                  className={cn(
+                    "overflow-hidden transition-all duration-300",
+                    optionsPanelExpanded ? "max-h-[300px]" : "max-h-0",
+                  )}
+                >
+                  {currentCategory?.options.map((option) => (
+                    <button
+                      key={option.id}
+                      className={cn(
+                        "h-[50px] w-full border-b px-4 py-3 text-left transition-colors last:border-b-0",
+                        selectedOption === option.id
+                          ? "bg-gray-200 font-medium"
+                          : "hover:bg-gray-100",
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedOption(option.id);
+                        setSelectedTile(null);
+                        setSelectedColor(null);
+                        setOptionsPanelExpanded(false);
+                      }}
+                    >
+                      {option.name}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div className="grid h-[550px] grid-cols-[250px_1fr_300px]">
-                <div className="border-r">
-                  <div className="h-full overflow-auto">
-                    {currentCategory?.options.map((option) => (
-                      <button
-                        key={option.id}
-                        className={cn(
-                          "h-[50px] w-full border-b px-4 py-3 text-left transition-colors last:border-b-0",
-                          selectedOption === option.id
-                            ? "bg-gray-200 font-medium"
-                            : "hover:bg-gray-100",
-                        )}
-                        onClick={() => {
-                          setSelectedOption(option.id);
-                          setSelectedTile(null);
-                          setSelectedColor(null);
-                        }}
-                      >
-                        {option.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="h-full overflow-y-auto border-r p-4">
-                  <div className="flex flex-wrap content-start gap-4">
-                    {availableTiles.map((tile) => (
+              <div className="p-4">
+                <div
+                  className={`${selectedTile != null && "align-center"} sm:baseline flex flex-wrap content-start gap-4 align-baseline`}
+                >
+                  {availableTiles.map((tile) => {
+                    console.log(selectedTile);
+                    console.log(tile);
+                    return (
                       <div
                         key={tile.id}
                         className={cn(
-                          "h-[200px] w-[calc(50%-8px)] cursor-pointer overflow-hidden rounded-lg border transition-all",
+                          `${selectedTile != tile.id && selectedTile != null && "hidden"} h-[200px] w-full cursor-pointer overflow-hidden rounded-lg border transition-all sm:visible md:w-[calc(50%-8px)]`,
                           selectedTile === tile.id
                             ? "ring-2 ring-gray-400"
                             : "hover:shadow-md",
@@ -238,50 +258,145 @@ const SurfaceTreatment = () => {
                           <h3 className="font-medium">{tile.name}</h3>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
+              </div>
 
-                <div className="flex flex-col p-4">
-                  {selectedTileData?.colors.length ? (
+              {/* Details Section */}
+              {selectedTileData && (
+                <div className={`border-t p-4`}>
+                  <h3 className="mb-3 font-medium">
+                    Informacje o {selectedTileData.name}
+                  </h3>
+                  <p className="mb-4 break-words text-sm">
+                    {selectedTileData.description}
+                  </p>
+
+                  {selectedTileData.colors.length > 0 && (
                     <>
                       <h3 className="mb-2 font-medium">Wybierz kolor</h3>
-                      <div className="mb-6 grid grid-cols-5 gap-2">
+                      <div className="mb-4 flex flex-wrap gap-2">
                         {selectedTileData.colors.map((color) => (
                           <button
                             key={color}
                             className={cn(
                               "h-12 w-12 rounded-md border",
-                              colorMap[color].bg,
+                              colorMap[color]?.bg,
                               selectedColor === color
                                 ? "ring-2 ring-gray-500 ring-offset-2"
                                 : "",
                             )}
                             onClick={() => setSelectedColor(color)}
-                            aria-label={colorMap[color].name}
+                            aria-label={colorMap[color]?.name}
                           />
                         ))}
                       </div>
                     </>
-                  ) : null}
-
-                  {selectedTileData && (
-                    <div className="flex-1">
-                      <h3 className="mb-2 font-medium">
-                        Informacje o {selectedTileData.name}
-                      </h3>
-                      <p className="text-sm">{selectedTileData.description}</p>
-                    </div>
                   )}
+                </div>
+              )}
 
-                  <AlertDialogFooter className="mt-auto flex justify-end gap-2">
-                    <AlertDialogCancel>Zamknij</AlertDialogCancel>
-                    <AlertDialogAction>Zatwierdź</AlertDialogAction>
-                  </AlertDialogFooter>
+              <AlertDialogFooter className="sticky bottom-0 mt-auto flex items-center justify-end gap-2 border-t bg-background p-4">
+                <AlertDialogAction>Zatwierdź</AlertDialogAction>
+              </AlertDialogFooter>
+            </div>
+
+            <div className="hidden h-full grid-cols-[200px_1fr] md:grid lg:grid-cols-[250px_1fr_300px]">
+              <div className="overflow-auto border-r">
+                {currentCategory?.options.map((option) => (
+                  <button
+                    key={option.id}
+                    className={cn(
+                      "h-[50px] w-full border-b px-4 py-3 text-left transition-colors last:border-b-0",
+                      selectedOption === option.id
+                        ? "bg-gray-200 font-medium"
+                        : "hover:bg-gray-100",
+                    )}
+                    onClick={() => {
+                      setSelectedOption(option.id);
+                      setSelectedTile(null);
+                      setSelectedColor(null);
+                    }}
+                  >
+                    {option.name}
+                  </button>
+                ))}
+              </div>
+
+              <div className="overflow-y-auto border-r p-4">
+                <div className="flex flex-wrap content-start gap-4">
+                  {availableTiles.map((tile) => (
+                    <div
+                      key={tile.id}
+                      className={cn(
+                        "h-[200px] w-[calc(50%-8px)] cursor-pointer overflow-hidden rounded-lg border transition-all",
+                        selectedTile === tile.id
+                          ? "ring-2 ring-gray-400"
+                          : "hover:shadow-md",
+                      )}
+                      onClick={() => {
+                        setSelectedTile(tile.id);
+                        setSelectedColor(null);
+                      }}
+                    >
+                      <div className="relative h-[150px] w-full">
+                        <Image
+                          src={tile.image || "/placeholder.svg"}
+                          alt={tile.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex h-[50px] items-center justify-center p-3 text-center">
+                        <h3 className="font-medium">{tile.name}</h3>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+
+              <div className="flex flex-col p-4">
+                {selectedTileData?.colors.length ? (
+                  <>
+                    <h3 className="mb-2 font-medium">Wybierz kolor</h3>
+                    <div className="mb-6 grid grid-cols-3 gap-2 lg:grid-cols-4">
+                      {selectedTileData.colors.map((color) => (
+                        <button
+                          key={color}
+                          className={cn(
+                            "h-10 w-10 rounded-md border",
+                            colorMap[color]?.bg,
+                            selectedColor === color
+                              ? "ring-2 ring-gray-500 ring-offset-2"
+                              : "",
+                          )}
+                          onClick={() => setSelectedColor(color)}
+                          aria-label={colorMap[color]?.name}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : null}
+
+                {selectedTileData && (
+                  <div className="flex-1 overflow-y-auto">
+                    <h3 className="mb-2 font-medium">
+                      Informacje o {selectedTileData.name}
+                    </h3>
+                    <p className="break-words text-sm">
+                      {selectedTileData.description}
+                    </p>
+                  </div>
+                )}
+
+                <AlertDialogFooter className="sticky bottom-0 mt-auto flex justify-end gap-2 bg-background py-2">
+                  <AlertDialogCancel>Zamknij</AlertDialogCancel>
+                  <AlertDialogAction>Zatwierdź</AlertDialogAction>
+                </AlertDialogFooter>
+              </div>
+            </div>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>

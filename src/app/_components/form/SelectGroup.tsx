@@ -1,35 +1,41 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InfoButton from "./InfoButton";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-interface SelectGroupProps {
-  name: string;
-  info?: string;
-  options: string[];
-  isImportant?: boolean;
-}
-
-const SelectGroup: React.FC<SelectGroupProps> = ({
+const SelectGroup: React.FC<formElementsInterface> = ({
+  id,
+  onChange,
+  filled,
   name,
   info = "",
-  options,
+  options = [""],
   isImportant = false,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(
+    filled ?? null,
+  );
+  const prevOption = useRef<string | null>(selectedOption);
 
   const handleClick = (option: string) => {
     setSelectedOption((prev) => (prev === option ? null : option));
   };
 
+  useEffect(() => {
+    if (prevOption.current !== selectedOption) {
+      onChange(id, selectedOption ?? "");
+      prevOption.current = selectedOption;
+    }
+  }, [selectedOption, id, onChange]);
+
   return (
-    <div className="mb-3 flex flex-wrap items-center">
-      <div className="ml-2 flex flex-wrap gap-2">
+    <div className="mb-5 flex flex-wrap items-center">
+      <div className="ml-2 flex flex-wrap gap-x-2">
         <div className="flex items-center">
           <p className="flex items-center whitespace-nowrap p-[6px] text-base">
             {isImportant && <span className="mr-1 text-red-500">*</span>}
             {name}
           </p>
-          {info != "" && <InfoButton info={info} />}
+          {info && <InfoButton info={info} />}
         </div>
         {options.map((option, index) => (
           <button
@@ -39,7 +45,7 @@ const SelectGroup: React.FC<SelectGroupProps> = ({
               selectedOption === option
                 ? "bg-accent-foreground text-accent"
                 : "hover:bg-muted hover:text-muted-foreground"
-            } inline-flex h-9 min-w-9 items-center justify-center gap-2 rounded-md border px-2.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`}
+            } my-1 inline-flex h-9 min-w-9 items-center justify-center gap-2 rounded-md border px-2.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`}
           >
             {option}
           </button>

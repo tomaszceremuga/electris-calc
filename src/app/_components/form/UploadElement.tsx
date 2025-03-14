@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Upload, X, FileText, File } from "lucide-react";
 
 import InfoButton from "./InfoButton";
@@ -18,15 +18,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-interface UploadElementProps {
-  name: string;
-  description?: string;
-  info?: string;
-  isImportant?: boolean;
-}
-
-const UploadElement: React.FC<UploadElementProps> = ({
+const UploadElement: React.FC<formElementsInterface> = ({
+  id,
+  onChange,
   name,
   description = "",
   info = "",
@@ -34,7 +30,19 @@ const UploadElement: React.FC<UploadElementProps> = ({
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const prevOption = useRef<File[] | null>(files);
+
+  useEffect(() => {
+    const fileNames = files.map((file) => file.name).join(";");
+
+    if (prevOption.current !== files) {
+      onChange(id, fileNames);
+      prevOption.current = files;
+    }
+  }, [files, id, onChange]);
 
   const getDate = (): string => {
     const actualDate = new Date();
@@ -105,12 +113,12 @@ const UploadElement: React.FC<UploadElementProps> = ({
           {isImportant && <span className="mr-1 text-red-500">*</span>}
           {name}
         </p>
-        {info !== "" && <InfoButton info={info} />}
+        {info && <InfoButton info={info} />}
       </div>
-      {description !== "" && (
-        <p className="ml-5 pb-1 text-neutral-500">{description}</p>
+      {description && (
+        <p className="pb-1 text-neutral-500 xl:ml-5">{description}</p>
       )}
-      <div className="ml-5 mt-2">
+      <div className="mt-2 xl:ml-5">
         <div className="flex flex-wrap items-center gap-3">
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -194,8 +202,7 @@ const UploadElement: React.FC<UploadElementProps> = ({
                 <AlertDialogAction
                   disabled={files.length === 0}
                   onClick={() => {
-                    // Here you would typically handle the upload
-                    // For now we'll just close the dialog
+                    // tutaj przesyłanie na backend
                   }}
                 >
                   Zatwierdź

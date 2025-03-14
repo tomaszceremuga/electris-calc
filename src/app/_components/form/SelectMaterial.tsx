@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "~/components/ui/button";
 import { TriangleAlert } from "lucide-react";
 import {
@@ -12,42 +11,88 @@ import {
 } from "@/components/ui/popover";
 import SurfaceTreatment from "./SurfaceTreatment";
 
-interface SelectMaterialProps {
-  name: string;
+interface SurfaceTreatmentProps {
+  id: number;
+  onChange: (id: number, value: string) => void;
+  filled: string;
+
+  selectedMaterial: {
+    image: string;
+    name: string;
+    infoLink: string;
+    rate: number;
+    rates: number;
+  };
+  data: {
+    alertMesage: string;
+    categories: {
+      id: string;
+      name: string;
+      options: {
+        id: string;
+        name: string;
+      }[];
+    }[];
+    tiles: {
+      id: string;
+      categoryId: string;
+      name: string;
+      description: string;
+      image: string;
+      colors: string[];
+      requiredOption?: string;
+    }[];
+  };
 }
 
-const SelectMaterial: React.FC<SelectMaterialProps> = ({ name }) => {
+const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
+  id,
+  onChange,
+  filled,
+  selectedMaterial,
+  data,
+}) => {
+  const [selectedSurface, setSelectedSurface] = useState<string>("");
+
+  const prevSurface = useRef<string | null>(selectedSurface);
+
+  useEffect(() => {
+    if (prevSurface.current !== selectedSurface) {
+      onChange(id, selectedSurface ?? "");
+      prevSurface.current = selectedSurface;
+    }
+  }, [selectedSurface, id, onChange]);
+
   return (
-    <div className="flex h-min w-full p-3">
+    <div className="flex flex-wrap sm:flex-nowrap h-min w-full p-3">
       <div className="w-full">
         <p className="">Wybrany materiał</p>
-        {/* elementy tego diva maja byc wycentrowane */}
-        <div className="flex h-full items-center border-r-[1px]">
+        <div className="flex h-full items-center sm:border-r">
           <div className="flex h-full items-center">
             <Image
-              src="https://pcbwayfile.s3-us-west-2.amazonaws.com/web/20/12/10/2226459873337t.jpg"
+              src={selectedMaterial.image}
               width={120}
               height={120}
               alt="Materiał"
             />
           </div>
           <div className="h-fit w-full">
-            <p className="mb-1 font-bold">Aluminum 5052</p>
+            <p className="mb-1 font-bold">{selectedMaterial.name}</p>
             <a href="#" className="hover:underline">
               Pokaż więcej informacji
             </a>
             <div className="mt-3 flex items-center gap-[6px]">
               <Star className="w-4" />
-              <p className="font-semibold">4.9</p>
-              <p className="ml-1">(207 ocen)</p>
+              <p className="font-semibold">{selectedMaterial.rate} </p>
+              <p className="ml-1">({selectedMaterial.rates} ocen)</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-6 grid min-h-full w-full px-6 py-1">
+      <div className="mt-6 grid min-h-full w-full md:px-6 py-1">
         <div className="flex items-center gap-2">
-          <p>Wykończenie - 24 opcje</p>
+          <p>Wykończenie - {data.tiles.length} opcje</p>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -60,11 +105,15 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({ name }) => {
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <p>tekst ?</p>
+              <p>{data.alertMesage}</p>
             </PopoverContent>
           </Popover>
         </div>
-        <SurfaceTreatment />
+        <SurfaceTreatment
+          setSelectedSurface={setSelectedSurface}
+          data={data}
+          filled={filled.split(";")}
+        />
       </div>
     </div>
   );

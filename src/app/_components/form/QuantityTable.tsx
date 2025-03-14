@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,42 +9,52 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
 import { Check } from "lucide-react";
 
 const QuantityTable = ({
+  filled,
+  finalQuantity,
   setQuantity,
 }: {
   setQuantity: (value: number) => void;
+  finalQuantity: number;
+  filled: number;
 }) => {
-  const [customQuantity, setCustomQuantity] = React.useState("");
-  const [selectedQty, setSelectedQty] = React.useState<number | null>(null);
-
   const quantities = [
     { qty: 1, unitPrice: "-/pc", totalPrice: "RFQ" },
     { qty: 2, unitPrice: "-/pc", totalPrice: "RFQ" },
     { qty: 5, unitPrice: "-/pc", totalPrice: "RFQ" },
     { qty: 10, unitPrice: "-/pc", totalPrice: "RFQ" },
     { qty: 50, unitPrice: "-/pc", totalPrice: "RFQ" },
-    {
-      qty: 100,
-      unitPrice: "Customized Quote/pc",
-      totalPrice: "Customized Quote",
-    },
+    { qty: 100, unitPrice: "-/pc", totalPrice: "RFQ" },
   ];
+
+  const [customQuantity, setCustomQuantity] = React.useState(
+    quantities.some((item) => item.qty === Number(filled))
+      ? ""
+      : (filled ?? ""),
+  );
+  const [selectedQty, setSelectedQty] = React.useState<number | null>(
+    quantities.some((item) => item.qty === Number(finalQuantity))
+      ? finalQuantity
+      : null,
+  );
+
+  useEffect(() => {
+    if (!quantities.some((item) => item.qty === Number(finalQuantity))) {
+      setCustomQuantity(finalQuantity.toString());
+    } else {
+      setCustomQuantity("");
+    }
+    setSelectedQty(finalQuantity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [finalQuantity]);
 
   const handleSelect = (qty: number) => {
     setQuantity(qty);
     setSelectedQty(qty);
-  };
-
-  const handleSubmitCustom = () => {
-    if (customQuantity) {
-      const qty = Number.parseInt(customQuantity, 10);
-      setQuantity(qty);
-      setSelectedQty(qty);
-    }
   };
 
   return (
@@ -70,7 +80,7 @@ const QuantityTable = ({
               </TableCell>
               <TableCell className="text-center">{item.unitPrice}</TableCell>
               <TableCell className="text-center">{item.totalPrice}</TableCell>
-              <TableCell className="flex justify-center text-center">
+              <TableCell className="flex items-center justify-center text-center">
                 {selectedQty === item.qty && (
                   <Check className="h-5 w-5 text-green-500" />
                 )}
@@ -80,26 +90,42 @@ const QuantityTable = ({
         </TableBody>
       </Table>
 
-      <div className="flex items-center gap-2 p-3">
+      <div className="flex cursor-pointer items-center gap-2 border-t p-3 hover:bg-gray-50">
         <Input
           type="number"
           value={customQuantity}
-          onChange={(e) => setCustomQuantity(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setCustomQuantity(value);
+
+            if (value) {
+              const qty = Number.parseInt(value, 10);
+              if (!isNaN(qty)) {
+                setQuantity(qty);
+                setSelectedQty(qty);
+              }
+            }
+          }}
           className="max-w-[120px]"
         />
-        <Button
-          variant="default"
-          onClick={handleSubmitCustom}
-          className="px-3 py-1"
-        >
-          Prześlij
-        </Button>
-        <span className="flex-1 text-neutral-500">Podaj własną wartość</span>
-        {selectedQty && !quantities.some((q) => q.qty === selectedQty) && (
-          <Check className="h-5 w-5 text-green-500" />
-        )}
-      </div>
 
+        <div
+          className="flex w-full justify-between pr-4"
+          onClick={() => {
+            const qty = Number(customQuantity);
+            if (!isNaN(qty)) {
+              handleSelect(qty);
+            }
+          }}
+        >
+          <span className="flex-1 text-neutral-500">Podaj własną wartość</span>
+          {customQuantity !== "" &&
+            selectedQty &&
+            !quantities.some((q) => q.qty === selectedQty) && (
+              <Check className="h-5 w-5 text-green-500" />
+            )}
+        </div>
+      </div>
       <div className="p-3 text-sm text-gray-500">
         Note: Bulk orders are customized quotes with the most favorable price.
         Unit price would decrease as quantity increases. VAT and freight are

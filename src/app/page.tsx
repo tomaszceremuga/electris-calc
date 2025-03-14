@@ -1,16 +1,20 @@
-import Link from "next/link";
+// import Link from "next/link";
 
-import { api, HydrateClient } from "~/trpc/server";
+// import { api, HydrateClient } from "~/trpc/server";
 
-import { MainAccordion } from "./_components/MainAccordion";
+import { HydrateClient } from "~/trpc/server";
+
+import FloatingCart from "./_components/FloatingCart";
+import Navbar from "./_components/Navbar";
+import AccordionWithNavigation from "./_components/AccordionWithNavigation";
 
 export default async function Home() {
   return (
     <HydrateClient>
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-        <div className="mx-auto w-full max-w-4xl rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-          <MainAccordion />
-        </div>
+      <Navbar />
+      <div className="flex flex-wrap justify-center p-4 pt-10 lg:min-h-screen lg:flex-nowrap lg:gap-x-5 lg:bg-gray-50">
+        <AccordionWithNavigation />
+        <FloatingCart />
       </div>
     </HydrateClient>
   );
