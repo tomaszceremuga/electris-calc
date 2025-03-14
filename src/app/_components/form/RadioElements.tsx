@@ -44,7 +44,7 @@ const RadioElements: React.FC<formElementsInterface> = ({
       </div>
 
       <RadioGroup
-        className="ml-5 flex pt-2 flex-wrap  gap-3"
+        className="ml-5 flex flex-wrap gap-3 pt-2"
         value={selectedOption ?? ""}
         onValueChange={handleChange}
       >

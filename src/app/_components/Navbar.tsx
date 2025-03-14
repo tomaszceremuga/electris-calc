@@ -5,8 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
