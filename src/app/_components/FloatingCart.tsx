@@ -16,20 +16,84 @@ interface CartItem {
 const FloatingCart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
-      id: "1",
-      image: "/placeholder.svg?height=64&width=64",
-      name: "ewqewqeqwewqwqewqewqweq",
-      quantity: 2,
-      properties: [
+      "id": "1",
+      "image": "/placeholder.svg?height=64&width=64",
+      "name": "Jakiś produkt",
+      "quantity": 2,
+      "properties": [
         {
-          name: "adssadasdas",
-          value: "adsasdas",
+          "name": "Numer seryjny",
+          "value": "213213"
         },
         {
-          name: "asdsa",
-          value: "asdasda",
+          "name": "Jednostka miary",
+          "value": "mm"
         },
-      ],
+        {
+          "name": "Materiał główny",
+          "value": "Stal nierdzewna"
+        },
+        {
+          "name": "Materiał dodatkowy",
+          "value": "Aluminium 5052"
+        },
+        {
+          "name": "Kolor",
+          "value": "Srebrno-biały"
+        },
+        {
+          "name": "Grubość",
+          "value": "1.0mm"
+        },
+        {
+          "name": "Powierzchnia",
+          "value": "surface;anodized;anodized-simple;purple"
+        },
+        {
+          "name": "Pusty parametr",
+          "value": ""
+        },
+        {
+          "name": "Czy jest wodoodporny?",
+          "value": "Tak"
+        },
+        {
+          "name": "Czy jest ogniotrwały?",
+          "value": "Tak"
+        },
+        {
+          "name": "Tolerancje",
+          "value": "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)"
+        },
+        {
+          "name": "Czy wymaga certyfikatu?",
+          "value": "Tak"
+        },
+        {
+          "name": "Metoda znakowania",
+          "value": "Grawerowanie laserowe"
+        },
+        {
+          "name": "Testy jakości",
+          "value": "Testy montażowe"
+        },
+        {
+          "name": "Opcja premium",
+          "value": "Premium (dodatkowe opłaty)"
+        },
+        {
+          "name": "Rodzaj inspekcji",
+          "value": "Standardowa inspekcja (brak raportu)"
+        },
+        {
+          "name": "Zastosowanie",
+          "value": "Sprzęt biurowy i akcesoria"
+        },
+        {
+          "name": "Kod produktu",
+          "value": "ewqeqwe"
+        }
+      ]
     },
     {
       id: "2",
@@ -80,8 +144,8 @@ const FloatingCart = () => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="sticky top-[105px] h-min w-full max-w-sm self-start rounded border bg-card shadow-sm">
-      <div className="rounded-t-lg border-b border-border p-4">
+    <div className="sticky lg:top-[105px] h-min w-full max-w-4xl lg:max-w-sm  self-start  bg-card  lg:rounded-md lg:border">
+      <div className="lg:rounded-t-lg lg:border-b lg:border-border p-4">
         <h2 className="flex items-center gap-2 font-medium text-card-foreground">
           <ShoppingCart size={18} />
           Koszyk{" "}
@@ -89,7 +153,7 @@ const FloatingCart = () => {
         </h2>
       </div>
 
-      <div className="p-4">
+      <div className="lg:p-4 px-4">
         {cartItems.length > 0 ? (
           <ul>
             {cartItems.map((item, index) => (

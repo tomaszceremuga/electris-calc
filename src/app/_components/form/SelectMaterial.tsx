@@ -64,10 +64,10 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   }, [selectedSurface, id, onChange]);
 
   return (
-    <div className="flex h-min w-full p-3">
+    <div className="flex flex-wrap sm:flex-nowrap h-min w-full p-3">
       <div className="w-full">
         <p className="">Wybrany materiał</p>
-        <div className="flex h-full items-center border-r-[1px]">
+        <div className="flex h-full items-center sm:border-r">
           <div className="flex h-full items-center">
             <Image
               src={selectedMaterial.image}
@@ -90,7 +90,7 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
         </div>
       </div>
 
-      <div className="mt-6 grid min-h-full w-full px-6 py-1">
+      <div className="mt-6 grid min-h-full w-full md:px-6 py-1">
         <div className="flex items-center gap-2">
           <p>Wykończenie - {data.tiles.length} opcje</p>
           <Popover>

@@ -119,9 +119,9 @@ const UploadElement: React.FC<formElementsInterface> = ({
         {info && <InfoButton info={info} />}
       </div>
       {description && (
-        <p className="ml-5 pb-1 text-neutral-500">{description}</p>
+        <p className="xl:ml-5 pb-1 text-neutral-500">{description}</p>
       )}
-      <div className="ml-5 mt-2">
+      <div className="xl:ml-5 mt-2">
         <div className="flex flex-wrap items-center gap-3">
           <AlertDialog>
             <AlertDialogTrigger asChild>

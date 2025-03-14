@@ -23,7 +23,7 @@ const TextAreaElement: React.FC<formElementsInterface> = ({
       <Textarea
         onChange={(e) => onChange(id, e.target.value)}
         defaultValue={filled}
-        className="my-[8px] ml-[20px]"
+        className="my-[8px] xl:ml-[20px] "
       />
     </div>
   );

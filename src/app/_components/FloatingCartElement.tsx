@@ -56,8 +56,8 @@ const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
           />
         </div>
 
-        <div className="min-w-0 flex-1">
-          <h3 className="truncate text-sm font-medium text-foreground">
+        <div className="min-w-0 flex-1 ">
+          <h3 className="break-words whitespace-normal text-sm font-medium text-foreground">
             {name}
           </h3>
 
@@ -108,12 +108,12 @@ const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
       </div>
 
       {showDetails && properties.length > 0 && (
-        <div className="ml-20 mt-2 border-l-2 border-muted pl-1">
+        <div className=" mt-2 border rounded border-muted p-4 ">
           <dl className="space-y-1">
             {properties.map((prop, index) => (
-              <div key={index} className="flex text-xs text-muted-foreground">
-                <dt className="mr-1 font-medium">{prop.name}:</dt>
-                <dd>{prop.value}</dd>
+              <div key={index} className="flex text-xs text-muted-foreground ">
+                <dt className="w-1/2 mr-1  break-words whitespace-normal font-semibold">{prop.name}:</dt>
+                <dd className="w-1/2 break-words whitespace-normal">{prop.value}</dd>
               </div>
             ))}
           </dl>

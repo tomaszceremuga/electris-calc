@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <HydrateClient>
       <Navbar />
-      <div className="flex min-h-screen justify-center gap-5 bg-gray-50 p-4 pt-10">
+      <div className="flex flex-wrap lg:flex-nowrap lg:min-h-screen justify-center lg:gap-x-5  lg:bg-gray-50 p-4 pt-10">
         <AccordionWithNavigation />
         <FloatingCart />
       </div>
