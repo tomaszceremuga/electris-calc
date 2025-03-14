@@ -74,12 +74,10 @@ const QuantityElement: React.FC<formElementsInterface> = ({
               <div className="w-full max-w-[700px]">
                 <QuantityTable
                   setQuantity={setQuantity}
-                  onChange={onChange}
                   filled={
                     typeof filled === "number" ? filled : Number(filled ?? 0)
                   }
                   finalQuantity={finalQuantity}
-                  id={id}
                 />
               </div>
             </AlertDialogHeader>
