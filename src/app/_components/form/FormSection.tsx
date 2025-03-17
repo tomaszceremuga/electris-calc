@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 
 import SelectGroup from "./SelectGroup";
@@ -11,9 +9,16 @@ import SelectMaterial from "./SelectMaterial";
 
 import formData from "~/lib/formData";
 
+type UploadedFile = {
+  name: string;
+  size: number;
+  url: string;
+};
+
 type FormResultState = {
   id: number;
-  values: Record<number, string>[]; 
+  uploadedFiles: UploadedFile[];
+  values: Record<number, unknown>[]; // `any` pozwala na dowolne wartości
 };
 
 type FilledFormData = {
@@ -41,20 +46,20 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
 
   const [formResult, setFormResult] = useState<FormResultState>({
     id: formData.id,
+    uploadedFiles: [],
     values: [],
   });
 
- 
   useEffect(() => {
     const initialState: FormResultState = {
       id: formData.id,
+      uploadedFiles: [],
       values: formData.formElements.map((element) => {
-
         const filledValue = filledFormData.values.find(
           (item) => item[element.id],
         );
         return {
-          [element.id]: filledValue ? (filledValue[element.id] ?? "") : "", 
+          [element.id]: filledValue ? (filledValue[element.id] ?? "") : "",
         };
       }),
     };
@@ -62,8 +67,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
     setFormResult(initialState);
   }, [filledFormData]);
 
-
-  const handleChange = (id: number, value: string) => {
+  const handleChange = (id: number, value: unknown) => {
     setFormResult((prev) => ({
       ...prev,
       values: prev.values.map((item) =>
@@ -76,7 +80,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
     <div className="xl:pr-16">
       {formData.formElements.map((el, index) => {
         const filledValue =
-          filledFormData.values.find((item) => item[el.id])?.[el.id] ?? ""; 
+          filledFormData.values.find((item) => item[el.id])?.[el.id] ?? "";
 
         switch (el.type) {
           case "selectGroup":

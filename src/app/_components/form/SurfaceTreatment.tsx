@@ -21,8 +21,17 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Pencil } from "lucide-react";
 
+interface SelectedSurfaceInterface {
+  category?: string;
+  option?: string;
+  tile?: string;
+  color?: string;
+}
+
 interface SurfaceTreatmentProps {
-  setSelectedSurface: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedSurface: React.Dispatch<
+    React.SetStateAction<SelectedSurfaceInterface>
+  >;
   filled: string[];
   data: {
     alertMesage: string;
@@ -106,9 +115,12 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     : null;
 
   useEffect(() => {
-    setSelectedSurface(
-      `${selectedCategory ?? ""};${selectedOption ?? ""};${selectedTile ?? ""};${selectedColor ?? ""}`,
-    );
+    setSelectedSurface({
+      category: selectedCategory ?? "",
+      option: selectedOption ?? "",
+      tile: selectedTile ?? "",
+      color: selectedColor ?? "",
+    });
   }, [
     selectedCategory,
     selectedOption,

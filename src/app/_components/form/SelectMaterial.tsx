@@ -13,7 +13,7 @@ import SurfaceTreatment from "./SurfaceTreatment";
 
 interface SurfaceTreatmentProps {
   id: number;
-  onChange: (id: number, value: string) => void;
+  onChange: (id: number, value: unknown) => void;
   filled: string;
 
   selectedMaterial: {
@@ -45,6 +45,13 @@ interface SurfaceTreatmentProps {
   };
 }
 
+interface SelectedSurfaceInterface {
+  category?: string;
+  option?: string;
+  tile?: string;
+  color?: string;
+}
+
 const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   id,
   onChange,
@@ -52,19 +59,20 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   selectedMaterial,
   data,
 }) => {
-  const [selectedSurface, setSelectedSurface] = useState<string>("");
+  const [selectedSurface, setSelectedSurface] =
+    useState<SelectedSurfaceInterface>({});
 
-  const prevSurface = useRef<string | null>(selectedSurface);
+  const prevSurface = useRef<SelectedSurfaceInterface | null>(selectedSurface);
 
   useEffect(() => {
     if (prevSurface.current !== selectedSurface) {
-      onChange(id, selectedSurface ?? "");
+      onChange(id, selectedSurface);
       prevSurface.current = selectedSurface;
     }
   }, [selectedSurface, id, onChange]);
 
   return (
-    <div className="flex flex-wrap sm:flex-nowrap h-min w-full p-3">
+    <div className="flex h-min w-full flex-wrap p-3 sm:flex-nowrap">
       <div className="w-full">
         <p className="">Wybrany materiał</p>
         <div className="flex h-full items-center sm:border-r">
@@ -90,7 +98,7 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
         </div>
       </div>
 
-      <div className="mt-6 grid min-h-full w-full md:px-6 py-1">
+      <div className="mt-6 grid min-h-full w-full py-1 md:px-6">
         <div className="flex items-center gap-2">
           <p>Wykończenie - {data.tiles.length} opcje</p>
           <Popover>
