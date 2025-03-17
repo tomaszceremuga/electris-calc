@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { ChevronUp } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 import {
   AlertDialog,
@@ -17,16 +18,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Pencil } from "lucide-react";
 
-export type SelectedSurfaceType = {
-  category?: string;
-  option?: string;
-  tile?: string;
-  color?: string;
-};
+import { type SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
 
 interface SurfaceTreatmentProps {
   setSelectedSurface: React.Dispatch<React.SetStateAction<SelectedSurfaceType>>;

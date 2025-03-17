@@ -8,14 +8,9 @@ import QuantityElement from "./QuantityElement";
 import SelectMaterial from "./SelectMaterial";
 
 import formData from "~/lib/formData";
-
-import { type SelectedSurfaceType } from "./SurfaceTreatment";
-
-type UploadedFile = {
-  name: string;
-  size: number;
-  url: string;
-};
+import { type SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
+import { type UploadedFile } from "~/lib/UploadedFileType";
+import { type FilledFormType } from "~/lib/FilledFormType";
 
 type FormResultState = {
   id: number;
@@ -23,17 +18,12 @@ type FormResultState = {
   values: Array<Record<string, string | SelectedSurfaceType | UploadedFile[]>>;
 };
 
-type FilledFormData = {
-  id: number;
-  uploadedFiles: UploadedFile[];
-  values: Array<Record<string, string | SelectedSurfaceType | UploadedFile[]>>;
-};
-
 type FormSectionProps = {
-  filledFormData: FilledFormData;
+  filledFormData: FilledFormType;
+  uploadedFiles: UploadedFile[];
 };
 
-const FormSection = ({ filledFormData }: FormSectionProps) => {
+const FormSection = ({ filledFormData, uploadedFiles }: FormSectionProps) => {
   const defaultMaterial = {
     image: "",
     name: "Unknown",
@@ -56,7 +46,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
   useEffect(() => {
     const initialState: FormResultState = {
       id: formData.id,
-      uploadedFiles: [],
+      uploadedFiles: uploadedFiles,
       values: formData.formElements.map((element) => {
         const filledValue = filledFormData.values.find(
           (item) => item[element.id],
@@ -68,7 +58,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
     };
 
     setFormResult(initialState);
-  }, [filledFormData]);
+  }, [filledFormData, uploadedFiles]);
 
   const handleChange = (id: number, value: unknown) => {
     setFormResult((prev) => ({

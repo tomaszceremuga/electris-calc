@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import {
   Accordion,
   AccordionContent,
@@ -8,26 +9,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
 import FormSection from "./form/FormSection";
 import UploadSection from "./upload/UploadSection";
 import SummarySection from "./summary/SummarySection";
-import { type UploadedFile } from "./upload/UploadArea";
 
-type SelectedSurfaceInterface = {
-  category?: string;
-  option?: string;
-  tile?: string;
-  color?: string;
-};
+import { ChevronRight } from "lucide-react";
 
-type FilledFormData = {
-  id: number;
-  uploadedFiles: UploadedFile[];
-  values: Array<
-    Record<string, string | SelectedSurfaceInterface | UploadedFile[]>
-  >;
-};
+import { type UploadedFile } from "~/lib/UploadedFileType";
+import { type FilledFormType } from "~/lib/FilledFormType";
 
 export default function AccordionWithNavigation() {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
@@ -37,7 +26,7 @@ export default function AccordionWithNavigation() {
     setActiveIndex(targetIndex);
   };
 
-  const filledFormData: FilledFormData = {
+  const filledFormData: FilledFormType = {
     id: 1,
     uploadedFiles: [],
     values: [
@@ -68,7 +57,7 @@ export default function AccordionWithNavigation() {
         },
       },
       {
-        "8": {},
+        "8": [],
       },
       {
         "9": "Tak",
@@ -148,7 +137,10 @@ export default function AccordionWithNavigation() {
           <span className="text-left font-medium">Formularz</span>
         </AccordionTrigger>
         <AccordionContent className="pb-4 xl:px-4">
-          <FormSection filledFormData={filledFormData} />
+          <FormSection
+            uploadedFiles={uploadedFiles}
+            filledFormData={filledFormData}
+          />
           <div className="mt-4 flex gap-2">
             <Button
               onClick={() => handleNavigation("item-0")}
