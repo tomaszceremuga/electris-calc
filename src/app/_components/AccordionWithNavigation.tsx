@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Accordion,
@@ -15,6 +15,7 @@ import SummarySection from "./summary/SummarySection";
 
 import { ChevronRight } from "lucide-react";
 
+import formData from "~/lib/formData";
 import { type UploadedFile } from "~/lib/UploadedFileType";
 import { type FilledFormType } from "~/lib/FilledFormType";
 
@@ -25,6 +26,19 @@ export default function AccordionWithNavigation() {
   const handleNavigation = (targetIndex: string) => {
     setActiveIndex(targetIndex);
   };
+
+  const [formCurrentState, setFormCurrentState] = useState<FilledFormType>({
+    id: formData.id,
+    uploadedFiles: [],
+    values: [],
+  });
+
+  useEffect(() => {
+    setFormCurrentState((prevState) => ({
+      ...prevState,
+      uploadedFiles: uploadedFiles,
+    }));
+  }, [uploadedFiles]);
 
   const filledFormData: FilledFormType = {
     id: 1,
@@ -92,6 +106,22 @@ export default function AccordionWithNavigation() {
     ],
   };
 
+  useEffect(() => {
+    const initialState: FilledFormType = {
+      id: formData.id,
+      uploadedFiles: uploadedFiles,
+      values: formData.formElements.map((element) => {
+        const filledValue = filledFormData.values.find(
+          (item) => item[element.id],
+        );
+        return {
+          [element.id]: filledValue ? (filledValue[element.id] ?? "") : "",
+        };
+      }),
+    };
+    setFormCurrentState(initialState);
+  }, []);
+
   return (
     <Accordion
       type="single"
@@ -139,7 +169,9 @@ export default function AccordionWithNavigation() {
         <AccordionContent className="pb-4 xl:px-4">
           <FormSection
             uploadedFiles={uploadedFiles}
-            filledFormData={filledFormData}
+            filledFormData={formCurrentState}
+            formCurrentState={formCurrentState}
+            setFormCurrentState={setFormCurrentState}
           />
           <div className="mt-4 flex gap-2">
             <Button

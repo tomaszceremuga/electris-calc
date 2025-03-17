@@ -8,22 +8,22 @@ import QuantityElement from "./QuantityElement";
 import SelectMaterial from "./SelectMaterial";
 
 import formData from "~/lib/formData";
-import { type SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
 import { type UploadedFile } from "~/lib/UploadedFileType";
 import { type FilledFormType } from "~/lib/FilledFormType";
-
-type FormResultState = {
-  id: number;
-  uploadedFiles: UploadedFile[];
-  values: Array<Record<string, string | SelectedSurfaceType | UploadedFile[]>>;
-};
 
 type FormSectionProps = {
   filledFormData: FilledFormType;
   uploadedFiles: UploadedFile[];
+  formCurrentState: FilledFormType;
+  setFormCurrentState: React.Dispatch<React.SetStateAction<FilledFormType>>;
 };
 
-const FormSection = ({ filledFormData, uploadedFiles }: FormSectionProps) => {
+const FormSection = ({
+  filledFormData,
+  uploadedFiles,
+  formCurrentState,
+  setFormCurrentState,
+}: FormSectionProps) => {
   const defaultMaterial = {
     image: "",
     name: "Unknown",
@@ -37,31 +37,8 @@ const FormSection = ({ filledFormData, uploadedFiles }: FormSectionProps) => {
     tiles: [],
   };
 
-  const [formResult, setFormResult] = useState<FormResultState>({
-    id: formData.id,
-    uploadedFiles: [],
-    values: [],
-  });
-
-  useEffect(() => {
-    const initialState: FormResultState = {
-      id: formData.id,
-      uploadedFiles: uploadedFiles,
-      values: formData.formElements.map((element) => {
-        const filledValue = filledFormData.values.find(
-          (item) => item[element.id],
-        );
-        return {
-          [element.id]: filledValue ? (filledValue[element.id] ?? "") : "",
-        };
-      }),
-    };
-
-    setFormResult(initialState);
-  }, [filledFormData, uploadedFiles]);
-
   const handleChange = (id: number, value: unknown) => {
-    setFormResult((prev) => ({
+    setFormCurrentState((prev) => ({
       ...prev,
       values: prev.values.map((item) =>
         item[id] !== undefined ? { ...item, [id]: value } : item,
@@ -164,7 +141,9 @@ const FormSection = ({ filledFormData, uploadedFiles }: FormSectionProps) => {
         }
       })}
 
-      <pre className="bg-purple-300">{JSON.stringify(formResult, null, 2)}</pre>
+      <pre className="bg-purple-300">
+        {JSON.stringify(formCurrentState, null, 2)}
+      </pre>
     </div>
   );
 };
