@@ -5,6 +5,10 @@ import { useState, useRef } from "react"
 import { Button } from "~/components/ui/button" // Updated import path to match your project structure
 import { toast } from "sonner"
 import {Download} from "lucide-react"
+import { put } from "@vercel/blob";
+
+
+const BLOB_READ_WRITE_TOKEN="vercel_blob_rw_P6s5BqQMdLPWrMUU_0rQjZBNIHBJKXHW52VHCHpQs1NP2jA"
 
 interface UploadAreaProps {
   setFileList: React.Dispatch<React.SetStateAction<string[]>>;
