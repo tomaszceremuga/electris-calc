@@ -1,25 +1,29 @@
 
+
 "use client"
+
 import type React from "react"
 import { useState, useRef } from "react"
-import { Button } from "~/components/ui/button" // Updated import path to match your project structure
+import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import {Download} from "lucide-react"
-import { put } from "@vercel/blob";
+import { Download, Loader2 } from "lucide-react"
 
-
-const BLOB_READ_WRITE_TOKEN="vercel_blob_rw_P6s5BqQMdLPWrMUU_0rQjZBNIHBJKXHW52VHCHpQs1NP2jA"
-
-interface UploadAreaProps {
-  setFileList: React.Dispatch<React.SetStateAction<string[]>>;
-  setFileSize:React.Dispatch<React.SetStateAction<number[]>>
-  count:number
-  setCount:React.Dispatch<React.SetStateAction<number>>
-  // Change to handle an array of strings
+// Interfejs dla plików przesłanych do Blob storage
+export interface UploadedFile {
+  name: string
+  url: string
+  size: number
 }
 
-const UploadArea = ({setFileList,setFileSize,count,setCount}:UploadAreaProps) => {
+interface UploadAreaProps {
+  uploadedFiles: UploadedFile[]
+  setUploadedFiles: React.Dispatch<React.SetStateAction<UploadedFile[]>>
+  count: number
+}
+
+const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
   const [isDragging, setIsDragging] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const getDate = (): string => {
@@ -62,61 +66,102 @@ const UploadArea = ({setFileList,setFileSize,count,setCount}:UploadAreaProps) =>
     setIsDragging(false)
 
     const files = e.dataTransfer.files
-    if (files && files.length > 0 ) {
-      handleFiles(files)
+    if (files && files.length > 0) {
+      void handleFiles(files)
     }
   }
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files && files.length > 0 ) {
-      handleFiles(files)
+    if (files && files.length > 0) {
+      void handleFiles(files)
     }
   }
 
-  const handleFiles = (files: FileList) => {
+  const uploadFileToBlobStorage = async (file: File): Promise<string> => {
     try {
-      if ( files.length > 0) {
-        
+      const formData = new FormData()
+      formData.append("file", file)
 
-        const hasLargeFile = Array.from(files).some(file => file.size > 209715200)
+      const response = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
+        method: "POST",
+        body: file,
+      })
+
+      if (!response.ok) {
+        throw new Error("Upload failed")
+      }
+
+      const blob = (await response.json()) as { url: string }
+      return blob.url
+    } catch (error) {
+      console.error("Error uploading to Blob storage:", error)
+      throw error
+    }
+  }
+
+  const handleFiles = async (files: FileList) => {
+    try {
+      if (files.length > 0) {
+        const hasLargeFile = Array.from(files).some((file) => file.size > 209715200)
         if (hasLargeFile) {
           toast("Zbyt duży plik. Możesz przesłać do 200MB")
           return
         }
 
-        const rightExtensions=["step","stp","x_t","iges","igs","sldprt","dwg","dxf","pdf"]
-        const hasGreatExtension=Array.from(files).every(file=>{
-          return rightExtensions.includes(file.name.split('.').pop()?.toLowerCase()??"")
+        const rightExtensions = ["step", "stp", "x_t", "iges", "igs", "sldprt", "dwg", "dxf", "pdf"]
+        const hasGreatExtension = Array.from(files).every((file) => {
+          return rightExtensions.includes(file.name.split(".").pop()?.toLowerCase() ?? "")
         })
-        
-        if(!hasGreatExtension){
+
+        if (!hasGreatExtension) {
           toast("Możesz przesyłać pliki tylko z odpowiednim rozszerzeniem")
           return
         }
 
-        if(count+files.length>12){
+        if (count + files.length > 12) {
           toast("Nie możesz dodać więcej niż 12 plików")
           return
         }
-        setCount(prev=>prev+files.length)
-        // console.log(files[0].name.split('.').pop())
-        const fileNames = Array.from(files).map(file => file.name)
-        const fileSizes = Array.from(files).map(file => file.size)
-        setFileList((prev: string[]) => [...prev, ...fileNames])
-        setFileSize((prev:number[])=>[...prev,...fileSizes])
-        toast("Plik został wczytany", {
-          description: getDate(),
-        })
-        
+
+        setIsUploading(true)
+
+        // Przesyłanie plików do Blob storage
+        const newUploadedFiles: UploadedFile[] = []
+
+        for (const file of Array.from(files)) {
+          try {
+            const url = await uploadFileToBlobStorage(file)
+            newUploadedFiles.push({
+              name: file.name,
+              url: url,
+              size: file.size,
+            })
+          } catch (uploadError) {
+            console.error("Error uploading file:", uploadError)
+            toast.error(`Błąd podczas przesyłania pliku ${file.name}`)
+          }
+        }
+
+        // Aktualizacja stanu tylko jeśli mamy pomyślnie przesłane pliki
+        if (newUploadedFiles.length > 0) {
+          setUploadedFiles((prev) => [...prev, ...newUploadedFiles])
+
+          toast.success(
+            newUploadedFiles.length > 1 ? `Przesłano ${newUploadedFiles.length} plików` : "Plik został przesłany",
+            { description: getDate() },
+          )
+        }
       } else {
         throw new Error("No files selected")
       }
     } catch (error) {
-      console.error("Error setting file list:", error)
+      const errorMessage = error instanceof Error ? error.message : "Unknown error"
+      console.error("Error handling files:", errorMessage)
       toast.error("Wystąpił błąd przy wczytywaniu pliku")
+    } finally {
+      setIsUploading(false)
     }
-
   }
 
   const openFileSelector = () => {
@@ -135,18 +180,31 @@ const UploadArea = ({setFileList,setFileSize,count,setCount}:UploadAreaProps) =>
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <button className="mb-4" onClick={openFileSelector}>
-        <Download size={80} strokeWidth={2.25} />
-      </button>
+      {isUploading ? (
+        <>
+          <Loader2 size={80} className="animate-spin mb-4" />
+          <p className="text-sm text-center text-muted-foreground">Przesyłanie plików...</p>
+        </>
+      ) : (
+        <>
+          <button className="mb-4" onClick={openFileSelector} type="button">
+            <Download size={80} strokeWidth={2.25} />
+          </button>
 
-      <input type="file" ref={fileInputRef} onChange={handleFileInputChange} className="hidden" />
+          <input type="file" ref={fileInputRef} onChange={handleFileInputChange} className="hidden" multiple />
 
-      <Button onClick={openFileSelector}>Wybierz plik</Button>
+          <Button onClick={openFileSelector} disabled={isUploading}>
+            Wybierz plik
+          </Button>
 
-      {isDragging && <p className="mt-4 text-sm text-center text-primary">Upuść plik tutaj</p>}
+          {isDragging && <p className="mt-4 text-sm text-center text-primary">Upuść plik tutaj</p>}
 
-      {!isDragging && (
-        <p className="mt-4 text-sm text-center text-muted-foreground">Przeciągnij i upuść plik lub kliknij przycisk</p>
+          {!isDragging && (
+            <p className="mt-4 text-sm text-center text-muted-foreground">
+              Przeciągnij i upuść plik lub kliknij przycisk
+            </p>
+          )}
+        </>
       )}
     </div>
   )

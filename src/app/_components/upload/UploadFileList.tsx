@@ -1,49 +1,31 @@
-import * as React from "react";
-import UploadElement from "./UploadElement";
 
+
+import type * as React from "react"
+import UploadElement from "./UploadElement"
+import type { UploadedFile } from "./UploadArea"
 
 interface UploadFileProps {
-  fileList: string[]; // File list passed from parent
-  setFileList: (newList: string[]) => void;
-  fileSize: number[];
-  // Function to update the file list
-  setFileSize: (newList: number[]) => void;
-  setCount:(count:number)=>void
+  uploadedFiles: UploadedFile[]
+  setUploadedFiles: React.Dispatch<React.SetStateAction<UploadedFile[]>>
 }
 
-const UploadFileList = ({
-  fileList,
-  setFileList,
-  fileSize,
-  setFileSize,
-  setCount
-}: UploadFileProps) => {
+const UploadFileList = ({ uploadedFiles, setUploadedFiles }: UploadFileProps) => {
   const handleDeleteButton = (i: number) => {
-    const updatedList = fileList.filter((_, index) => index !== i);
-    const updatedSize = fileSize.filter((_, index) => index !== i);
-    setFileList(updatedList);
-    setFileSize(updatedSize);
-    setCount(updatedList.length)
-  };
+    setUploadedFiles((prev) => prev.filter((_, index) => index !== i))
+  }
 
   return (
-    fileList.length > 0 && (
+    uploadedFiles.length > 0 && (
       <div className="w-full rounded-lg p-4">
         <p className="mb-2 text-lg font-semibold">WCZYTANE PLIKI</p>
         <div className="space-y-2">
-          {fileList.map((fileName, index) => (
-            <UploadElement
-              key={index}
-              index={index}
-              onDelete={handleDeleteButton}
-              fileName={fileName}
-              fileSize={fileSize.at(index) ?? 0}
-            />
+          {uploadedFiles.map((file, index) => (
+            <UploadElement key={index} index={index} onDelete={handleDeleteButton} file={file} />
           ))}
         </div>
       </div>
     )
-  );
-};
+  )
+}
 
-export default UploadFileList;
+export default UploadFileList

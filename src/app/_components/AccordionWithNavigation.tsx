@@ -12,7 +12,8 @@ import { ChevronRight } from "lucide-react";
 import FormSection from "./form/FormSection";
 import UploadSection from "./upload/UploadSection";
 import SummarySection from "./summary/SummarySection";
-
+import { type UploadedFile } from "./upload/UploadArea"
+// import FileList from "@/components/file-list"
 type FilledFormData = {
   id: number;
   values: Array<Record<string, string>>;
@@ -20,7 +21,8 @@ type FilledFormData = {
 
 export default function AccordionWithNavigation() {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
-
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
+  // const [count, setCount] = useState(0)
   const handleNavigation = (targetIndex: string) => {
     setActiveIndex(targetIndex);
   };
@@ -64,9 +66,12 @@ export default function AccordionWithNavigation() {
       >
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-left font-medium">Prześlij pliki</span>
+          {uploadedFiles.map((el,index)=>(
+            <span key={index}>{el.name}</span>
+          ))}
         </AccordionTrigger>
         <AccordionContent className="pb-4 xl:px-4">
-          <UploadSection />
+          <UploadSection uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles}/>
           <div className="mt-4 flex gap-2">
             <Button
               onClick={() => handleNavigation("item-1")}
