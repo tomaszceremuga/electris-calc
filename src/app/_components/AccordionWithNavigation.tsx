@@ -12,42 +12,94 @@ import { ChevronRight } from "lucide-react";
 import FormSection from "./form/FormSection";
 import UploadSection from "./upload/UploadSection";
 import SummarySection from "./summary/SummarySection";
-import { type UploadedFile } from "./upload/UploadArea"
-// import FileList from "@/components/file-list"
+import { type UploadedFile } from "./upload/UploadArea";
+
+type SelectedSurfaceInterface = {
+  category?: string;
+  option?: string;
+  tile?: string;
+  color?: string;
+};
+
 type FilledFormData = {
   id: number;
-  values: Array<Record<string, string>>;
+  uploadedFiles: UploadedFile[];
+  values: Array<
+    Record<string, string | SelectedSurfaceInterface | UploadedFile[]>
+  >;
 };
 
 export default function AccordionWithNavigation() {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
-  // const [count, setCount] = useState(0)
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+
   const handleNavigation = (targetIndex: string) => {
     setActiveIndex(targetIndex);
   };
 
   const filledFormData: FilledFormData = {
     id: 1,
+    uploadedFiles: [],
     values: [
-      { "1": "13213" },
-      { "2": "mm" },
-      { "3": "Stal nierdzewna" },
-      { "4": "Aluminium 5052" },
-      { "5": "Srebrno-biały" },
-      { "6": "1.0mm" },
-      { "777": "surface;anodized;anodized-simple;purple" },
-      { "8": "" },
-      { "9": "Tak" },
-      { "10": "Tak" },
-      { "11": "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)" },
-      { "12": "Tak" },
-      { "13": "Grawerowanie laserowe" },
-      { "14": "Testy montażowe" },
-      { "15": "Premium (dodatkowe opłaty)" },
-      { "16": "Standardowa inspekcja (brak raportu)" },
-      { "17": "Sprzęt biurowy i akcesoria" },
-      { "18": "ewqeqwe" },
+      {
+        "1": "13213",
+      },
+      {
+        "2": "mm",
+      },
+      {
+        "3": "Stal nierdzewna",
+      },
+      {
+        "4": "Aluminium 5052",
+      },
+      {
+        "5": "Srebrno-biały",
+      },
+      {
+        "6": "1.0mm",
+      },
+      {
+        "777": {
+          category: "surface",
+          option: "anodized",
+          tile: "anodized-simple",
+          color: "black",
+        },
+      },
+      {
+        "8": {},
+      },
+      {
+        "9": "Tak",
+      },
+      {
+        "10": "Tak",
+      },
+      {
+        "11": "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
+      },
+      {
+        "12": "Tak",
+      },
+      {
+        "13": "Grawerowanie laserowe",
+      },
+      {
+        "14": "Testy montażowe",
+      },
+      {
+        "15": "Premium (dodatkowe opłaty)",
+      },
+      {
+        "16": "Standardowa inspekcja (brak raportu)",
+      },
+      {
+        "17": "Sprzęt biurowy i akcesoria",
+      },
+      {
+        "18": "ewqeqwe",
+      },
     ],
   };
 
@@ -66,12 +118,15 @@ export default function AccordionWithNavigation() {
       >
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-left font-medium">Prześlij pliki</span>
-          {uploadedFiles.map((el,index)=>(
+          {uploadedFiles.map((el: UploadedFile, index) => (
             <span key={index}>{el.name}</span>
           ))}
         </AccordionTrigger>
         <AccordionContent className="pb-4 xl:px-4">
-          <UploadSection uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles}/>
+          <UploadSection
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+          />
           <div className="mt-4 flex gap-2">
             <Button
               onClick={() => handleNavigation("item-1")}

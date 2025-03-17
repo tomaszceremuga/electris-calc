@@ -9,6 +9,8 @@ import SelectMaterial from "./SelectMaterial";
 
 import formData from "~/lib/formData";
 
+import { type SelectedSurfaceType } from "./SurfaceTreatment";
+
 type UploadedFile = {
   name: string;
   size: number;
@@ -18,12 +20,13 @@ type UploadedFile = {
 type FormResultState = {
   id: number;
   uploadedFiles: UploadedFile[];
-  values: Record<number, unknown>[]; // `any` pozwala na dowolne wartości
+  values: Array<Record<string, string | SelectedSurfaceType | UploadedFile[]>>;
 };
 
 type FilledFormData = {
   id: number;
-  values: Array<Record<string, string>>;
+  uploadedFiles: UploadedFile[];
+  values: Array<Record<string, string | SelectedSurfaceType | UploadedFile[]>>;
 };
 
 type FormSectionProps = {
@@ -79,8 +82,9 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
   return (
     <div className="xl:pr-16">
       {formData.formElements.map((el, index) => {
-        const filledValue =
-          filledFormData.values.find((item) => item[el.id])?.[el.id] ?? "";
+        const filledValue = filledFormData.values.find((item) => item[el.id])?.[
+          el.id
+        ];
 
         switch (el.type) {
           case "selectGroup":
@@ -88,7 +92,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <SelectGroup
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "string" ? filledValue : ""}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -102,7 +106,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <RadioElements
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "string" ? filledValue : ""}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -116,7 +120,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <TextAreaElement
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "string" ? filledValue : ""}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -130,7 +134,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <QuantityElement
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "string" ? filledValue : ""}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -144,7 +148,7 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <UploadElement
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={Array.isArray(filledValue) ? filledValue : []}
                 name={el.name}
                 info={el.info}
                 description={el.decription}
@@ -158,12 +162,13 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <SelectMaterial
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue == "object" ? filledValue : {}}
                 key={index}
                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
                 data={el.data ?? defaultData}
               />
             );
+
           default:
             return <p className="bg-red-600">Błędny element</p>;
         }

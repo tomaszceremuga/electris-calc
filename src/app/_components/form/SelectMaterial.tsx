@@ -10,11 +10,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import SurfaceTreatment from "./SurfaceTreatment";
+import { type SelectedSurfaceType } from "./SurfaceTreatment";
 
 interface SurfaceTreatmentProps {
   id: number;
   onChange: (id: number, value: unknown) => void;
-  filled: string;
+  filled: SelectedSurfaceType | object;
 
   selectedMaterial: {
     image: string;
@@ -120,7 +121,7 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
         <SurfaceTreatment
           setSelectedSurface={setSelectedSurface}
           data={data}
-          filled={filled.split(";")}
+          filled={filled}
         />
       </div>
     </div>

@@ -18,9 +18,22 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { type formElementsInterface } from "~/lib/formElementsInterface";
+// import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const UploadElement: React.FC<formElementsInterface> = ({
+import { type UploadedFile } from "../upload/UploadArea";
+
+interface UploadElementProps {
+  id: number;
+  onChange: (id: number, value: unknown) => void;
+  filled: UploadedFile[] | [];
+  name?: string;
+  info?: string;
+  options?: string[];
+  isImportant?: boolean;
+  description?: string;
+}
+
+const UploadElement: React.FC<UploadElementProps> = ({
   id,
   onChange,
   name,
