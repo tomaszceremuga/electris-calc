@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { PencilLine } from "lucide-react";
 
 interface Property {
   name: string;
@@ -56,8 +57,8 @@ const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
           />
         </div>
 
-        <div className="min-w-0 flex-1 ">
-          <h3 className="break-words whitespace-normal text-sm font-medium text-foreground">
+        <div className="min-w-0 flex-1">
+          <h3 className="whitespace-normal break-words text-sm font-medium text-foreground">
             {name}
           </h3>
 
@@ -88,6 +89,12 @@ const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
           >
             Ilość
           </label>
+          <button
+            className="text-muted-foreground transition hover:text-foreground"
+            aria-label="Edytuj element"
+          >
+            <PencilLine size={16} />
+          </button>
           <input
             id={`quantity-${name.replace(/\s+/g, "-")}`}
             type="number"
@@ -108,12 +115,16 @@ const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
       </div>
 
       {showDetails && properties.length > 0 && (
-        <div className=" mt-2 border rounded border-muted p-4 ">
+        <div className="mt-2 rounded border border-muted p-4">
           <dl className="space-y-1">
             {properties.map((prop, index) => (
-              <div key={index} className="flex text-xs text-muted-foreground ">
-                <dt className="w-1/2 mr-1  break-words whitespace-normal font-semibold">{prop.name}:</dt>
-                <dd className="w-1/2 break-words whitespace-normal">{prop.value}</dd>
+              <div key={index} className="flex text-xs text-muted-foreground">
+                <dt className="mr-1 w-1/2 whitespace-normal break-words font-semibold">
+                  {prop.name}:
+                </dt>
+                <dd className="w-1/2 whitespace-normal break-words">
+                  {prop.value}
+                </dd>
               </div>
             ))}
           </dl>
