@@ -13,7 +13,7 @@ import FormSection from "./form/FormSection";
 import UploadSection from "./upload/UploadSection";
 import SummarySection from "./summary/SummarySection";
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, File, X } from "lucide-react";
 
 import formData from "~/lib/formData";
 import { type UploadedFile } from "~/lib/UploadedFileType";
@@ -120,6 +120,7 @@ export default function AccordionWithNavigation() {
       }),
     };
     setFormCurrentState(initialState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -135,11 +136,57 @@ export default function AccordionWithNavigation() {
         value="item-0"
         className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
-        <AccordionTrigger className="px-4 hover:no-underline">
-          <span className="text-left font-medium">Prześlij pliki</span>
-          {uploadedFiles.map((el: UploadedFile, index) => (
-            <span key={index}>{el.name}</span>
-          ))}
+        {/* <AccordionTrigger className="flex justify-between px-4 hover:no-underline">
+          <div className="flex w-2/3 bg-blue-200">
+            <span className="mr-5 w-auto text-nowrap text-left font-medium">
+              Prześlij pliki
+            </span>
+            <div className="flex w-1/2 justify-start gap-2 bg-purple-200">
+              {uploadedFiles.map((el: UploadedFile, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-1 rounded-md border bg-muted/30 px-2 py-1 text-sm"
+                >
+                  <File className="h-3.5 w-3.5" />
+                  <a
+                    href={el.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="max-w-[150px] truncate hover:underline"
+                  >
+                    {el.name}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AccordionTrigger> */}
+        <AccordionTrigger className="flex w-full justify-between px-4 pr-8 hover:no-underline">
+          <div className="flex w-full items-center">
+            <span className="mr-5 shrink-0 font-medium">Prześlij pliki</span>
+            <div className="relative flex-1 overflow-hidden pr-8">
+              <div className="flex items-center gap-2 overflow-x-hidden whitespace-nowrap pr-4">
+                {uploadedFiles.map((el: UploadedFile, index) => (
+                  <div
+                    key={index}
+                    className="flex shrink-0 items-center gap-1 rounded-md border bg-muted/30 px-2 py-1 text-sm"
+                  >
+                    <File className="h-3.5 w-3.5" />
+                    <a
+                      href={el.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="max-w-[150px] truncate hover:underline"
+                    >
+                      {el.name}
+                    </a>
+                  </div>
+                ))}
+              </div>
+              {/* Gradient overlay that creates the fade-out effect */}
+              <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-r from-transparent to-background"></div>
+            </div>
+          </div>
         </AccordionTrigger>
         <AccordionContent className="pb-4 xl:px-4">
           <UploadSection
