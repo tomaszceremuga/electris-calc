@@ -1,29 +1,52 @@
 import DeliveryOptions from "./DeliveryOptions";
-import SummaryButtons from "./SummaryButtons";
+import { Button } from "@/components/ui/button";
+import { ShoppingBag } from "lucide-react";
 
 const SummarySection = () => {
   return (
-    <div className="flex w-full flex-col items-start justify-between gap-8 rounded-xl p-6 md:flex-row">
-      <div className="w-full rounded-lg p-4 md:w-1/2">
+    <div className="grid gap-6 lg:grid-cols-2">
+      <div className="p-1">
         <DeliveryOptions />
       </div>
 
-      <div className="w-full rounded-lg p-4 md:w-1/2">
-        <p className="text-lg font-bold text-neutral-800">
-          Ilość elementów: <span className="text-neutral-600">0</span>
-        </p>
-        <p className="text-lg font-bold text-neutral-800">
-          CENA: <span className="text-neutral-900">xxx ZŁ</span>
-        </p>
-        <p className="text-sm text-neutral-600">
-          <sup className="font-bold text-neutral-700">
-            <span>*</span>
-          </sup>
-          W cenę wliczony jest podatek VAT
-        </p>
+      <div className="space-y-6 p-1">
         <div>
-          <SummaryButtons />
+          <h3 className="text-xl font-semibold">Podsumowanie zamówienia</h3>
+          <p className="text-sm text-muted-foreground">
+            Sprawdź szczegóły przed złożeniem zamówienia
+          </p>
         </div>
+
+        <div className="space-y-4 rounded-lg bg-accent/50 p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground">Ilość elementów:</p>
+            <span className="font-medium">0</span>
+          </div>
+
+          <div className="flex items-center justify-between border-t border-border pt-4">
+            <p className="text-muted-foreground">Wartość produktów:</p>
+            <span className="font-medium">0,00 zł</span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground">Koszt dostawy:</p>
+            <span className="font-medium">19,99 zł</span>
+          </div>
+
+          <div className="flex items-center justify-between border-t border-border pt-4">
+            <p className="font-medium">RAZEM:</p>
+            <span className="text-xl font-bold">19,99 zł</span>
+          </div>
+        </div>
+
+        <p className="text-sm text-muted-foreground">
+          <sup className="font-medium">*</sup>W cenę wliczony jest podatek VAT
+        </p>
+
+        <Button className="w-full" size="lg">
+          <ShoppingBag className="mr-2 h-4 w-4" />
+          Dodaj do zamówienia
+        </Button>
       </div>
     </div>
   );

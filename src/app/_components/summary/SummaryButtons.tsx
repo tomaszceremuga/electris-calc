@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
-import OrderDetails from "./OrderDetails";
+// import OrderDetails from "./OrderDetails";
 
 const SummaryButtons = () => {
   return (
-    <div className="flex flex-col gap-2">
-      <OrderDetails />
-      <Button variant="default">DODAJ KOLEJNY ELEMENT</Button>
-      <Button variant="default">PRZEJDŹ DO PŁATNOŚCI</Button>
+    <div className="mt-10 flex flex-col">
+      {/* <OrderDetails /> */}
+      <Button variant="default" className="h-[100px] w-[250px]">
+        Dodaj do zamówienia
+      </Button>
     </div>
   );
 };
