@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import InfoButton from "./InfoButton";
-import { type formElementsInterface } from "~/lib/formElementsInterface";
+import { type FormElementsType } from "~/lib/FormElementsType";
 
-const SelectGroup: React.FC<formElementsInterface> = ({
+const SelectGroup: React.FC<FormElementsType> = ({
   id,
   onChange,
   filled,
@@ -12,7 +12,7 @@ const SelectGroup: React.FC<formElementsInterface> = ({
   isImportant = false,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(
-    filled ?? null,
+    typeof filled == "string" ? filled : null,
   );
   const prevOption = useRef<string | null>(selectedOption);
 

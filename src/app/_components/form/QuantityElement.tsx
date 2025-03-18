@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import InfoButton from "./InfoButton";
 import QuantityTable from "./QuantityTable";
-import { type formElementsInterface } from "~/lib/formElementsInterface";
+import { type FormElementsType } from "~/lib/FormElementsType";
 import { X } from "lucide-react";
 
-const QuantityElement: React.FC<formElementsInterface> = ({
+const QuantityElement: React.FC<FormElementsType> = ({
   id,
   onChange,
   filled,
@@ -24,7 +24,7 @@ const QuantityElement: React.FC<formElementsInterface> = ({
   info = "",
   isImportant = false,
 }) => {
-  const convertToNumber = (filled: string): number => {
+  const convertToNumber = (filled: unknown): number => {
     const result = Number(filled);
     return isNaN(result) ? 0 : result;
   };

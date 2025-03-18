@@ -1,7 +1,7 @@
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import InfoButton from "./InfoButton";
-import { type formElementsInterface } from "~/lib/formElementsInterface";
+import { type formElementsInterface } from "~/lib/FormElementsType";
 
 const TextAreaElement: React.FC<formElementsInterface> = ({
   id,
@@ -23,7 +23,7 @@ const TextAreaElement: React.FC<formElementsInterface> = ({
       <Textarea
         onChange={(e) => onChange(id, e.target.value)}
         defaultValue={filled}
-        className="my-[8px] xl:ml-[20px] "
+        className="my-[8px] xl:ml-[20px]"
       />
     </div>
   );

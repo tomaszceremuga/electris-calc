@@ -13,12 +13,12 @@ import FormSection from "./form/FormSection";
 import UploadSection from "./upload/UploadSection";
 import SummarySection from "./summary/SummarySection";
 
-import { ChevronRight, File, X } from "lucide-react";
+import { ChevronRight, File } from "lucide-react";
 
 import formData from "~/lib/formData";
 import { type UploadedFile } from "~/lib/UploadedFileType";
 import { type FilledFormType } from "~/lib/FilledFormType";
-import { SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
+import { type SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
 
 export default function AccordionWithNavigation() {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");

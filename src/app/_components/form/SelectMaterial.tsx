@@ -10,11 +10,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import SurfaceTreatment from "./SurfaceTreatment";
-import { type SelectedSurfaceType } from "./SurfaceTreatment";
+import { type SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
 
 interface SurfaceTreatmentProps {
   id: number;
-  onChange: (id: number, value: unknown) => void;
+  onChange: (id: number, value: SelectedSurfaceType) => void;
   filled: SelectedSurfaceType | object;
 
   selectedMaterial: {

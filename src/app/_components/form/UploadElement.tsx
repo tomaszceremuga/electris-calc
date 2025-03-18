@@ -1289,7 +1289,7 @@ interface BlobResponse {
 
 interface UploadElementProps {
   id: number;
-  onChange: (id: number, value: unknown) => void;
+  onChange: (id: number, value: UploadedFile[]) => void;
   filled: UploadedFile[] | [];
   name?: string;
   info?: string;

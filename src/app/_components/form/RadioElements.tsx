@@ -3,20 +3,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import InfoButton from "./InfoButton";
-import { type formElementsInterface } from "~/lib/formElementsInterface";
+import { type FormElementsType } from "~/lib/FormElementsType";
 
-const RadioElements: React.FC<formElementsInterface> = ({
+const RadioElements: React.FC<FormElementsType> = ({
   id,
   onChange,
   filled,
-
   name,
   info = "",
   options = [""],
   isImportant = false,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(
-    filled ?? null,
+    typeof filled == "string" ? filled : null,
   );
   const prevOption = useRef<string | null>(selectedOption);
 
