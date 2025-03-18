@@ -1,16 +1,20 @@
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import InfoButton from "./InfoButton";
-import { type formElementsInterface } from "~/lib/FormElementsType";
+import { type FormElementsType } from "~/lib/FormElementsType";
 
-const TextAreaElement: React.FC<formElementsInterface> = ({
+const TextAreaElement: React.FC<FormElementsType> = ({
   id,
-  onChange,
+  onChange = () => {
+    console.log("");
+  },
   filled,
   name,
   info = "",
   isImportant = false,
 }) => {
+  console.log(typeof filled);
+  console.log(filled);
   return (
     <div className="p-2">
       <div className="flex items-center">
@@ -21,8 +25,8 @@ const TextAreaElement: React.FC<formElementsInterface> = ({
         {info && <InfoButton info={info} />}{" "}
       </div>
       <Textarea
-        onChange={(e) => onChange(id, e.target.value)}
-        defaultValue={filled}
+        onBlur={(e) => onChange(id, e.target.value)}
+        defaultValue={typeof filled === "string" ? filled : ""}
         className="my-[8px] xl:ml-[20px]"
       />
     </div>

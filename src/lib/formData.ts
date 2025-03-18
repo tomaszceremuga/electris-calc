@@ -4,7 +4,7 @@ const formData = {
     price: " id pola od ilosci * 1.2 + surfaceTreatment * 0.8",
     deliveryDate: "quantity < 100 ? 14 : 31",
   },
-  formElements: [
+  values: [
     {
       id: 1,
       type: "quantity",
@@ -210,7 +210,7 @@ const formData = {
       type: "radioElements",
       name: "Tolerancja",
       info: "",
-      decription:
+      description:
         "Tolerancje będą kontrolowane zgodnie z normą ISO 2768-1. W przypadku innych, węższych tolerancji, wymagany będzie rysunek techniczny w celu wskazania krytycznych wymiarów.",
       options: [
         "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
@@ -223,7 +223,7 @@ const formData = {
       type: "radioElements",
       name: "Spawanie",
       info: "",
-      decription: "",
+      description: "",
       options: ["Nie", "Tak"],
       isImportant: true,
     },
@@ -232,7 +232,7 @@ const formData = {
       type: "radioElements",
       name: "Oznaczenie części",
       info: "Proszę wyraźnie oznaczyć zawartość sitodruku lub grawerunku laserowego w pliku CAD (DWG lub DXF). Wymagany jest również plik graficzny (Ai lub SVG).",
-      decription: "",
+      description: "",
       options: ["Sitodruk", "Grawerowanie laserowe"],
       isImportant: false,
     },
@@ -241,7 +241,7 @@ const formData = {
       type: "radioElements",
       name: "Montaż części",
       info: "Jeśli wybierzesz [Test montażu], wymagany jest rysunek 2D z instrukcjami montażu. Wyniki testu montażu zostaną przesłane e-mailem. Domyślnie zostanie wykonany tylko test. Jeśli musisz wysłać je po montażu, wybierz [Wyślij w montażu].",
-      decription:
+      description:
         "Proszę określić wymagania dotyczące montażu. PCBWay nie ponosi żadnego ryzyka związanego z montażem, jeśli wybierzesz opcję Brak wymagań dotyczących montażu.",
       options: ["Nie", "Testy montażowe", "Dostawa w formie zmontowanej"],
       isImportant: true,
@@ -251,7 +251,7 @@ const formData = {
       type: "radioElements",
       name: "Wygląd końcowy",
       info: "",
-      decription: "",
+      description: "",
       options: ["Standard", "Premium (dodatkowe opłaty)"],
       isImportant: false,
     },
@@ -260,7 +260,7 @@ const formData = {
       type: "radioElements",
       name: "Kontrola",
       info: "",
-      decription:
+      description:
         "Raport z inspekcji nie zostanie wysłany wraz z częściami, chyba że będzie Ci potrzebny.",
       options: [
         "Standardowa inspekcja (brak raportu)",
@@ -275,7 +275,7 @@ const formData = {
       type: "selectGroup",
       name: "Opis produktu",
       info: "Opis produktu wymagany do odprawy celnej:1. Przestrzegaj zasad handlu międzynarodowego i podaj opisy produktów do odprawy celnej.2. Wybierz prawidłowy opis produktu zgodnie z rzeczywistym zastosowaniem produktu. Jeśli nie ma pasującego elementu, wybierz Inne.",
-      decription: "",
+      description: "",
       options: [
         "Sprzęt biurowy i akcesoria",
         "Pojazdy i akcesoria",
@@ -289,12 +289,91 @@ const formData = {
       type: "textArea",
       name: "Inne specjalne wymagania",
       info: "",
-      decription:
+      description:
         "Wypełnij wymaganiami dotyczącymi produkcji, pakowania i dostarczenia",
       options: [],
       isImportant: false,
     },
   ],
+  defaultFilledFormData: {
+    id: 1,
+    uploadedFiles: [],
+    values: [
+      {
+        id: 1,
+        value: 123,
+      },
+      {
+        id: 2,
+        value: "inch",
+      },
+      {
+        id: 4,
+        value: "Aluminium 5052",
+      },
+      {
+        id: 5,
+        value: "Srebrno-biały",
+      },
+      {
+        id: 6,
+        value: "0.8mm",
+      },
+      {
+        id: 777,
+        value: {
+          category: "surface",
+          option: "anodized",
+          tile: "anodized-simple",
+          color: "black",
+        },
+      },
+      {
+        id: 8,
+        value: [],
+      },
+      {
+        id: 9,
+        value: "Tak",
+      },
+      {
+        id: 10,
+        value: "Tak",
+      },
+      {
+        id: 11,
+        value: "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
+      },
+      {
+        id: 12,
+        value: "Tak",
+      },
+      {
+        id: 13,
+        value: "Grawerowanie laserowe",
+      },
+      {
+        id: 14,
+        value: "Testy montażowe",
+      },
+      {
+        id: 15,
+        value: "Premium (dodatkowe opłaty)",
+      },
+      {
+        id: 16,
+        value: "Standardowa inspekcja (brak raportu)",
+      },
+      {
+        id: 17,
+        value: "Sprzęt biurowy i akcesoria",
+      },
+      {
+        id: 18,
+        value: "ewqeqwe",
+      },
+    ],
+  },
 };
 
 export default formData;

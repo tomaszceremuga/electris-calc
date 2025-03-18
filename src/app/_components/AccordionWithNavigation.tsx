@@ -18,7 +18,7 @@ import { ChevronRight, File } from "lucide-react";
 import formData from "~/lib/formData";
 import { type UploadedFile } from "~/lib/UploadedFileType";
 import { type FilledFormType } from "~/lib/FilledFormType";
-import { type SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
+import { type FormDataToGenerateType } from "~/lib/FormDataToGenerateType";
 
 export default function AccordionWithNavigation() {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
@@ -28,11 +28,11 @@ export default function AccordionWithNavigation() {
     setActiveIndex(targetIndex);
   };
 
-  const [formCurrentState, setFormCurrentState] = useState<FilledFormType>({
-    id: formData.id,
-    uploadedFiles: [],
-    values: [],
-  });
+  const [formCurrentState, setFormCurrentState] = useState<FilledFormType>(
+    formData.defaultFilledFormData,
+  );
+  const [formDataToGenerate, setFormDataToGenerate] =
+    useState<FormDataToGenerateType>(formData);
 
   useEffect(() => {
     setFormCurrentState((prevState) => ({
@@ -41,56 +41,13 @@ export default function AccordionWithNavigation() {
     }));
   }, [uploadedFiles]);
 
-  const filledFormData: FilledFormType = {
-    id: 1,
-    uploadedFiles: [],
-    values: [
-      { id: 1, value: 5 },
-      { id: 2, value: "mm" },
-      { id: 3, value: "Stal nierdzewna" },
-      { id: 4, value: "Aluminium 5052" },
-      { id: 5, value: "Srebrno-biały" },
-      { id: 6, value: "1.0mm" },
-      {
-        id: 777,
-        value: {
-          category: "surface",
-          option: "anodized",
-          tile: "anodized-simple",
-          color: "black",
-        } as SelectedSurfaceType,
-      },
-      { id: 8, value: [] as UploadedFile[] },
-      { id: 9, value: "Tak" },
-      { id: 10, value: "Tak" },
-      { id: 11, value: "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)" },
-      { id: 12, value: "Tak" },
-      { id: 13, value: "Grawerowanie laserowe" },
-      { id: 14, value: "Testy montażowe" },
-      { id: 15, value: "Premium (dodatkowe opłaty)" },
-      { id: 16, value: "Standardowa inspekcja (brak raportu)" },
-      { id: 17, value: "Sprzęt biurowy i akcesoria" },
-      { id: 18, value: "ewqeqwe" },
-    ],
+  const generateForm = (
+    data: FormDataToGenerateType,
+    filledData?: FilledFormType,
+  ) => {
+    setFormDataToGenerate(data);
+    setFormCurrentState(filledData ?? data.defaultFilledFormData);
   };
-
-  useEffect(() => {
-    const initialState: FilledFormType = {
-      id: formData.id,
-      uploadedFiles: uploadedFiles,
-      values: formData.formElements.map((element) => {
-        const filledValue = filledFormData.values.find(
-          (item) => item.id === element.id,
-        );
-        return {
-          id: element.id,
-          value: filledValue ? filledValue.value : "",
-        };
-      }),
-    };
-    setFormCurrentState(initialState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Accordion
@@ -105,31 +62,6 @@ export default function AccordionWithNavigation() {
         value="item-0"
         className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
-        {/* <AccordionTrigger className="flex justify-between px-4 hover:no-underline">
-          <div className="flex w-2/3 bg-blue-200">
-            <span className="mr-5 w-auto text-nowrap text-left font-medium">
-              Prześlij pliki
-            </span>
-            <div className="flex w-1/2 justify-start gap-2 bg-purple-200">
-              {uploadedFiles.map((el: UploadedFile, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-1 rounded-md border bg-muted/30 px-2 py-1 text-sm"
-                >
-                  <File className="h-3.5 w-3.5" />
-                  <a
-                    href={el.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="max-w-[150px] truncate hover:underline"
-                  >
-                    {el.name}
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        </AccordionTrigger> */}
         <AccordionTrigger className="flex w-full justify-between px-4 pr-8 hover:no-underline">
           <div className="flex w-full items-center">
             <span className="mr-5 shrink-0 font-medium">Prześlij pliki</span>
@@ -184,8 +116,9 @@ export default function AccordionWithNavigation() {
         </AccordionTrigger>
         <AccordionContent className="pb-4 xl:px-4">
           <FormSection
+            generateForm={generateForm}
+            formDataToGenerate={formDataToGenerate}
             uploadedFiles={uploadedFiles}
-            filledFormData={formCurrentState}
             formCurrentState={formCurrentState}
             setFormCurrentState={setFormCurrentState}
           />

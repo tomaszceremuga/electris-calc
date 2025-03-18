@@ -1,3 +1,4 @@
+import { type FilledFormType } from "./FilledFormType";
 import { type FormElementsType } from "./FormElementsType";
 
 export type FormDataToGenerateType = {
@@ -7,4 +8,5 @@ export type FormDataToGenerateType = {
     deliveryDate: string;
   };
   values: Array<FormElementsType>;
+  defaultFilledFormData: FilledFormType;
 };

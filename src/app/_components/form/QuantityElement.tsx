@@ -38,7 +38,7 @@ const QuantityElement: React.FC<FormElementsType> = ({
   );
 
   useEffect(() => {
-    if (prevQuantity.current !== quantity) {
+    if (prevQuantity.current !== quantity && onChange) {
       onChange(id, quantity);
       prevQuantity.current = quantity;
     }

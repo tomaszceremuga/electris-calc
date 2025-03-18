@@ -123,7 +123,6 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     setSelectedSurface,
   ]);
 
-  console.log("OBECNY KAFELEK " + selectedTile);
   return (
     <div>
       <AlertDialog>
@@ -236,8 +235,6 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                   className={`${selectedTile != null && "align-center"} sm:baseline flex flex-wrap content-start gap-4 align-baseline`}
                 >
                   {availableTiles.map((tile) => {
-                    console.log(selectedTile);
-                    console.log(tile);
                     return (
                       <div
                         key={tile.id}

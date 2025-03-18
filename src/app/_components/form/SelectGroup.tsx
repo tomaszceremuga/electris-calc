@@ -4,7 +4,9 @@ import { type FormElementsType } from "~/lib/FormElementsType";
 
 const SelectGroup: React.FC<FormElementsType> = ({
   id,
-  onChange,
+  onChange = () => {
+    console.log("");
+  },
   filled,
   name,
   info = "",
@@ -25,7 +27,7 @@ const SelectGroup: React.FC<FormElementsType> = ({
       onChange(id, selectedOption ?? "");
       prevOption.current = selectedOption;
     }
-  }, [selectedOption, id, onChange]);
+  }, [selectedOption, id, onChange, filled]);
 
   return (
     <div className="mb-5 flex flex-wrap items-center">

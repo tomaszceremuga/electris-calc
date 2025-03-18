@@ -7,7 +7,9 @@ import { type FormElementsType } from "~/lib/FormElementsType";
 
 const RadioElements: React.FC<FormElementsType> = ({
   id,
-  onChange,
+  onChange = () => {
+    console.log("");
+  },
   filled,
   name,
   info = "",
@@ -32,6 +34,10 @@ const RadioElements: React.FC<FormElementsType> = ({
     }
   }, [selectedOption, id, onChange]);
 
+  console.log("");
+  console.log("");
+  console.log("filled opacja");
+  console.log(filled);
   return (
     <div className="mb-5 p-2">
       <div className="flex items-center">
