@@ -1,5 +1,9 @@
 const formData = {
   id: 1,
+  calculation: {
+    price: " id pola od ilosci * 1.2 + surfaceTreatment * 0.8",
+    deliveryDate: "quantity < 100 ? 14 : 31",
+  },
   formElements: [
     {
       id: 1,
@@ -18,22 +22,6 @@ const formData = {
       description: "",
       options: ["mm", "inch", "cm"],
       isImportant: false,
-    },
-    {
-      id: 3,
-      type: "selectGroup",
-      name: "Materiał",
-      info: "",
-      description: "",
-      options: [
-        "Aluminium",
-        "Stal nierdzewna",
-        "Stal miękka",
-        "Miedź",
-        "PMMA(Akryl)",
-        "Włókno węglowe",
-      ],
-      isImportant: true,
     },
     {
       id: 4,
@@ -71,24 +59,6 @@ const formData = {
       ],
       isImportant: true,
     },
-    // {
-    //   id: 6,
-    //   type: "radioElements",
-    //   name: "Grubość",
-    //   info: "",
-    //   options: [
-    //     "0.8mm",
-    //     "1.0mm",
-    //     "1.2mm",
-    //     "1.5mm",
-    //     "2.0mm",
-    //     "2.5mm",
-    //     "3.0mm",
-    //     "4.0mm",
-    //   ],
-    //   isImportant: true,
-    // },
-
     {
       id: 777,
       type: "selectMaterial",

@@ -18,6 +18,7 @@ import { ChevronRight, File, X } from "lucide-react";
 import formData from "~/lib/formData";
 import { type UploadedFile } from "~/lib/UploadedFileType";
 import { type FilledFormType } from "~/lib/FilledFormType";
+import { SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
 
 export default function AccordionWithNavigation() {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
@@ -44,65 +45,32 @@ export default function AccordionWithNavigation() {
     id: 1,
     uploadedFiles: [],
     values: [
+      { id: 1, value: 5 },
+      { id: 2, value: "mm" },
+      { id: 3, value: "Stal nierdzewna" },
+      { id: 4, value: "Aluminium 5052" },
+      { id: 5, value: "Srebrno-biały" },
+      { id: 6, value: "1.0mm" },
       {
-        "1": "13213",
-      },
-      {
-        "2": "mm",
-      },
-      {
-        "3": "Stal nierdzewna",
-      },
-      {
-        "4": "Aluminium 5052",
-      },
-      {
-        "5": "Srebrno-biały",
-      },
-      {
-        "6": "1.0mm",
-      },
-      {
-        "777": {
+        id: 777,
+        value: {
           category: "surface",
           option: "anodized",
           tile: "anodized-simple",
           color: "black",
-        },
+        } as SelectedSurfaceType,
       },
-      {
-        "8": [],
-      },
-      {
-        "9": "Tak",
-      },
-      {
-        "10": "Tak",
-      },
-      {
-        "11": "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
-      },
-      {
-        "12": "Tak",
-      },
-      {
-        "13": "Grawerowanie laserowe",
-      },
-      {
-        "14": "Testy montażowe",
-      },
-      {
-        "15": "Premium (dodatkowe opłaty)",
-      },
-      {
-        "16": "Standardowa inspekcja (brak raportu)",
-      },
-      {
-        "17": "Sprzęt biurowy i akcesoria",
-      },
-      {
-        "18": "ewqeqwe",
-      },
+      { id: 8, value: [] as UploadedFile[] },
+      { id: 9, value: "Tak" },
+      { id: 10, value: "Tak" },
+      { id: 11, value: "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)" },
+      { id: 12, value: "Tak" },
+      { id: 13, value: "Grawerowanie laserowe" },
+      { id: 14, value: "Testy montażowe" },
+      { id: 15, value: "Premium (dodatkowe opłaty)" },
+      { id: 16, value: "Standardowa inspekcja (brak raportu)" },
+      { id: 17, value: "Sprzęt biurowy i akcesoria" },
+      { id: 18, value: "ewqeqwe" },
     ],
   };
 
@@ -112,10 +80,11 @@ export default function AccordionWithNavigation() {
       uploadedFiles: uploadedFiles,
       values: formData.formElements.map((element) => {
         const filledValue = filledFormData.values.find(
-          (item) => item[element.id],
+          (item) => item.id === element.id,
         );
         return {
-          [element.id]: filledValue ? (filledValue[element.id] ?? "") : "",
+          id: element.id,
+          value: filledValue ? filledValue.value : "",
         };
       }),
     };
