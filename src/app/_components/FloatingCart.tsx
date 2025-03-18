@@ -12,7 +12,9 @@ interface CartItem {
   properties: { name: string; value: string }[];
   quantity: number;
 }
-
+interface ResponseData {
+  message: string; // Adjust according to the structure of your response data
+}
 const FloatingCart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
@@ -143,6 +145,38 @@ const FloatingCart = () => {
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
+  const handleProceedToCheckout = async () => {
+    try {
+      const response: Response = await fetch('/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cartItems } as { cartItems: CartItem[] }),
+      });
+  
+      // Check if the response is OK (status code 200-299)
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response from server:", errorText);
+        alert('Wystąpił błąd przy wysyłaniu e-maila');
+        return;
+      }
+  
+      // Try parsing the JSON response
+      const data: ResponseData = await response.json() as ResponseData;
+  
+      if (data.message) {
+        alert(data.message);
+      } else {
+        alert('Wystąpił błąd przy wysyłaniu e-maila');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Wystąpił błąd przy wysyłaniu e-maila');
+    }
+  };
+  
   return (
     <div className="sticky lg:top-[105px] h-min w-full max-w-4xl lg:max-w-sm  self-start  bg-card  lg:rounded-md lg:border">
       <div className="lg:rounded-t-lg lg:border-b lg:border-border p-4">
@@ -181,7 +215,7 @@ const FloatingCart = () => {
           <Button variant="outline" className="w-full">
             Pokaż koszyk
           </Button>
-          <Button className="w-full">Przejdź do kasy</Button>
+          <Button className="w-full"  onClick={handleProceedToCheckout}>Przejdź do kasy</Button>
         </div>
       </div>
     </div>
