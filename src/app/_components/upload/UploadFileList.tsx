@@ -1,18 +1,23 @@
 import type * as React from "react";
 import UploadElement from "./UploadElement";
 import { type UploadedFile } from "~/lib/UploadedFileType";
+import { useFormContext } from "~/lib/FormContext";
 
 interface UploadFileProps {
   uploadedFiles: UploadedFile[];
-  setUploadedFiles: React.Dispatch<React.SetStateAction<UploadedFile[]>>;
+  setUploadedFiles: (uploadedFiles: UploadedFile[]) => void;
 }
 
 const UploadFileList = ({
   uploadedFiles,
   setUploadedFiles,
 }: UploadFileProps) => {
+  const { formCurrentState } = useFormContext();
+
   const handleDeleteButton = (i: number) => {
-    setUploadedFiles((prev) => prev.filter((_, index) => index !== i));
+    setUploadedFiles(
+      formCurrentState.uploadedFiles.filter((_, index) => index !== i),
+    );
   };
 
   return (

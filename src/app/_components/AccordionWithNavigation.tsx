@@ -1,30 +1,31 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
 import {
   Accordion,
   AccordionContent as UI_AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
-import FormSection from "./form/FormSection"
-import UploadSection from "./upload/UploadSection"
-import SummarySection from "./summary/SummarySection"
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import FormSection from "./form/FormSection";
+import UploadSection from "./upload/UploadSection";
+import SummarySection from "./summary/SummarySection";
 
-import { ChevronRight, File } from "lucide-react"
+import { ChevronRight, File } from "lucide-react";
 
-import { FormProvider, useFormContext } from "~/lib/FormContext"
+import { FormProvider, useFormContext } from "~/lib/FormContext";
 
-// Create a wrapper component to access context values
 const AccordionContent = () => {
-  const [activeIndex, setActiveIndex] = useState<string>("item-0")
-  const { uploadedFiles } = useFormContext()
+  const [activeIndex, setActiveIndex] = useState<string>("item-0");
+  const { formCurrentState } = useFormContext();
+
+  const uploadedFiles = formCurrentState.uploadedFiles;
 
   const handleNavigation = (targetIndex: string) => {
-    setActiveIndex(targetIndex)
-  }
+    setActiveIndex(targetIndex);
+  };
 
   return (
     <Accordion
@@ -35,7 +36,10 @@ const AccordionContent = () => {
       className="h-min w-full max-w-4xl"
     >
       {/* Upload Section */}
-      <AccordionItem value="item-0" className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border">
+      <AccordionItem
+        value="item-0"
+        className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
+      >
         <AccordionTrigger className="flex w-full justify-between px-4 pr-8 hover:no-underline">
           <div className="flex w-full items-center">
             <span className="mr-5 shrink-0 font-medium">Prześlij pliki</span>
@@ -66,7 +70,10 @@ const AccordionContent = () => {
         <UI_AccordionContent className="pb-4 xl:px-4">
           <UploadSection />
           <div className="mt-4 flex gap-2">
-            <Button onClick={() => handleNavigation("item-1")} className="flex items-center">
+            <Button
+              onClick={() => handleNavigation("item-1")}
+              className="flex items-center"
+            >
               Dalej
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -75,18 +82,28 @@ const AccordionContent = () => {
       </AccordionItem>
 
       {/* Form Section */}
-      <AccordionItem value="item-1" className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border">
+      <AccordionItem
+        value="item-1"
+        className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
+      >
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-left font-medium">Formularz</span>
         </AccordionTrigger>
         <UI_AccordionContent className="pb-4 xl:px-4">
           <FormSection />
           <div className="mt-4 flex gap-2">
-            <Button onClick={() => handleNavigation("item-0")} variant="outline" className="flex items-center">
+            <Button
+              onClick={() => handleNavigation("item-0")}
+              variant="outline"
+              className="flex items-center"
+            >
               <ChevronRight className="mr-2 h-4 w-4 rotate-180" />
               Wróć
             </Button>
-            <Button onClick={() => handleNavigation("item-2")} className="flex items-center">
+            <Button
+              onClick={() => handleNavigation("item-2")}
+              className="flex items-center"
+            >
               Dalej
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -95,14 +112,21 @@ const AccordionContent = () => {
       </AccordionItem>
 
       {/* Summary Section */}
-      <AccordionItem value="item-2" className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border">
+      <AccordionItem
+        value="item-2"
+        className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
+      >
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-left font-medium">Podsumowanie</span>
         </AccordionTrigger>
         <UI_AccordionContent className="pb-4 xl:px-4">
           <SummarySection />
           <div className="mt-4 flex gap-2">
-            <Button onClick={() => handleNavigation("item-1")} variant="outline" className="flex items-center">
+            <Button
+              onClick={() => handleNavigation("item-1")}
+              variant="outline"
+              className="flex items-center"
+            >
               <ChevronRight className="mr-2 h-4 w-4 rotate-180" />
               Wróć
             </Button>
@@ -111,14 +135,13 @@ const AccordionContent = () => {
         </UI_AccordionContent>
       </AccordionItem>
     </Accordion>
-  )
-}
+  );
+};
 
 export default function AccordionWithNavigation() {
   return (
     <FormProvider>
       <AccordionContent />
     </FormProvider>
-  )
+  );
 }
-

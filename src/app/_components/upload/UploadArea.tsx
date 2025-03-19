@@ -8,10 +8,11 @@ import { toast } from "sonner";
 import { Download, Loader2 } from "lucide-react";
 
 import { type UploadedFile } from "~/lib/UploadedFileType";
+import { useFormContext } from "~/lib/FormContext";
 
 interface UploadAreaProps {
   uploadedFiles: UploadedFile[];
-  setUploadedFiles: React.Dispatch<React.SetStateAction<UploadedFile[]>>;
+  setUploadedFiles: (uploadedFiles: UploadedFile[]) => void;
   count: number;
 }
 
@@ -19,6 +20,8 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { formCurrentState } = useFormContext();
 
   const getDate = (): string => {
     const actualDate = new Date();
@@ -156,7 +159,10 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
 
         // Aktualizacja stanu tylko jeśli mamy pomyślnie przesłane pliki
         if (newUploadedFiles.length > 0) {
-          setUploadedFiles((prev) => [...prev, ...newUploadedFiles]);
+          setUploadedFiles([
+            ...formCurrentState.uploadedFiles,
+            ...newUploadedFiles,
+          ]);
 
           toast.success(
             newUploadedFiles.length > 1
