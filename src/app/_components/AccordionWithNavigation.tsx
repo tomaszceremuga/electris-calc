@@ -20,7 +20,6 @@ import { FormProvider, useFormContext } from "~/lib/FormContext";
 const AccordionContent = () => {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
   const { formCurrentState } = useFormContext();
-
   const uploadedFiles = formCurrentState.uploadedFiles;
 
   const handleNavigation = (targetIndex: string) => {

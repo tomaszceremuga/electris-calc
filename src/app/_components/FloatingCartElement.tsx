@@ -113,7 +113,7 @@ const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
           </button>
         </div>
       </div>
-
+      
       {showDetails && properties.length > 0 && (
         <div className="mt-2 rounded border border-muted p-4">
           <dl className="space-y-1">
@@ -129,8 +129,11 @@ const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
             ))}
           </dl>
         </div>
+
       )}
+      
     </li>
+    
   );
 };
 

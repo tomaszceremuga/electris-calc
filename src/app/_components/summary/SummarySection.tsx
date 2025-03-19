@@ -1,8 +1,15 @@
+"use client";
+
 import DeliveryOptions from "./DeliveryOptions";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
+import { CartProvider, useCartContext } from "~/lib/CartContext";
+import { useFormContext } from "~/lib/FormContext";
 
-const SummarySection = () => {
+const SummarySectionTemplate = () => {
+  const {  setCartState } = useCartContext();
+  const { formCurrentState, formDataToGenerate } = useFormContext();
+
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <div className="p-1">
@@ -43,7 +50,20 @@ const SummarySection = () => {
           <sup className="font-medium">*</sup>W cenę wliczony jest podatek VAT
         </p>
 
-        <Button className="w-full" size="lg">
+        <Button
+          className="w-full"
+          size="lg"
+          onClick={() => {
+            setCartState((prev) => [
+              ...prev,
+              {
+                id: formCurrentState.id,
+                filledForm: formCurrentState,
+                formDataToGenerate: formDataToGenerate,
+              },
+            ]);
+          }}
+        >
           <ShoppingBag className="mr-2 h-4 w-4" />
           Dodaj do zamówienia
         </Button>
@@ -52,4 +72,11 @@ const SummarySection = () => {
   );
 };
 
-export default SummarySection;
+// export default SummarySection;
+export default function SummarySection() {
+  return (
+    <CartProvider>
+      <SummarySectionTemplate />
+    </CartProvider>
+  );
+}

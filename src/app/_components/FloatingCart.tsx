@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import FloatingCartElement from "./FloatingCartElement";
+import { CartProvider, useCartContext } from "~/lib/CartContext";
 
 interface CartItem {
   id: string;
@@ -15,7 +16,8 @@ interface CartItem {
 interface ResponseData {
   message: string; // Adjust according to the structure of your response data
 }
-const FloatingCart = () => {
+const FloatingCartTemplate = () => {
+   const { cartState } = useCartContext();
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       "id": "1",
@@ -176,6 +178,9 @@ const FloatingCart = () => {
     }
   };
   
+
+
+
   return (
     <div className="sticky lg:top-[105px] h-min w-full max-w-4xl lg:max-w-sm  self-start  bg-card  lg:rounded-md lg:border">
       <div className="lg:rounded-t-lg lg:border-b lg:border-border p-4">
@@ -217,8 +222,18 @@ const FloatingCart = () => {
           <Button className="w-full"  onClick={handleProceedToCheckout}>Przejdź do kasy</Button>
         </div>
       </div>
+
+      <pre className="rounded-md bg-purple-300 p-2">{JSON.stringify(cartState, null, 2)}</pre>
+
     </div>
   );
 };
 
-export default FloatingCart;
+export default function FloatingCart() {
+
+  return (
+    <CartProvider>
+      <FloatingCartTemplate />
+    </CartProvider>
+  );
+}
