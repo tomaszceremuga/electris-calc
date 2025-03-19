@@ -147,14 +147,13 @@ const FloatingCart = () => {
 
   const handleProceedToCheckout = async () => {
     try {
-      const response: Response = await fetch('/api/sendEmail', {
+      const response = await fetch('/api/sendEmail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cartItems } as { cartItems: CartItem[] }),
+        body: JSON.stringify({ cartItems }),
       });
-  
       // Check if the response is OK (status code 200-299)
       if (!response.ok) {
         const errorText = await response.text();
@@ -162,7 +161,7 @@ const FloatingCart = () => {
         alert('Wystąpił błąd przy wysyłaniu e-maila');
         return;
       }
-  
+      console.log("connection is OK")
       // Try parsing the JSON response
       const data: ResponseData = await response.json() as ResponseData;
   
