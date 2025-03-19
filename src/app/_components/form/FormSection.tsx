@@ -1,64 +1,50 @@
-import React from "react";
+"use client"
 
-import SelectGroup from "./SelectGroup";
-import RadioElements from "./RadioElements";
-import TextAreaElement from "./TextAreaElement";
-import UploadElement from "./UploadElement";
-import QuantityElement from "./QuantityElement";
-import SelectMaterial from "./SelectMaterial";
+import SelectGroup from "./SelectGroup"
+import RadioElements from "./RadioElements"
+import TextAreaElement from "./TextAreaElement"
+import UploadElement from "./UploadElement"
+import QuantityElement from "./QuantityElement"
+import SelectMaterial from "./SelectMaterial"
 
-import { type UploadedFile } from "~/lib/UploadedFileType";
-import { type FilledFormType } from "~/lib/FilledFormType";
-import { type FilledValueType } from "~/lib/FilledValueType";
-import { type FormDataToGenerateType } from "~/lib/FormDataToGenerateType";
-import { Button } from "~/components/ui/button";
+// import type { UploadedFile } from "~/lib/UploadedFileType"
+import type { FilledValueType } from "~/lib/FilledValueType"
+import { Button } from "~/components/ui/button"
+import { useFormContext } from "~/lib/FormContext"
 
-type FormSectionProps = {
-  generateForm: (
-    data: FormDataToGenerateType,
-    filledData?: FilledFormType,
-  ) => void;
+// type FormSectionProps = {
+//   uploadedFiles: UploadedFile[]
+// { uploadedFiles }: FormSectionProps
+// }
 
-  formDataToGenerate: FormDataToGenerateType;
-  uploadedFiles: UploadedFile[];
-  formCurrentState: FilledFormType;
-  setFormCurrentState: React.Dispatch<React.SetStateAction<FilledFormType>>;
-};
+const FormSection = () => {
+  // Get form state and functions from context instead of props
+  const { generateForm, formDataToGenerate, formCurrentState, setFormCurrentState } = useFormContext()
 
-const FormSection = ({
-  generateForm,
-  formDataToGenerate,
-  formCurrentState,
-  setFormCurrentState,
-}: FormSectionProps) => {
   const defaultMaterial = {
     image: "",
     name: "Unknown",
     infoLink: "#",
     rate: 0,
     rates: 0,
-  };
+  }
   const defaultData = {
     alertMesage: "",
     categories: [],
     tiles: [],
-  };
+  }
 
   const handleChange = (id: number, value: FilledValueType["value"]) => {
     setFormCurrentState((prev) => ({
       ...prev,
-      values: prev.values.map((item) =>
-        item.id === id ? { ...item, value } : item,
-      ),
-    }));
-  };
+      values: prev.values.map((item) => (item.id === id ? { ...item, value } : item)),
+    }))
+  }
 
   return (
     <div className="xl:pr-16">
       {formDataToGenerate.values.map((el, index) => {
-        const filledValue = formCurrentState.values.find(
-          (item) => item.id === el.id,
-        )?.value;
+        const filledValue = formCurrentState.values.find((item) => item.id === el.id)?.value
         switch (el.type) {
           case "selectGroup":
             return (
@@ -73,7 +59,7 @@ const FormSection = ({
                 key={index}
                 isImportant={el.isImportant}
               />
-            );
+            )
           case "radioElements":
             return (
               <RadioElements
@@ -87,7 +73,7 @@ const FormSection = ({
                 key={index}
                 isImportant={el.isImportant}
               />
-            );
+            )
           case "textArea":
             return (
               <TextAreaElement
@@ -101,7 +87,7 @@ const FormSection = ({
                 key={index}
                 isImportant={el.isImportant}
               />
-            );
+            )
           case "quantity":
             return (
               <QuantityElement
@@ -115,7 +101,7 @@ const FormSection = ({
                 key={index}
                 isImportant={el.isImportant}
               />
-            );
+            )
           case "uploadElement":
             return (
               <UploadElement
@@ -129,16 +115,14 @@ const FormSection = ({
                 key={index}
                 isImportant={el.isImportant}
               />
-            );
+            )
           case "selectMaterial":
             return (
               <SelectMaterial
                 id={el.id}
                 onChange={handleChange}
                 filled={
-                  typeof filledValue === "object" &&
-                  filledValue !== null &&
-                  !Array.isArray(filledValue)
+                  typeof filledValue === "object" && filledValue !== null && !Array.isArray(filledValue)
                     ? filledValue
                     : {}
                 }
@@ -146,19 +130,17 @@ const FormSection = ({
                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
                 data={el.data ?? defaultData}
               />
-            );
+            )
 
           default:
             return (
               <p key={index} className="bg-red-600">
                 Błędny element
               </p>
-            );
+            )
         }
       })}
-      <pre className="rounded-md bg-purple-300 p-2">
-        {JSON.stringify(formCurrentState, null, 2)}
-      </pre>
+      <pre className="rounded-md bg-purple-300 p-2">{JSON.stringify(formCurrentState, null, 2)}</pre>
       <Button
         onClick={() => {
           generateForm(
@@ -211,24 +193,14 @@ const FormSection = ({
                   name: "Grubość",
                   info: "",
                   description: "",
-                  options: [
-                    "0.8mm",
-                    "1.0mm",
-                    "1.2mm",
-                    "1.5mm",
-                    "2.0mm",
-                    "2.5mm",
-                    "3.0mm",
-                    "4.0mm",
-                  ],
+                  options: ["0.8mm", "1.0mm", "1.2mm", "1.5mm", "2.0mm", "2.5mm", "3.0mm", "4.0mm"],
                   isImportant: true,
                 },
                 {
                   id: 777,
                   type: "selectMaterial",
                   selectedMaterial: {
-                    image:
-                      "https://pcbwayfile.s3-us-west-2.amazonaws.com/web/20/12/10/2226459873337t.jpg",
+                    image: "https://pcbwayfile.s3-us-west-2.amazonaws.com/web/20/12/10/2226459873337t.jpg",
                     name: "Aluminum 12125052",
                     infoLink: "#",
                     rate: 4.9,
@@ -371,8 +343,7 @@ const FormSection = ({
                   type: "radioElements",
                   name: "Wkładki",
                   info: "",
-                  description:
-                    "Proszę podać standardowe wkładki stosowane w  części.",
+                  description: "Proszę podać standardowe wkładki stosowane w  części.",
                   options: ["Nie", "Tak"],
                   isImportant: true,
                 },
@@ -383,10 +354,7 @@ const FormSection = ({
                   info: "",
                   description:
                     "Tolerancje będą kontrolowane zgodnie z normą ISO 2768-1. W przypadku innych, węższych tolerancji, wymagany będzie rysunek techniczny w celu wskazania krytycznych wymiarów.",
-                  options: [
-                    "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
-                    "Wymagane są węższe tolerancje",
-                  ],
+                  options: ["Nie są wymagane żadne węższe tolerancje (ISO 2768-1)", "Wymagane są węższe tolerancje"],
                   isImportant: true,
                 },
                 {
@@ -414,11 +382,7 @@ const FormSection = ({
                   info: "Jeśli wybierzesz [Test montażu], wymagany jest rysunek 2D z instrukcjami montażu. Wyniki testu montażu zostaną przesłane e-mailem. Domyślnie zostanie wykonany tylko test. Jeśli musisz wysłać je po montażu, wybierz [Wyślij w montażu].",
                   description:
                     "Proszę określić wymagania dotyczące montażu. PCBWay nie ponosi żadnego ryzyka związanego z montażem, jeśli wybierzesz opcję Brak wymagań dotyczących montażu.",
-                  options: [
-                    "Nie",
-                    "Testy montażowe",
-                    "Dostawa w formie zmontowanej",
-                  ],
+                  options: ["Nie", "Testy montażowe", "Dostawa w formie zmontowanej"],
                   isImportant: true,
                 },
                 {
@@ -464,8 +428,7 @@ const FormSection = ({
                   type: "textArea",
                   name: "Inne specjalne wymagania",
                   info: "",
-                  description:
-                    "Wypełnij wymaganiami dotyczącymi produkcji, pakowania i dostarczenia",
+                  description: "Wypełnij wymaganiami dotyczącymi produkcji, pakowania i dostarczenia",
                   options: [],
                   isImportant: false,
                 },
@@ -517,8 +480,7 @@ const FormSection = ({
                   },
                   {
                     id: 11,
-                    value:
-                      "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
+                    value: "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
                   },
                   {
                     id: 12,
@@ -642,13 +604,14 @@ const FormSection = ({
                 },
               ],
             },
-          );
+          )
         }}
       >
         generuj formularz
       </Button>
     </div>
-  );
-};
+  )
+}
 
-export default FormSection;
+export default FormSection
+
