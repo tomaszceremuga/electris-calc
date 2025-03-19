@@ -48,7 +48,7 @@ interface UploadElementProps {
 const UploadElement: React.FC<UploadElementProps> = ({
   id,
   onChange,
-  filled = [],
+  filled,
   name,
   description = "",
   info = "",
@@ -183,6 +183,9 @@ const UploadElement: React.FC<UploadElementProps> = ({
       setIsUploading(false);
     }
   };
+  useEffect(() => {
+    setUploadedFiles(filled);
+  }, [filled]);
 
   return (
     <div className="mb-5 p-2">

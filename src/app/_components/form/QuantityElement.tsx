@@ -44,6 +44,10 @@ const QuantityElement: React.FC<FormElementsType> = ({
     }
   }, [quantity, id, onChange]);
 
+  useEffect(() => {
+    setQuantity(typeof filled == "number" ? filled : 0);
+  }, [filled]);
+
   return (
     <div className="mb-5 flex flex-wrap items-center">
       <div className="ml-2 flex flex-wrap gap-2">

@@ -29,6 +29,10 @@ const SelectGroup: React.FC<FormElementsType> = ({
     }
   }, [selectedOption, id, onChange, filled]);
 
+  useEffect(() => {
+    setSelectedOption(typeof filled == "string" ? filled : null);
+  }, [filled]);
+
   return (
     <div className="mb-5 flex flex-wrap items-center">
       <div className="ml-2 flex flex-wrap gap-x-2">

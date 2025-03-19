@@ -123,6 +123,13 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
     setSelectedSurface,
   ]);
 
+  useEffect(() => {
+    setSelectedCategory(filled.category ?? "");
+    setSelectedOption(filled.option ?? "");
+    setSelectedTile(filled.tile ?? "");
+    setSelectedColor(filled.color ?? "");
+  }, [filled, setSelectedSurface]);
+
   return (
     <div>
       <AlertDialog>

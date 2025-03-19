@@ -34,10 +34,10 @@ const RadioElements: React.FC<FormElementsType> = ({
     }
   }, [selectedOption, id, onChange]);
 
-  console.log("");
-  console.log("");
-  console.log("filled opacja");
-  console.log(filled);
+  useEffect(() => {
+    setSelectedOption(typeof filled == "string" ? filled : null);
+  }, [filled]);
+
   return (
     <div className="mb-5 p-2">
       <div className="flex items-center">

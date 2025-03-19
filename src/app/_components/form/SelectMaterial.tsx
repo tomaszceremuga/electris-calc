@@ -46,13 +46,6 @@ interface SurfaceTreatmentProps {
   };
 }
 
-interface SelectedSurfaceInterface {
-  category?: string;
-  option?: string;
-  tile?: string;
-  color?: string;
-}
-
 const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   id,
   onChange,
@@ -60,10 +53,11 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   selectedMaterial,
   data,
 }) => {
-  const [selectedSurface, setSelectedSurface] =
-    useState<SelectedSurfaceInterface>({});
+  const [selectedSurface, setSelectedSurface] = useState<SelectedSurfaceType>(
+    {},
+  );
 
-  const prevSurface = useRef<SelectedSurfaceInterface | null>(selectedSurface);
+  const prevSurface = useRef<SelectedSurfaceType>(selectedSurface);
 
   useEffect(() => {
     if (prevSurface.current !== selectedSurface) {

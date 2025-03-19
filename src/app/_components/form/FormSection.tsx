@@ -59,13 +59,6 @@ const FormSection = ({
         const filledValue = formCurrentState.values.find(
           (item) => item.id === el.id,
         )?.value;
-        console.log("");
-        console.log("");
-        console.log("");
-
-        console.log("wartość do wypełnieina ");
-        console.log(filledValue);
-
         switch (el.type) {
           case "selectGroup":
             return (
@@ -354,6 +347,128 @@ const FormSection = ({
                     ],
                   },
                 },
+                {
+                  id: 8,
+                  type: "uploadElement",
+                  name: "Rysunek techiczny",
+                  info: "",
+                  description: "",
+                  options: [],
+                  isImportant: false,
+                },
+                {
+                  id: 9,
+                  type: "radioElements",
+                  name: "Czy Twoje części wymagają gwintowania?",
+                  info: "",
+                  description:
+                    "Proszę określić, czy Twoja część ma gwinty wewnętrzne lub zewnętrzne.Nie ponosimy żadnego ryzyka montażowego, jeśli jest to niestandardowy gwint, chyba że wszystkie części montażowe są tutaj produkowane i montowane.",
+                  options: ["Nie", "Tak"],
+                  isImportant: true,
+                },
+                {
+                  id: 10,
+                  type: "radioElements",
+                  name: "Wkładki",
+                  info: "",
+                  description:
+                    "Proszę podać standardowe wkładki stosowane w  części.",
+                  options: ["Nie", "Tak"],
+                  isImportant: true,
+                },
+                {
+                  id: 11,
+                  type: "radioElements",
+                  name: "Tolerancja",
+                  info: "",
+                  description:
+                    "Tolerancje będą kontrolowane zgodnie z normą ISO 2768-1. W przypadku innych, węższych tolerancji, wymagany będzie rysunek techniczny w celu wskazania krytycznych wymiarów.",
+                  options: [
+                    "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
+                    "Wymagane są węższe tolerancje",
+                  ],
+                  isImportant: true,
+                },
+                {
+                  id: 12,
+                  type: "radioElements",
+                  name: "Spawanie",
+                  info: "",
+                  description: "",
+                  options: ["Nie", "Tak"],
+                  isImportant: true,
+                },
+                {
+                  id: 13,
+                  type: "radioElements",
+                  name: "Oznaczenie części",
+                  info: "Proszę wyraźnie oznaczyć zawartość sitodruku lub grawerunku laserowego w pliku CAD (DWG lub DXF). Wymagany jest również plik graficzny (Ai lub SVG).",
+                  description: "",
+                  options: ["Sitodruk", "Grawerowanie laserowe"],
+                  isImportant: false,
+                },
+                {
+                  id: 14,
+                  type: "radioElements",
+                  name: "Montaż części",
+                  info: "Jeśli wybierzesz [Test montażu], wymagany jest rysunek 2D z instrukcjami montażu. Wyniki testu montażu zostaną przesłane e-mailem. Domyślnie zostanie wykonany tylko test. Jeśli musisz wysłać je po montażu, wybierz [Wyślij w montażu].",
+                  description:
+                    "Proszę określić wymagania dotyczące montażu. PCBWay nie ponosi żadnego ryzyka związanego z montażem, jeśli wybierzesz opcję Brak wymagań dotyczących montażu.",
+                  options: [
+                    "Nie",
+                    "Testy montażowe",
+                    "Dostawa w formie zmontowanej",
+                  ],
+                  isImportant: true,
+                },
+                {
+                  id: 15,
+                  type: "radioElements",
+                  name: "Wygląd końcowy",
+                  info: "",
+                  description: "",
+                  options: ["Standard", "Premium (dodatkowe opłaty)"],
+                  isImportant: false,
+                },
+                {
+                  id: 16,
+                  type: "radioElements",
+                  name: "Kontrola",
+                  info: "",
+                  description:
+                    "Raport z inspekcji nie zostanie wysłany wraz z częściami, chyba że będzie Ci potrzebny.",
+                  options: [
+                    "Standardowa inspekcja (brak raportu)",
+                    "Standardowa inspekcja z formalnym raportem",
+                    "Inspekcja CMM z formalnym raportem",
+                    "Certyfikacja materiału źródłowego",
+                  ],
+                  isImportant: false,
+                },
+                {
+                  id: 17,
+                  type: "selectGroup",
+                  name: "Opis produktu",
+                  info: "Opis produktu wymagany do odprawy celnej:1. Przestrzegaj zasad handlu międzynarodowego i podaj opisy produktów do odprawy celnej.2. Wybierz prawidłowy opis produktu zgodnie z rzeczywistym zastosowaniem produktu. Jeśli nie ma pasującego elementu, wybierz Inne.",
+                  description: "",
+                  options: [
+                    "Sprzęt biurowy i akcesoria",
+                    "Pojazdy i akcesoria",
+                    "Rozrywka DIY",
+                    "Sprzęt audio i wideo",
+                  ],
+                  isImportant: true,
+                },
+                {
+                  id: 18,
+                  type: "textArea",
+                  name: "Inne specjalne wymagania",
+                  info: "",
+                  description:
+                    "Wypełnij wymaganiami dotyczącymi produkcji, pakowania i dostarczenia",
+                  options: [],
+                  isImportant: false,
+                },
               ],
               defaultFilledFormData: {
                 id: 1,
@@ -388,6 +503,51 @@ const FormSection = ({
                       color: "black",
                     },
                   },
+                  {
+                    id: 8,
+                    value: [],
+                  },
+                  {
+                    id: 9,
+                    value: "Tak",
+                  },
+                  {
+                    id: 10,
+                    value: "Tak",
+                  },
+                  {
+                    id: 11,
+                    value:
+                      "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
+                  },
+                  {
+                    id: 12,
+                    value: "Tak",
+                  },
+                  {
+                    id: 13,
+                    value: "Grawerowanie laserowe",
+                  },
+                  {
+                    id: 14,
+                    value: "Testy montażowe",
+                  },
+                  {
+                    id: 15,
+                    value: "Premium (dodatkowe opłaty)",
+                  },
+                  {
+                    id: 16,
+                    value: "Standardowa inspekcja (brak raportu)",
+                  },
+                  {
+                    id: 17,
+                    value: "Sprzęt biurowy i akcesoria",
+                  },
+                  {
+                    id: 18,
+                    value: "ewqeqwe",
+                  },
                 ],
               },
             },
@@ -398,7 +558,7 @@ const FormSection = ({
               values: [
                 {
                   id: 1,
-                  value: 5,
+                  value: 100,
                 },
                 {
                   id: 2,
@@ -422,8 +582,63 @@ const FormSection = ({
                     category: "surface",
                     option: "anodized",
                     tile: "anodized-simple",
-                    color: "yellow",
+                    color: "beige",
                   },
+                },
+                {
+                  id: 8,
+                  value: [
+                    {
+                      name: "Dokument bez tytułu.pdf",
+                      size: 11419,
+                      url: "https://p6s5bqqmdlpwrmuu.public.blob.vercel-storage.com/uploads/Dokument%20bez%20tytu%C5%82u-N16iBmmMuihVzbQUSJel6XOEybhF4J.pdf",
+                    },
+                    {
+                      name: "jasperBagiBagi-4x.gif",
+                      size: 760780,
+                      url: "https://p6s5bqqmdlpwrmuu.public.blob.vercel-storage.com/uploads/jasperBagiBagi-4x-0QSVhtTHRlS2iHAlSLKWwOPVixtido.gif",
+                    },
+                  ],
+                },
+                {
+                  id: 9,
+                  value: "Tak",
+                },
+                {
+                  id: 10,
+                  value: "Tak",
+                },
+                {
+                  id: 11,
+                  value: "Wymagane są węższe tolerancje",
+                },
+                {
+                  id: 12,
+                  value: "Tak",
+                },
+                {
+                  id: 13,
+                  value: "Grawerowanie laserowe",
+                },
+                {
+                  id: 14,
+                  value: "Dostawa w formie zmontowanej",
+                },
+                {
+                  id: 15,
+                  value: "Premium (dodatkowe opłaty)",
+                },
+                {
+                  id: 16,
+                  value: "Certyfikacja materiału źródłowego",
+                },
+                {
+                  id: 17,
+                  value: "Sprzęt audio i wideo",
+                },
+                {
+                  id: 18,
+                  value: "cos  specjalnego",
                 },
               ],
             },
