@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { ChevronUp } from "lucide-react";
-import { Pencil } from "lucide-react";
+import { Edit } from "lucide-react";
 
 import {
   AlertDialog,
@@ -136,7 +136,7 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
         <AlertDialogTrigger>
           {selectedTile || selectedColor ? (
             <div className="relative mt-2 gap-2 whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 pr-12 text-left text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
-              <Pencil className="absolute right-3 top-3" />
+              <Edit className="absolute right-3 top-3" />
 
               <div className="space-y-2">
                 <p>

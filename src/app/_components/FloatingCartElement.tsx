@@ -1,139 +1,174 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
-import Image from "next/image";
+import { Edit, Trash2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PencilLine } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
-interface Property {
+interface Specification {
   name: string;
   value: string;
 }
 
-interface FloatingCartElementProps {
-  name: string;
-  image: string;
-  properties: Property[];
+interface CartItem {
+  id: string;
+  specifications: Specification[];
   quantity: number;
-  isLast?: boolean;
-  onQuantityChange?: (newQuantity: number) => void;
-  onRemove?: () => void;
 }
 
-const FloatingCartElement: React.FC<FloatingCartElementProps> = ({
-  name,
-  image,
-  properties,
-  quantity,
-  isLast = false,
-  onQuantityChange,
+interface FloatingCartElementProps {
+  item: CartItem;
+  isEditing: boolean;
+  onEdit: () => void;
+  onRemove: () => void;
+  onUpdate: (updatedItem: CartItem) => void;
+}
+
+const FloatingCartElement = ({
+  item,
+  isEditing,
+  onEdit,
   onRemove,
-}) => {
-  const [localQuantity, setLocalQuantity] = useState(quantity);
-  const [showDetails, setShowDetails] = useState(false);
+  onUpdate,
+}: FloatingCartElementProps) => {
+  const [editedItem, setEditedItem] = useState<CartItem>({ ...item });
 
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuantity = Math.max(1, Number(e.target.value));
-    setLocalQuantity(newQuantity);
-    onQuantityChange?.(newQuantity);
+  const handleSpecificationChange = (index: number, value: string) => {
+    if (index >= 0 && index < editedItem.specifications.length) {
+      const updatedSpecs = [...editedItem.specifications];
+      updatedSpecs[index] = { ...updatedSpecs[index], value };
+      setEditedItem({ ...editedItem, specifications: updatedSpecs });
+    }
   };
 
-  const toggleDetails = () => {
-    setShowDetails(!showDetails);
+  const handleQuantityChange = (value: string) => {
+    const quantity = Number.parseInt(value) || 1;
+    setEditedItem({ ...editedItem, quantity });
   };
+
+  const handleSave = () => {
+    onUpdate(editedItem);
+  };
+
+  const handleCancel = () => {
+    setEditedItem({ ...item });
+    onEdit();
+  };
+
+  // Group specifications by category
+  const groupedSpecs: Record<string, Specification[]> = {};
+  let currentCategory = "Podstawowe";
+
+  item.specifications.forEach((spec) => {
+    if (spec.name.includes("Kategoria")) {
+      currentCategory = spec.name.replace("Kategoria ", "");
+      return;
+    }
+
+    if (!groupedSpecs[currentCategory]) {
+      groupedSpecs[currentCategory] = [];
+    }
+
+    groupedSpecs[currentCategory].push(spec);
+  });
 
   return (
-    <li className={`py-3 ${!isLast ? "border-b border-border" : ""}`}>
-      <div className="flex items-center gap-4">
-        <div className="relative size-16 overflow-hidden rounded-md border border-border bg-muted">
-          <Image
-            src={image || "/placeholder.svg?height=64&width=64"}
-            alt={name}
-            width={64}
-            height={64}
-            className="object-cover"
-          />
+    <li className="mb-4">
+      <Card className="p-4">
+        <div className="mb-2 flex items-start justify-between">
+          <Badge variant="outline" className="px-2 py-1">
+            Element {item.id.replace("item", "")}
+          </Badge>
+          <div className="flex gap-2">
+            {isEditing ? (
+              <>
+                <Button size="icon" variant="ghost" onClick={handleSave}>
+                  <Check className="h-4 w-4" />
+                </Button>
+                <Button size="icon" variant="ghost" onClick={handleCancel}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="icon" variant="ghost" onClick={onEdit}>
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button size="icon" variant="ghost" onClick={onRemove}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
-        <div className="min-w-0 flex-1">
-          <h3 className="whitespace-normal break-words text-sm font-medium text-foreground">
-            {name}
-          </h3>
-
-          {properties.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mt-1 h-6 px-2 text-xs text-muted-foreground"
-              onClick={toggleDetails}
-            >
-              {showDetails ? (
-                <span className="flex items-center gap-1">
-                  Ukryj szczegóły <ChevronUp size={14} />
-                </span>
-              ) : (
-                <span className="flex items-center gap-1">
-                  Pokaż szczegóły <ChevronDown size={14} />
-                </span>
+        {Object.entries(groupedSpecs).map(
+          ([category, specs], categoryIndex) => (
+            <div key={categoryIndex} className="mb-3">
+              <h4 className="mb-1 text-sm font-medium">{category}</h4>
+              <div className="grid grid-cols-1 gap-1">
+                {specs.map((spec, index) => (
+                  <div key={index} className="flex flex-col">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">
+                        {spec.name}:
+                      </span>
+                      {isEditing ? (
+                        <Input
+                          className="ml-2 h-7 text-xs"
+                          value={
+                            editedItem.specifications.find(
+                              (s) => s.name === spec.name,
+                            )?.value ?? ""
+                          }
+                          onChange={(e) => {
+                            const specIndex =
+                              editedItem.specifications.findIndex(
+                                (s) => s.name === spec.name,
+                              );
+                            if (specIndex !== -1) {
+                              handleSpecificationChange(
+                                specIndex,
+                                e.target.value,
+                              );
+                            }
+                          }}
+                        />
+                      ) : (
+                        <span className="text-xs font-medium">
+                          {spec.value}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {categoryIndex < Object.keys(groupedSpecs).length - 1 && (
+                <Separator className="my-2" />
               )}
-            </Button>
+            </div>
+          ),
+        )}
+
+        <div className="mt-3 flex items-center justify-between">
+          <span className="text-sm">Ilość:</span>
+          {isEditing ? (
+            <Input
+              type="number"
+              className="h-8 w-16"
+              min="1"
+              value={editedItem.quantity}
+              onChange={(e) => handleQuantityChange(e.target.value)}
+            />
+          ) : (
+            <span className="font-medium">{item.quantity}</span>
           )}
         </div>
-
-        <div className="flex items-center gap-3">
-          <label
-            htmlFor={`quantity-${name.replace(/\s+/g, "-")}`}
-            className="sr-only"
-          >
-            Ilość
-          </label>
-          <button
-            className="text-muted-foreground transition hover:text-foreground"
-            aria-label="Edytuj element"
-          >
-            <PencilLine size={16} />
-          </button>
-          <input
-            id={`quantity-${name.replace(/\s+/g, "-")}`}
-            type="number"
-            min="1"
-            value={localQuantity}
-            onChange={handleQuantityChange}
-            className="h-8 w-14 rounded border border-input bg-background p-0 text-center text-sm [-moz-appearance:_textfield] focus:border-primary focus:ring-1 focus:ring-ring [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-          />
-
-          <button
-            onClick={onRemove}
-            className="text-muted-foreground transition hover:text-destructive"
-            aria-label="Usuń element"
-          >
-            <Trash2 size={18} />
-          </button>
-        </div>
-      </div>
-      
-      {showDetails && properties.length > 0 && (
-        <div className="mt-2 rounded border border-muted p-4">
-          <dl className="space-y-1">
-            {properties.map((prop, index) => (
-              <div key={index} className="flex text-xs text-muted-foreground">
-                <dt className="mr-1 w-1/2 whitespace-normal break-words font-semibold">
-                  {prop.name}:
-                </dt>
-                <dd className="w-1/2 whitespace-normal break-words">
-                  {prop.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-      )}
-      
+      </Card>
     </li>
-    
   );
 };
 

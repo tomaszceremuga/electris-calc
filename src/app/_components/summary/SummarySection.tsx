@@ -7,7 +7,7 @@ import { CartProvider, useCartContext } from "~/lib/CartContext";
 import { useFormContext } from "~/lib/FormContext";
 
 const SummarySectionTemplate = () => {
-  const {  setCartState } = useCartContext();
+  const { cartState, setCartState } = useCartContext();
   const { formCurrentState, formDataToGenerate } = useFormContext();
 
   return (
@@ -62,6 +62,8 @@ const SummarySectionTemplate = () => {
                 formDataToGenerate: formDataToGenerate,
               },
             ]);
+            console.log("=====================================");
+            console.log(cartState);
           }}
         >
           <ShoppingBag className="mr-2 h-4 w-4" />
