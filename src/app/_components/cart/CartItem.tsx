@@ -7,6 +7,8 @@ import { FieldRow } from "./FieldRow";
 import { type CartElementType } from "~/lib/CartElementType";
 import { type FilledFormType } from "~/lib/FilledFormType";
 import { type FormDataToGenerateType } from "~/lib/FormDataToGenerateType";
+// import { useFormContext } from "~/lib/FormContext";
+// import { useEffect } from "react";
 
 interface CartItemProps {
   item: CartElementType;
@@ -23,9 +25,9 @@ export function CartItem({
   onRemove,
   onShowDetails,
 }: CartItemProps) {
+  // const {generateForm,formCurrentState}=useFormContext()
   const filledForm = item.filledForm as FilledFormType;
   const formDataToGenerate = item.formDataToGenerate as FormDataToGenerateType;
-
   const importantFieldIds = formDataToGenerate.values
     .filter((field) => field.isImportant)
     .map((field) => field.id);
@@ -49,7 +51,9 @@ export function CartItem({
     .filter(Boolean);
 
   const totalFields = formDataToGenerate.values.length;
-
+  // useEffect(() => {
+  //   console.log("Aktualny stan formularza:", formCurrentState);
+  // }, [formCurrentState]);
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-4">
@@ -57,7 +61,10 @@ export function CartItem({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onEdit(item.id)}
+            onClick={() => {
+              onEdit(item.id)
+              // generateForm(formDataToGenerate, filledForm);
+            }}
             className="h-8 w-8"
           >
             <Edit className="h-4 w-4" />
@@ -65,6 +72,7 @@ export function CartItem({
           </Button>
           <Button
             variant="ghost"
+
             size="icon"
             onClick={() => onRemove(item.id)}
             className="h-8 w-8 text-destructive hover:text-destructive"

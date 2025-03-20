@@ -50,7 +50,7 @@ export function FormProvider({ children }: { children: ReactNode }) {
       uploadedFiles: uploadedFiles,
     }));
   };
-
+  
   const generateForm = (
     data: FormDataToGenerateType,
     filledData?: FilledFormType,

@@ -1,133 +1,74 @@
-// import type { NextApiRequest, NextApiResponse } from 'next';
-// import { ServerClient } from 'postmark';
+import { ServerClient } from "postmark"
+import { NextResponse } from "next/server"
 
-// // Define types for cart items and their properties
-// interface CartProperty {
-//   name: string;
-//   value: string;
-// }
-
-// interface CartItem {
-//   id: string;
-//   name: string;
-//   image: string;
-//   quantity: number;
-//   properties: CartProperty[];
-// }
-
-// const postmarkClient = new ServerClient(process.env.POSTMARK_TOKEN!);
-
-// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-//   if (req.method === 'POST') {
-//     // Type the request body to match the expected structure
-//     const { cartItems } = req.body as { cartItems: CartItem[] };
-
-
-//     // Przetwarzanie danych do treści e-maila
-//     let emailBody = `
-//       <h2>Twoje Zamówienie</h2>
-//       <table border="1">
-//         <tr><th>Nazwa</th><th>Wartość</th></tr>
-//     `;
-
-//     cartItems.forEach((item) => {
-//       item.properties.forEach((property) => {
-//         emailBody += `
-//           <tr>
-//             <td>${property.name}</td>
-//             <td>${property.value}</td>
-//           </tr>
-//         `;
-//       });
-//     });
-
-//     emailBody += '</table>';
-
-//     try {
-//       await postmarkClient.sendEmail({
-//         From: 'tstowyemailto123@gmail.com', // Adres nadawcy
-//         To: 'tstowyemailto123@gmail.com', // Adres odbiorcy
-//         Subject: 'Twoje Zamówienie',
-//         HtmlBody: emailBody,
-//         TextBody: 'Proszę sprawdzić szczegóły zamówienia.',
-//       });
-
-//       return res.status(200).json({ message: 'Email wysłany pomyślnie!' });
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//     } catch (error) {
-//       return res.status(500).json({ error: 'Błąd przy wysyłaniu e-maila' });
-//     }
-//   } else {
-//     res.status(405).json({ error: 'Metoda nieobsługiwana' });
-//   }
-// }
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { ServerClient } from 'postmark';
-
-interface CartProperty {
-  name: string;
-  value: string;
+interface CartField {
+  name: string
+  value: string
+  color?: string
 }
 
 interface CartItem {
-  id: string;
-  name: string;
-  image: string;
-  quantity: number;
-  properties: CartProperty[];
+  id: number
+  fields: CartField[]
 }
 
+interface RequestData {
+  cartItems?: CartItem[]
+}
 
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Metoda nieobsługiwana' });
-  }
-
+export async function POST(request: Request): Promise<NextResponse> {
   try {
-    // ✅ Upewnienie się, że `req.body` jest stringiem
-    if (typeof req.body !== 'string') {
-      return res.status(400).json({ error: 'Niepoprawne dane w żądaniu' });
-    }
+    // Pobieramy dane z żądania z poprawnym typowaniem
+    const data: RequestData = await request.json().catch(() => ({ cartItems: [] }))
 
-    // ✅ Parsowanie JSON-a z req.body
-    const { cartItems }: { cartItems: CartItem[] } = JSON.parse(req.body) as { cartItems: CartItem[]};
-
-    if (!cartItems || !Array.isArray(cartItems)) {
-      return res.status(400).json({ error: 'Niepoprawne dane w żądaniu' });
-    }
-
-    // ✅ Sprawdzenie zmiennej środowiskowej
-    const postmarkToken = process.env.POSTMARK_TOKEN;
+    // Pobieramy token Postmark
+    const postmarkToken = process.env.POSTMARK_TOKEN
     if (!postmarkToken) {
-      console.error("Brak tokena Postmark w zmiennych środowiskowych");
-      return res.status(500).json({ error: "Brak tokena Postmark w konfiguracji serwera" });
+      console.error("Brak tokena Postmark w zmiennych środowiskowych")
+      return NextResponse.json({ error: "Brak tokena Postmark w konfiguracji serwera" }, { status: 500 })
     }
 
-    const postmarkClient = new ServerClient(postmarkToken);
+    // Inicjalizacja klienta Postmark
+    const postmarkClient = new ServerClient(postmarkToken)
 
-    // 📩 Tworzenie treści e-maila
-    let emailBody = `<h2>Twoje Zamówienie</h2><table border="1"><tr><th>Nazwa</th><th>Wartość</th></tr>`;
-    cartItems.forEach(item => {
-      item.properties.forEach(property => {
-        emailBody += `<tr><td>${property.name}</td><td>${property.value}</td></tr>`;
-      });
-    });
-    emailBody += '</table>';
+    // Przygotowanie treści e-maila
+    const cartItems = data.cartItems || []
 
-    // 📤 Wysyłka e-maila
-    await postmarkClient.sendEmail({
-      From: 'tstowyemailto123@gmail.com',
-      To: 'tstowyemailto123@gmail.com',
-      Subject: 'Twoje Zamówienie',
-      HtmlBody: emailBody,
-      TextBody: 'Proszę sprawdzić szczegóły zamówienia.',
-    });
+    // Tworzenie treści e-maila na podstawie elementów koszyka
+    let emailContent = "Szczegóły zamówienia:\n\n"
 
-    return res.status(200).json({ message: 'Email wysłany pomyślnie!' });
+    if (cartItems.length > 0) {
+      cartItems.forEach((item: CartItem, index: number) => {
+        const itemDetails = item.fields
+          ? item.fields.map((field: CartField) => `${field.name}: ${field.value}`).join(", ")
+          : "Brak szczegółów"
 
+        emailContent += `${index + 1}. ID: ${item.id}, ${itemDetails}\n`
+      })
+    } else {
+      emailContent += "Brak elementów w koszyku."
+    }
+
+    // WAŻNE: Użyj zweryfikowanego adresu email w Postmark
+    // Musisz dodać i zweryfikować ten adres w panelu Postmark jako "Sender Signature"
+    // const fromEmail = " mateusz.knapik@electris.pl" // Zmień na swój zweryfikowany adres email w Postmark
+    const fromEmail = " adres"
+    // Wysyłka e-maila
+    const response = await postmarkClient.sendEmail({
+      From: fromEmail, // Używamy zweryfikowanego adresu email
+      To: "szymonosielec@gmail.com", // Adres, na który chcesz wysłać e-mail
+      Subject: "Nowe zamówienie",
+      TextBody: emailContent,
+    })
+
+    console.log("Odpowiedź z Postmark:", JSON.stringify(response))
+
+    // Zwracamy sukces
+    return NextResponse.json({ message: "E-mail wysłany pomyślnie!" })
   } catch (error) {
-    console.error("Błąd serwera:", error);
-    return res.status(500).json({ error: 'Błąd przy wysyłaniu e-maila' });
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error("Błąd przy wysyłaniu e-maila:", errorMessage)
+    return NextResponse.json({ error: "Błąd przy wysyłaniu e-maila: " + errorMessage }, { status: 500 })
   }
 }
+

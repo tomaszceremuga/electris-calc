@@ -20,6 +20,10 @@ export type FieldType = {
   color: string;
 };
 
+interface OrderResponse {
+  message?: string;
+  error?: string;
+}
 export default function CustomCart() {
   const { cartState, setCartState } = useCartContext();
 
@@ -39,6 +43,34 @@ export default function CustomCart() {
     setIsAlertOpen(true);
   };
 
+
+  const handleSendEmail = async () => {
+    try {
+      const response = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartItems: cartState,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error("Błąd API:", errorText)
+        throw new Error(`Błąd API: ${response.status} - ${response.statusText}`)
+      }
+
+      const data = (await response.json()) as OrderResponse
+      alert(data.message ?? "E-mail wysłany pomyślnie!")
+    } catch (error) {
+      console.error("Błąd podczas wysyłania e-maila:", error)
+      alert(`Wystąpił błąd: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  }
+  
+  
   return (
     <div className="sticky h-min w-full max-w-4xl self-start bg-card lg:top-[105px] lg:max-w-sm lg:rounded-md lg:border">
       <Card className="border-none">
@@ -75,7 +107,7 @@ export default function CustomCart() {
 
           {cartState.length > 0 && (
             <div className="mt-4 flex justify-end border-t pt-4">
-              <Button className="w-full">Przejdź do zamówienia</Button>
+              <Button className="w-full" onClick={handleSendEmail}>Przejdź do zamówienia</Button>
             </div>
           )}
         </CardContent>
