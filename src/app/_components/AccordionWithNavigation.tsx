@@ -16,7 +16,6 @@ import SummarySection from "./summary/SummarySection";
 import { ChevronRight, File } from "lucide-react";
 
 import { FormProvider, useFormContext } from "~/lib/FormContext";
-
 const AccordionContent = () => {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
   const { formCurrentState } = useFormContext();
@@ -39,30 +38,32 @@ const AccordionContent = () => {
         value="item-0"
         className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
-        <AccordionTrigger className="flex w-full justify-between px-4 pr-8 hover:no-underline">
-          <div className="flex w-full items-center">
+        <AccordionTrigger className="flex w-[300px] justify-between px-4 hover:no-underline">
+          <div className="flex w-1/2 items-center md:w-3/4">
             <span className="mr-5 shrink-0 font-medium">Prześlij pliki</span>
-            <div className="relative flex-1 overflow-hidden pr-8">
-              <div className="flex items-center gap-2 overflow-x-hidden whitespace-nowrap pr-4">
-                {uploadedFiles.map((el, index) => (
-                  <div
-                    key={index}
-                    className="flex shrink-0 items-center gap-1 rounded-md border bg-muted/30 px-2 py-1 text-sm"
-                  >
-                    <File className="h-3.5 w-3.5" />
-                    <a
-                      href={el.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="max-w-[150px] truncate hover:underline"
+            <div className="h-max w-3/4 md:w-full">
+              <div className="relative flex-1 overflow-hidden">
+                <div className="flex items-center gap-2 overflow-x-hidden whitespace-nowrap">
+                  {uploadedFiles.map((el, index) => (
+                    <div
+                      key={index}
+                      className="flex shrink-0 items-center gap-1 rounded-md border bg-muted/30 px-2 py-1 text-sm"
                     >
-                      {el.name}
-                    </a>
-                  </div>
-                ))}
+                      <File className="h-3.5 w-3.5" />
+                      <a
+                        href={el.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="max-w-[150px] truncate hover:underline"
+                      >
+                        {el.name}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+                {/* Gradient overlay that creates the fade-out effect */}
+                <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-r from-transparent to-background"></div>
               </div>
-              {/* Gradient overlay that creates the fade-out effect */}
-              <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-r from-transparent to-background"></div>
             </div>
           </div>
         </AccordionTrigger>
@@ -85,11 +86,29 @@ const AccordionContent = () => {
         value="item-1"
         className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
-        <AccordionTrigger className="px-4 hover:no-underline">
-          <span className="text-left font-medium">Formularz</span>
+        <AccordionTrigger className="flex w-[300px] px-4 hover:no-underline">
+          <div className="flex w-1/2 items-center md:w-3/4">
+            <span className="mr-5 shrink-0 font-medium">Formularz</span>
+            <div className="h-max w-3/4 md:w-full">
+              <div className="relative flex-1 overflow-hidden">
+                <div className="flex items-center gap-2 overflow-x-hidden whitespace-nowrap pr-4 text-sm text-muted-foreground">
+                  {formCurrentState.values.map((el, index) => {
+                    if (typeof el.value == "number") {
+                      return <p key={index}> {el.value.toString()},</p>;
+                    } else if (typeof el.value == "string") {
+                      return <p key={index}> {el.value},</p>;
+                    }
+                  })}
+                </div>
+                {/* Gradient overlay that creates the fade-out effect */}
+                <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-r from-transparent to-background"></div>
+              </div>
+            </div>
+          </div>
         </AccordionTrigger>
         <UI_AccordionContent className="pb-4 xl:px-4">
           <FormSection />
+
           <div className="mt-4 flex gap-2">
             <Button
               onClick={() => handleNavigation("item-0")}
@@ -116,7 +135,7 @@ const AccordionContent = () => {
         className="mb-2 border-b bg-white p-2 lg:rounded-md lg:border"
       >
         <AccordionTrigger className="px-4 hover:no-underline">
-          <span className="text-left font-medium">Podsumowanie</span>
+          <span className="text-left font-medium">Dostawa</span>
         </AccordionTrigger>
         <UI_AccordionContent className="pb-4 xl:px-4">
           <SummarySection />
