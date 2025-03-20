@@ -23,7 +23,6 @@ export function ItemDetailsAlert({
   const filledForm = item.filledForm as FilledFormType;
   const formDataToGenerate = item.formDataToGenerate as FormDataToGenerateType;
 
-  // Map all fields with their values
   const allFields = formDataToGenerate.values.map((field) => {
     const filledValue = filledForm.values.find(
       (value) => value.id === field.id,
@@ -36,7 +35,6 @@ export function ItemDetailsAlert({
     };
   });
 
-  // Sort fields - important ones first
   const sortedFields = [
     ...allFields.filter((field) => field.isImportant),
     ...allFields.filter((field) => !field.isImportant),

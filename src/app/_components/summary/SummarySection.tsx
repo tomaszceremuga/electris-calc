@@ -3,11 +3,11 @@
 import DeliveryOptions from "./DeliveryOptions";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
-import { CartProvider, useCartContext } from "~/lib/CartContext";
+import { useCartContext } from "~/lib/CartContext";
 import { useFormContext } from "~/lib/FormContext";
 
-const SummarySectionTemplate = () => {
-  const { cartState, setCartState } = useCartContext();
+export default function SummarySection() {
+  const { setCartState } = useCartContext();
   const { formCurrentState, formDataToGenerate } = useFormContext();
 
   return (
@@ -41,7 +41,7 @@ const SummarySectionTemplate = () => {
           </div>
 
           <div className="flex items-center justify-between border-t border-border pt-4">
-            <p className="font-medium">RAZEM:</p>
+            <p className="font-medium">Razem:</p>
             <span className="text-xl font-bold">19,99 zł</span>
           </div>
         </div>
@@ -57,13 +57,11 @@ const SummarySectionTemplate = () => {
             setCartState((prev) => [
               ...prev,
               {
-                id: formCurrentState.id,
+                id: Date.now(),
                 filledForm: formCurrentState,
                 formDataToGenerate: formDataToGenerate,
               },
             ]);
-            console.log("=====================================");
-            console.log(cartState);
           }}
         >
           <ShoppingBag className="mr-2 h-4 w-4" />
@@ -71,14 +69,5 @@ const SummarySectionTemplate = () => {
         </Button>
       </div>
     </div>
-  );
-};
-
-// export default SummarySection;
-export default function SummarySection() {
-  return (
-    <CartProvider>
-      <SummarySectionTemplate />
-    </CartProvider>
   );
 }

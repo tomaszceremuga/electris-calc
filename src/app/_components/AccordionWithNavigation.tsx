@@ -129,7 +129,6 @@ const AccordionContent = () => {
               <ChevronRight className="mr-2 h-4 w-4 rotate-180" />
               Wróć
             </Button>
-            <Button variant="outline">Złóż zamówienie</Button>
           </div>
         </UI_AccordionContent>
       </AccordionItem>

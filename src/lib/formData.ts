@@ -112,28 +112,6 @@ const formData = {
             requiredOption: "anodized",
           },
           {
-            id: "bead-blast-anodized12",
-            categoryId: "surface",
-            name: "Piaskowanie + b;lblblblb",
-            description:
-              "Anodowanie tworzy powłokę odporną na korozję. Części mogą być anodowane w różnych kolorach — przezroczysty, czarny, czerwony i złoty są najczęściej spotykane — i zwykle jest związane z aluminium. A dzięki piaskowaniu powierzchnia części pozostaje gładka, z matowym wyglądem.",
-            image: "/placeholder.svg?height=150&width=250",
-            colors: [
-              "blue",
-              "black",
-              "gray",
-              "yellow",
-              "orange",
-              "red",
-              "teal",
-              "purple",
-              "brown",
-              "beige",
-            ],
-            requiredOption: "anodized",
-          },
-
-          {
             id: "anodized-simple",
             categoryId: "surface",
             name: "Anodowanie",
