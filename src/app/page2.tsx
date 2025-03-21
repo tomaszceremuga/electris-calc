@@ -16,7 +16,7 @@ export default async function Home() {
     <HydrateClient>
       <Navbar />
 
-      <div className="relative h-[40vh] w-full md:h-[60vh] lg:h-[80vh]">
+      <div className="relative min-h-[calc(100vh-4rem)] w-full">
         <Image
           src="/LandingPage.png"
           alt="Landing Page"
