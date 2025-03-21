@@ -5,9 +5,7 @@
 import { HydrateClient } from "~/trpc/server";
 
 import Navbar from "./_components/Navbar";
-import AccordionWithNavigation from "./_components/AccordionWithNavigation";
-import CustomCart from "./_components/cart/CustomCart";
-import { CartProvider } from "~/lib/CartContext";
+
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 
@@ -35,13 +33,6 @@ export default async function Home() {
           </Button>
         </div>
       </div>
-      {/* 
-       <div className="flex flex-wrap justify-center p-4 pt-10 lg:min-h-screen lg:flex-nowrap lg:gap-x-5 lg:bg-gray-50">
-         <CartProvider>
-           <AccordionWithNavigation />
-           <CustomCart />
-         </CartProvider>
-       </div> */}
     </HydrateClient>
   );
 }
