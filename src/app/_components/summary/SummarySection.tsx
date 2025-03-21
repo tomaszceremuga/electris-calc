@@ -11,7 +11,7 @@ export default function SummarySection() {
   const { formCurrentState, formDataToGenerate } = useFormContext();
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 px-5 lg:grid-cols-2">
       <div className="p-1">
         <DeliveryOptions />
       </div>

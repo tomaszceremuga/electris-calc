@@ -88,7 +88,9 @@ const AccordionContent = () => {
       >
         <AccordionTrigger className="flex w-[300px] px-4 hover:no-underline">
           <div className="flex w-1/2 items-center md:w-3/4">
-            <span className="mr-5 shrink-0 font-medium">Formularz</span>
+            <span className="mr-5 shrink-0 font-medium">
+              Technical information
+            </span>
             <div className="h-max w-3/4 md:w-full">
               <div className="relative flex-1 overflow-hidden">
                 <div className="flex items-center gap-2 overflow-x-hidden whitespace-nowrap pr-4 text-sm text-muted-foreground">

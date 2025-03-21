@@ -1,14 +1,14 @@
 "use client";
 
 import type React from "react";
-import { useState, useRef } from "react";
 
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Download, Loader2 } from "lucide-react";
-
-import { type UploadedFile } from "~/lib/UploadedFileType";
+import { Upload, FileUp } from "lucide-react";
+import type { UploadedFile } from "~/lib/UploadedFileType";
 import { useFormContext } from "~/lib/FormContext";
+import { cn } from "@/lib/utils";
 
 interface UploadAreaProps {
   uploadedFiles: UploadedFile[];
@@ -104,7 +104,7 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
     try {
       if (files.length > 0) {
         const hasLargeFile = Array.from(files).some(
-          (file) => file.size > 209715200,
+          (file) => file.size > 26214400,
         );
         if (hasLargeFile) {
           toast("Zbyt duży plik. Możesz przesłać do 200MB");
@@ -140,7 +140,6 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
 
         setIsUploading(true);
 
-        // Przesyłanie plików do Blob storage
         const newUploadedFiles: UploadedFile[] = [];
 
         for (const file of Array.from(files)) {
@@ -157,7 +156,6 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
           }
         }
 
-        // Aktualizacja stanu tylko jeśli mamy pomyślnie przesłane pliki
         if (newUploadedFiles.length > 0) {
           setUploadedFiles([
             ...formCurrentState.uploadedFiles,
@@ -190,28 +188,79 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
     }
   };
 
+  const acceptedExtensions =
+    ".step,.stp,.x_t,.iges,.igs,.sldprt,.dwg,.dxf,.pdf";
+
   return (
     <div
-      className={`flex flex-col items-center justify-center border-4 border-dashed ${
-        isDragging ? "border-primary bg-primary/10" : "bg-neutral-100"
-      } sm:full h-72 p-4 transition-colors duration-200 md:w-72`}
+      className={cn(
+        "relative flex h-full w-full flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-all duration-200 ease-in-out",
+        "h-80 sm:w-full md:w-full",
+        isDragging
+          ? "scale-[1.02] border-primary/70 bg-primary/5"
+          : "border-muted-foreground/25 bg-background hover:border-primary/40 hover:bg-muted/10",
+      )}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       {isUploading ? (
-        <>
-          <Loader2 size={80} className="mb-4 animate-spin" />
-          <p className="text-center text-sm text-muted-foreground">
-            Przesyłanie plików...
-          </p>
-        </>
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg
+                className="animate-progress-circular h-16 w-16"
+                viewBox="0 0 100 100"
+              >
+                <circle
+                  className="text-primary/20"
+                  strokeWidth="8"
+                  stroke="currentColor"
+                  fill="transparent"
+                  r="42"
+                  cx="50"
+                  cy="50"
+                />
+                <circle
+                  className="text-primary"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  stroke="currentColor"
+                  fill="transparent"
+                  r="42"
+                  cx="50"
+                  cy="50"
+                  strokeDasharray="264, 264"
+                  strokeDashoffset="264"
+                />
+              </svg>
+            </div>
+            <FileUp size={40} className="mx-auto text-primary/70" />
+          </div>
+          <div className="text-center">
+            <p className="font-medium text-primary">Przesyłanie plików</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Proszę czekać...
+            </p>
+          </div>
+        </div>
       ) : (
         <>
-          <button className="mb-4" onClick={openFileSelector} type="button">
-            <Download size={80} strokeWidth={2.25} />
-          </button>
+          <div
+            className={cn(
+              "mb-5 flex h-10 w-20 items-center justify-center rounded-full transition-all duration-300",
+              isDragging ? "scale-110 bg-primary/20" : "bg-white",
+            )}
+          >
+            <Upload
+              size={40}
+              className={cn(
+                "transition-colors duration-300",
+                isDragging ? "text-primary" : "text-muted-foreground",
+              )}
+            />
+          </div>
 
           <input
             type="file"
@@ -219,25 +268,52 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
             onChange={handleFileInputChange}
             className="hidden"
             multiple
+            accept={acceptedExtensions}
           />
 
-          <Button onClick={openFileSelector} disabled={isUploading}>
-            Wybierz plik
+          <h3
+            className={cn(
+              "mb-2 text-lg font-medium transition-colors duration-200",
+              isDragging ? "text-primary" : "text-foreground",
+            )}
+          >
+            {isDragging ? "Upuść pliki tutaj" : "Prześlij pliki"}
+          </h3>
+
+          <p className="mb-4 text-center text-sm text-muted-foreground">
+            Przeciągnij i upuść lub
+          </p>
+
+          <Button
+            onClick={openFileSelector}
+            disabled={isUploading}
+            size={"lg"}
+            className="relative overflow-hidden"
+            variant={isDragging ? "outline" : "default"}
+          >
+            <span className="relative z-10">Wybierz plik</span>
           </Button>
 
-          {isDragging && (
-            <p className="mt-4 text-center text-sm text-primary">
-              Upuść plik tutaj
-            </p>
-          )}
-
-          {!isDragging && (
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              Przeciągnij i upuść plik lub kliknij przycisk
-            </p>
-          )}
+          <div className="mt-4 text-center text-xs text-muted-foreground">
+            <p>Obsługiwane formaty STEP, STP, DWG, DXF, PDF</p>
+            <p className="mt-1">Maksymalny rozmiar: 25MB</p>
+          </div>
         </>
       )}
+
+      <style jsx global>{`
+        @keyframes progress-circular {
+          0% {
+            stroke-dashoffset: 264;
+          }
+          100% {
+            stroke-dashoffset: 0;
+          }
+        }
+        .animate-progress-circular {
+          animation: progress-circular 2s linear infinite;
+        }
+      `}</style>
     </div>
   );
 };
