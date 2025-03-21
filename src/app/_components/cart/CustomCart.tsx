@@ -1,51 +1,60 @@
-"use client";
 
-import { useState } from "react";
-import { ShoppingCart } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { CartItem } from "./CartItem";
-import { ItemDetailsAlert } from "./ItemDetailsAlert";
-import { useCartContext } from "~/lib/CartContext";
+"use client"
 
-export type CartItemType = {
-  id: number;
-  fields: FieldType[];
-};
-
-export type FieldType = {
-  name: string;
-  value: string;
-  color: string;
-};
+import { useState } from "react"
+import { ShoppingCart } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { CartItem } from "./CartItem"
+import { ItemDetailsAlert } from "./ItemDetailsAlert"
+import { useCartContext } from "~/lib/CartContext"
 
 interface OrderResponse {
-  message?: string;
-  error?: string;
+  message?: string
+  error?: string
 }
-export default function CustomCart() {
-  const { cartState, setCartState } = useCartContext();
 
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
+export default function CustomCart() {
+  const { cartState, setCartState } = useCartContext()
+  const [selectedItem, setSelectedItem] = useState<number | null>(null)
+  const [isAlertOpen, setIsAlertOpen] = useState(false)
+  const [isSending, setIsSending] = useState(false)
+  const [sendStatus, setSendStatus] = useState<{ message: string; isError: boolean } | null>(null)
 
   const removeItem = (id: number) => {
-    setCartState(cartState.filter((item) => item.id !== id));
-  };
+    setCartState(cartState.filter((item) => item.id !== id))
+  }
 
   const editItem = (id: number) => {
-    console.log(`Edit item ${id}`);
-  };
+    console.log(`Edit item ${id}`)
+  }
 
   const showDetails = (id: number) => {
-    setSelectedItem(id);
-    setIsAlertOpen(true);
-  };
+    setSelectedItem(id)
+    setIsAlertOpen(true)
+  }
+
 
 
   const handleSendEmail = async () => {
+    // Sprawdzamy czy koszyk nie jest pusty
+    if (cartState.length === 0) {
+      setSendStatus({
+        message: "Koszyk jest pusty",
+        isError: true,
+      })
+      return
+    }
+
+
+    setIsSending(true)
+    setSendStatus(null)
+
     try {
+      // Wysyłamy całą strukturę cartState bez modyfikacji
+      // console.log("Wysyłane dane:", JSON.stringify({ cartItems: cartState }, null, 2))
+
       const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
@@ -56,21 +65,36 @@ export default function CustomCart() {
         }),
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error("Błąd API:", errorText)
-        throw new Error(`Błąd API: ${response.status} - ${response.statusText}`)
+      const responseText = await response.text()
+      console.log("Odpowiedź serwera (tekst):", responseText)
+      
+      let data: OrderResponse
+      try {
+        data = JSON.parse(responseText) as OrderResponse
+      } catch (e) {
+        throw new Error(`Nieprawidłowa odpowiedź serwera: ${responseText}`)
       }
 
-      const data = (await response.json()) as OrderResponse
-      alert(data.message ?? "E-mail wysłany pomyślnie!")
+      if (!response.ok) {
+        throw new Error(`Błąd API: ${response.status} - ${data.error ?? response.statusText}`)
+      }
+
+      setSendStatus({
+        message: data.message ?? "E-mail wysłany pomyślnie!",
+        isError: false,
+      })
     } catch (error) {
       console.error("Błąd podczas wysyłania e-maila:", error)
-      alert(`Wystąpił błąd: ${error instanceof Error ? error.message : String(error)}`)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      setSendStatus({
+        message: `Wystąpił błąd: ${errorMessage}`,
+        isError: true,
+      })
+    } finally {
+      setIsSending(false)
     }
   }
-  
-  
+
   return (
     <div className="sticky h-min w-full max-w-4xl self-start bg-card lg:top-[105px] lg:max-w-sm lg:rounded-md lg:border">
       <Card className="border-none">
@@ -81,16 +105,13 @@ export default function CustomCart() {
               Koszyk
             </CardTitle>
             <Badge variant="outline" className="px-3">
-              {cartState.length}{" "}
-              {cartState.length === 1 ? "element" : "elementy"}
+              {cartState.length} {cartState.length === 1 ? "element" : "elementy"}
             </Badge>
           </div>
         </CardHeader>
         <CardContent>
           {cartState.length === 0 ? (
-            <div className="py-6 text-center text-muted-foreground">
-              Twój koszyk jest pusty
-            </div>
+            <div className="py-6 text-center text-muted-foreground">Twój koszyk jest pusty</div>
           ) : (
             <div className="max-h-[60vh] space-y-4 overflow-y-auto pr-1">
               {cartState.map((item) => (
@@ -106,8 +127,21 @@ export default function CustomCart() {
           )}
 
           {cartState.length > 0 && (
-            <div className="mt-4 flex justify-end border-t pt-4">
-              <Button className="w-full" onClick={handleSendEmail}>Przejdź do zamówienia</Button>
+            <div className="mt-4 flex flex-col gap-2 border-t pt-4">
+              {sendStatus && (
+                <div
+                  className={`text-sm p-2 rounded ${sendStatus.isError ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}
+                >
+                  {sendStatus.message}
+                </div>
+              )}
+
+              <Button className="w-full" onClick={handleSendEmail} disabled={isSending}>
+                {isSending ? "Wysyłanie..." : "Przejdź do zamówienia"}
+              </Button>
+
+        
+         
             </div>
           )}
         </CardContent>
@@ -118,11 +152,13 @@ export default function CustomCart() {
           item={cartState.find((item) => item.id === selectedItem)}
           onClose={() => setIsAlertOpen(false)}
           onEdit={() => {
-            editItem(selectedItem);
-            setIsAlertOpen(false);
+            editItem(selectedItem)
+            setIsAlertOpen(false)
           }}
         />
       )}
     </div>
-  );
+  )
 }
+
+
