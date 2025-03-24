@@ -16,10 +16,14 @@
 // import { ChevronRight, File } from "lucide-react";
 
 // import { FormProvider, useFormContext } from "~/lib/FormContext";
+// import { type GeneralInformationType } from "~/lib/GeneralInformationType";
 // const AccordionContent = () => {
 //   const [activeIndex, setActiveIndex] = useState<string>("item-0");
+//   const [generalInformation, setGeneralInformation] =
+//     useState<GeneralInformationType>({ name: "", company: "", email: "" });
 //   const { formCurrentState } = useFormContext();
 //   const uploadedFiles = formCurrentState.uploadedFiles;
+//   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
 //   const handleNavigation = (targetIndex: string) => {
 //     setActiveIndex(targetIndex);
@@ -33,6 +37,9 @@
 //       collapsible
 //       className="h-min w-full max-w-4xl"
 //     >
+//       <div>
+//         <pre>{JSON.stringify(generalInformation, null, 2)}</pre>
+//       </div>
 //       {/* General Information Section */}
 //       <AccordionItem
 //         value="item-0"
@@ -84,6 +91,11 @@
 //                   required
 //                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 //                 />
+//                 {formErrors.fullName && (
+//                   <p className="mt-1 text-sm text-red-500">
+//                     {formErrors.fullName}
+//                   </p>
+//                 )}
 //               </div>
 
 //               <div className="space-y-2 md:col-span-1">
@@ -98,6 +110,11 @@
 //                   required
 //                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 //                 />
+//                 {formErrors.companyName && (
+//                   <p className="mt-1 text-sm text-red-500">
+//                     {formErrors.companyName}
+//                   </p>
+//                 )}
 //               </div>
 
 //               <div className="space-y-2 md:col-span-2">
@@ -112,12 +129,57 @@
 //                   required
 //                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 //                 />
+//                 {formErrors.email && (
+//                   <p className="mt-1 text-sm text-red-500">
+//                     {formErrors.email}
+//                   </p>
+//                 )}
 //               </div>
 //             </div>
 //           </div>
 //           <div className="mt-4 flex gap-2">
 //             <Button
-//               onClick={() => handleNavigation("item-1")}
+//               onClick={() => {
+//                 // Get form field values
+//                 const fullName = (
+//                   document.getElementById("fullName") as HTMLInputElement
+//                 ).value;
+//                 const companyName = (
+//                   document.getElementById("companyName") as HTMLInputElement
+//                 ).value;
+//                 const email = (
+//                   document.getElementById("email") as HTMLInputElement
+//                 ).value;
+
+//                 // Reset errors
+//                 setFormErrors({});
+
+//                 // Validate fields
+//                 const errors: Record<string, string> = {};
+
+//                 if (!fullName.trim()) {
+//                   errors.fullName = "Imię i nazwisko jest wymagane";
+//                 }
+
+//                 if (!companyName.trim()) {
+//                   errors.companyName = "Nazwa firmy jest wymagana";
+//                 }
+
+//                 if (!email.trim()) {
+//                   errors.email = "Adres email jest wymagany";
+//                 } else if (!/\S+@\S+\.\S+/.test(email)) {
+//                   errors.email = "Nieprawidłowy format adresu email";
+//                 }
+
+//                 // If there are errors, display them
+//                 if (Object.keys(errors).length > 0) {
+//                   setFormErrors(errors);
+//                   return;
+//                 }
+
+//                 // If validation passes, proceed to next section
+//                 handleNavigation("item-1");
+//               }}
 //               className="flex items-center"
 //             >
 //               Dalej
@@ -242,7 +304,7 @@
 //           <span className="text-left font-medium">Dostawa</span>
 //         </AccordionTrigger>
 //         <UI_AccordionContent className="pb-4 xl:px-4">
-//           <SummarySection />
+//           <SummarySection generalInformation={generalInformation} />
 //           <div className="mt-4 flex gap-2">
 //             <Button
 //               onClick={() => handleNavigation("item-1")}
@@ -284,8 +346,15 @@ import SummarySection from "./summary/SummarySection";
 import { ChevronRight, File } from "lucide-react";
 
 import { FormProvider, useFormContext } from "~/lib/FormContext";
+import type { GeneralInformationType } from "~/lib/GeneralInformationType";
 const AccordionContent = () => {
   const [activeIndex, setActiveIndex] = useState<string>("item-0");
+  const [generalInformation, setGeneralInformation] =
+    useState<GeneralInformationType>({
+      name: "",
+      company: "",
+      email: "",
+    });
   const { formCurrentState } = useFormContext();
   const uploadedFiles = formCurrentState.uploadedFiles;
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -302,6 +371,9 @@ const AccordionContent = () => {
       collapsible
       className="h-min w-full max-w-4xl"
     >
+      <div>
+        <pre>{JSON.stringify(generalInformation, null, 2)}</pre>
+      </div>
       {/* General Information Section */}
       <AccordionItem
         value="item-0"
@@ -351,6 +423,13 @@ const AccordionContent = () => {
                   type="text"
                   placeholder="Wprowadź imię i nazwisko"
                   required
+                  value={generalInformation.name}
+                  onChange={(e) =>
+                    setGeneralInformation({
+                      ...generalInformation,
+                      name: e.target.value,
+                    })
+                  }
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
                 {formErrors.fullName && (
@@ -370,6 +449,13 @@ const AccordionContent = () => {
                   type="text"
                   placeholder="Wprowadź nazwę firmy"
                   required
+                  value={generalInformation.company}
+                  onChange={(e) =>
+                    setGeneralInformation({
+                      ...generalInformation,
+                      company: e.target.value,
+                    })
+                  }
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
                 {formErrors.companyName && (
@@ -389,6 +475,13 @@ const AccordionContent = () => {
                   type="email"
                   placeholder="Wprowadź adres email"
                   required
+                  value={generalInformation.email}
+                  onChange={(e) =>
+                    setGeneralInformation({
+                      ...generalInformation,
+                      email: e.target.value,
+                    })
+                  }
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
                 {formErrors.email && (
@@ -402,34 +495,23 @@ const AccordionContent = () => {
           <div className="mt-4 flex gap-2">
             <Button
               onClick={() => {
-                // Get form field values
-                const fullName = (
-                  document.getElementById("fullName") as HTMLInputElement
-                ).value;
-                const companyName = (
-                  document.getElementById("companyName") as HTMLInputElement
-                ).value;
-                const email = (
-                  document.getElementById("email") as HTMLInputElement
-                ).value;
-
                 // Reset errors
                 setFormErrors({});
 
                 // Validate fields
                 const errors: Record<string, string> = {};
 
-                if (!fullName.trim()) {
+                if (!generalInformation.name.trim()) {
                   errors.fullName = "Imię i nazwisko jest wymagane";
                 }
 
-                if (!companyName.trim()) {
+                if (!generalInformation.company.trim()) {
                   errors.companyName = "Nazwa firmy jest wymagana";
                 }
 
-                if (!email.trim()) {
+                if (!generalInformation.email.trim()) {
                   errors.email = "Adres email jest wymagany";
-                } else if (!/\S+@\S+\.\S+/.test(email)) {
+                } else if (!/\S+@\S+\.\S+/.test(generalInformation.email)) {
                   errors.email = "Nieprawidłowy format adresu email";
                 }
 
@@ -566,7 +648,7 @@ const AccordionContent = () => {
           <span className="text-left font-medium">Dostawa</span>
         </AccordionTrigger>
         <UI_AccordionContent className="pb-4 xl:px-4">
-          <SummarySection />
+          <SummarySection generalInformation={generalInformation} />
           <div className="mt-4 flex gap-2">
             <Button
               onClick={() => handleNavigation("item-1")}

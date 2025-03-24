@@ -5,8 +5,15 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 import { useCartContext } from "~/lib/CartContext";
 import { useFormContext } from "~/lib/FormContext";
+import { type GeneralInformationType } from "~/lib/GeneralInformationType";
 
-export default function SummarySection() {
+interface SummarySectionProps {
+  generalInformation: GeneralInformationType;
+}
+
+export default function SummarySection({
+  generalInformation,
+}: SummarySectionProps) {
   const { setCartState } = useCartContext();
   const { formCurrentState, formDataToGenerate } = useFormContext();
 
@@ -54,14 +61,29 @@ export default function SummarySection() {
           className="w-full"
           size="lg"
           onClick={() => {
-            setCartState((prev) => [
-              ...prev,
-              {
-                id: Date.now(),
-                filledForm: formCurrentState,
-                formDataToGenerate: formDataToGenerate,
+            // setCartState((prev) => [
+            //   ...prev,
+            //   {
+            //     id: Date.now(),
+            //     filledForm: formCurrentState,
+            //     formDataToGenerate: formDataToGenerate,
+            //   },
+            // ]);
+            setCartState((prev) => ({
+              generalInformation: {
+                name: generalInformation.name,
+                company: generalInformation.company,
+                email: generalInformation.email,
               },
-            ]);
+              values: [
+                ...prev.values, // Rozpakowujemy poprzednią tablicę wartości
+                {
+                  id: Date.now(),
+                  filledForm: formCurrentState,
+                  formDataToGenerate: formDataToGenerate,
+                },
+              ],
+            }));
           }}
         >
           <ShoppingBag className="mr-2 h-4 w-4" />

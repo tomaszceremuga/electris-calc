@@ -3,16 +3,25 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { CartElementType } from "./CartElementType";
 import React from "react";
+import { type GeneralInformationType } from "./GeneralInformationType";
+
+interface CartType {
+  generalInformation: GeneralInformationType;
+  values: CartElementType[];
+}
 
 interface CartContextType {
-  cartState: CartElementType[];
-  setCartState: React.Dispatch<React.SetStateAction<CartElementType[]>>;
+  cartState: CartType;
+  setCartState: React.Dispatch<React.SetStateAction<CartType>>;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartState, setCartState] = useState<CartElementType[]>([]);
+  const [cartState, setCartState] = useState<CartType>({
+    generalInformation: { name: "", company: "", email: "" },
+    values: [],
+  });
 
   const contextValue: CartContextType = {
     cartState,
