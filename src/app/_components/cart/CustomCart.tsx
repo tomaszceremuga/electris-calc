@@ -54,9 +54,6 @@ export default function CustomCart() {
     setSendStatus(null);
 
     try {
-      // Wysyłamy całą strukturę cartState bez modyfikacji
-      // console.log("Wysyłane dane:", JSON.stringify({ cartItems: cartState }, null, 2))
-
       const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
@@ -103,7 +100,6 @@ export default function CustomCart() {
 
   return (
     <div className="sticky h-min w-full max-w-4xl self-start bg-card lg:top-[105px] lg:max-w-sm lg:rounded-md lg:border">
-      <pre>{JSON.stringify(cartState, null, 2)}</pre>;
       <Card className="border-none">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
