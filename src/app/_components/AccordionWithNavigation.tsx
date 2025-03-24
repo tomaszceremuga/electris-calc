@@ -51,29 +51,24 @@ const AccordionContent = () => {
             <span className="mr-5 shrink-0 font-medium">
               General information
             </span>
-            {/* <div className="h-max w-3/4 md:w-full">
+            <div className="h-max w-3/4 md:w-full">
               <div className="relative flex-1 overflow-hidden">
                 <div className="flex items-center gap-2 overflow-x-hidden whitespace-nowrap">
-                  {uploadedFiles.map((el, index) => (
-                    <div
-                      key={index}
-                      className="flex shrink-0 items-center gap-1 rounded-md border bg-muted/30 px-2 py-1 text-sm"
-                    >
-                      <File className="h-3.5 w-3.5" />
-                      <a
-                        href={el.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="max-w-[150px] truncate hover:underline"
-                      >
-                        {el.name}
-                      </a>
-                    </div>
-                  ))}
+                  <p className="text-sm text-muted-foreground">
+                    {generalInformation.name != "" && (
+                      <span> {`${generalInformation.name},`} </span>
+                    )}
+                    {generalInformation.company != "" && (
+                      <span> {` ${generalInformation.company}, `} </span>
+                    )}
+                    {generalInformation.email != "" && (
+                      <span> {` ${generalInformation.email}`} </span>
+                    )}
+                  </p>
                 </div>
                 <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-r from-transparent to-background"></div>
               </div>
-            </div> */}
+            </div>
           </div>
         </AccordionTrigger>
         <UI_AccordionContent className="pb-4 xl:px-4">

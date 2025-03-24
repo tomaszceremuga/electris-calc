@@ -41,7 +41,6 @@ export default function CustomCart() {
   };
 
   const handleSendEmail = async () => {
-    // Sprawdzamy czy koszyk nie jest pusty
     if (cartState.values.length === 0) {
       setSendStatus({
         message: "Koszyk jest pusty",
