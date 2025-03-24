@@ -54,8 +54,8 @@ export default function CustomCart() {
 
     try {
       // Wysyłamy całą strukturę cartState bez modyfikacji
-      console.log("Wysyłane dane:", JSON.stringify({ cartItems: cartState }, null, 2))
-
+      // console.log("Wysyłane dane:", JSON.stringify({ cartItems: cartState }, null, 2))
+      console.log(cartState)
       const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
