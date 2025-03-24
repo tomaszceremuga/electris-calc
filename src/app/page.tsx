@@ -7,9 +7,9 @@ import { HydrateClient } from "~/trpc/server";
 import Navbar from "./_components/Navbar";
 
 import Image from "next/image";
-import { Button } from "~/components/ui/button";
+import RouterBtn from "./_components/RouterBtn";
 
-export default async function Home() {
+export default function Home() {
   return (
     <HydrateClient>
       <Navbar />
@@ -28,9 +28,7 @@ export default async function Home() {
           <p className="mt-2 text-lg md:text-xl">
             Chcesz nawiązać z nami współpracę?
           </p>
-          <Button variant="default" className="mt-4 px-6 py-3 text-lg">
-            KLIK
-          </Button>
+          <RouterBtn />
         </div>
       </div>
     </HydrateClient>
