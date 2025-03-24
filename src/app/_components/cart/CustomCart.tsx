@@ -54,6 +54,9 @@ export default function CustomCart() {
     setSendStatus(null);
 
     try {
+      // Wysyłamy całą strukturę cartState bez modyfikacji
+      console.log("Wysyłane dane:", JSON.stringify({ cartItems: cartState }, null, 2))
+
       const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
@@ -149,6 +152,12 @@ export default function CustomCart() {
               >
                 {isSending ? "Wysyłanie..." : "Przejdź do zamówienia"}
               </Button>
+              <Button className="w-full" onClick={handleSendEmail} >
+                debug
+              </Button>
+
+        
+         
             </div>
           )}
         </CardContent>
