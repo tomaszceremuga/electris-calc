@@ -420,6 +420,14 @@ const formData = {
       isImportant: true,
     },
     {
+      id: 112312,
+      type: "inputNumber",
+      name: "Ilość gięć",
+      info: "",
+      description: "Proszę podać ilość wgięć stosowanych w części.",
+      isImportant: true,
+    },
+    {
       id: 11,
       type: "radioElements",
       name: "Tolerancja",

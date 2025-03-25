@@ -9,6 +9,7 @@ import SelectMaterial from "./SelectMaterial";
 
 import type { FilledValueType } from "~/lib/FilledValueType";
 import { useFormContext } from "~/lib/FormContext";
+import InputNumber from "./InputNumber";
 
 const FormSection = () => {
   const { formDataToGenerate, formCurrentState, setFormCurrentState } =
@@ -67,6 +68,19 @@ const FormSection = () => {
                 info={el.info}
                 description={el.description}
                 options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+          case "inputNumber":
+            return (
+              <InputNumber
+                id={el.id}
+                onChange={handleChange}
+                filled={typeof filledValue === "number" ? filledValue : 0}
+                name={el.name}
+                info={el.info}
+                description={el.description}
                 key={index}
                 isImportant={el.isImportant}
               />
