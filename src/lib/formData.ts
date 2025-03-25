@@ -4,7 +4,7 @@ const formData = {
     price: " id pola od ilosci * 1.2 + surfaceTreatment * 0.8",
     deliveryDate: "quantity < 100 ? 14 : 31",
   },
-  hiddenElements: [112312, 9999],
+  hiddenElements: [112312, 9999, 21, 22, 23, 24],
   values: [
     {
       id: 1,
@@ -24,14 +24,63 @@ const formData = {
       options: ["mm", "inch"],
       isImportant: false,
     },
+    // {
+    //   id: 4,
+    //   type: "selectGroup",
+    //   name: "Rodzaj aluminium",
+    //   info: "",
+    //   description: "",
+    //   options: ["Aluminium 5052", "Aluminium 6061"],
+    //   isImportant: false,
+    // },
     {
-      id: 4,
+      id: 20,
       type: "selectGroup",
-      name: "Rodzaj aluminium",
-      info: "",
+      name: "Materiał",
+      info: "Wybierz materiał, z którego wykonana jest część.",
       description: "",
-      options: ["Aluminium 5052", "Aluminium 6061"],
-      isImportant: false,
+      options: ["Miedź", "Aluminium", "Stal", "Inne"],
+      isImportant: true,
+      elementsToShow: [
+        { option: "Miedź", elementToShow: 21 },
+        { option: "Aluminium", elementToShow: 22 },
+        { option: "Stal", elementToShow: 23 },
+        { option: "Inne", elementToShow: 24 },
+      ],
+    },
+    {
+      id: 21,
+      type: "selectGroup",
+      name: "Rodzaj Miedzi",
+      info: "",
+      options: ["CU-ETP", "CU-OFF"],
+      isImportant: true,
+      isLoaded: true,
+    },
+    {
+      id: 22,
+      type: "selectGroup",
+      name: "Rodzaj Aluminium",
+      info: "",
+      options: ["1050", "6062"],
+      isImportant: true,
+      isLoaded: true,
+    },
+    {
+      id: 23,
+      type: "selectGroup",
+      name: "Rodzaj Stali",
+      info: "",
+      options: ["Czarna", "Nierdzewna"],
+      isImportant: true,
+      isLoaded: true,
+    },
+    {
+      id: 24,
+      type: "inputText",
+      name: "Podaj własny rodzaj",
+      isLoaded: true,
+      description: "Proszę podać własny rodzaj",
     },
     {
       id: 6,
@@ -261,6 +310,28 @@ const formData = {
         value: 0,
       },
       {
+        id: 20,
+        value: "Miedź",
+      },
+      {
+        id: 21,
+        value: "CU-ETP",
+      },
+
+      {
+        id: 22,
+        value: "1050",
+      },
+      {
+        id: 23,
+        value: "Czarna",
+      },
+      {
+        id: 24,
+        value: "",
+      },
+
+      {
         id: 11123232323232,
         Value: 0,
       },
@@ -271,7 +342,7 @@ const formData = {
       },
       {
         id: 15,
-        value: "Premium (dodatkowe opłaty)",
+        value: "Standard",
       },
       {
         id: 16,

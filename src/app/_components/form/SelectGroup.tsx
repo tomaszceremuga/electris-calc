@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import InfoButton from "./InfoButton";
 import { type FormElementsType } from "~/lib/FormElementsType";
+import { useFormContext } from "~/lib/FormContext";
+import LoadedElement from "./LoadedElement";
 
 const SelectGroup: React.FC<FormElementsType> = ({
   id,
@@ -12,14 +14,35 @@ const SelectGroup: React.FC<FormElementsType> = ({
   info = "",
   options = [""],
   isImportant = false,
+  elementsToShow,
+  isLoaded,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(
     typeof filled == "string" ? filled : null,
   );
   const prevOption = useRef<string | null>(selectedOption);
+  const { setFormCurrentState } = useFormContext();
 
   const handleClick = (option: string) => {
-    setSelectedOption((prev) => (prev === option ? null : option));
+    const newValue = selectedOption === option ? null : option;
+    setSelectedOption(newValue);
+    console.log(elementsToShow);
+
+    elementsToShow?.forEach((el) => {
+      if (el.option === newValue) {
+        setFormCurrentState((prev) => ({
+          ...prev,
+          hiddenElements: prev.hiddenElements.filter(
+            (item) => item !== el.elementToShow,
+          ),
+        }));
+      } else {
+        setFormCurrentState((prev) => ({
+          ...prev,
+          hiddenElements: [...prev.hiddenElements, el.elementToShow],
+        }));
+      }
+    });
   };
 
   useEffect(() => {
@@ -41,7 +64,7 @@ const SelectGroup: React.FC<FormElementsType> = ({
             {isImportant && <span className="mr-1 text-red-500">*</span>}
             {name}
           </p>
-          {info && <InfoButton info={info} />}
+          {isLoaded && <LoadedElement />} {info && <InfoButton info={info} />}
         </div>
         {options.map((option, index) => (
           <button

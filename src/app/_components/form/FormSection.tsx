@@ -11,6 +11,7 @@ import type { FilledValueType } from "~/lib/FilledValueType";
 import { useFormContext } from "~/lib/FormContext";
 import InputNumber from "./InputNumber";
 import { useEffect } from "react";
+import InputText from "./InputText";
 
 const FormSection = () => {
   const { formDataToGenerate, formCurrentState, setFormCurrentState } =
@@ -70,7 +71,8 @@ const FormSection = () => {
                 options={el.options}
                 key={index}
                 isImportant={el.isImportant}
-                // elementsToShow={el.elementsToShow}
+                isLoaded={el.isLoaded}
+                elementsToShow={el.elementsToShow}
               />
             );
           case "radioElements":
@@ -91,6 +93,20 @@ const FormSection = () => {
           case "inputNumber":
             return (
               <InputNumber
+                id={el.id}
+                onChange={handleChange}
+                filled={typeof filledValue === "number" ? filledValue : 0}
+                name={el.name}
+                info={el.info}
+                description={el.description}
+                key={index}
+                isImportant={el.isImportant}
+                isLoaded={el.isLoaded}
+              />
+            );
+          case "inputText":
+            return (
+              <InputText
                 id={el.id}
                 onChange={handleChange}
                 filled={typeof filledValue === "number" ? filledValue : 0}

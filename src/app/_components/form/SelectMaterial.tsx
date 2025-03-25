@@ -229,10 +229,12 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   }, [selectedSurface, id, onChange]);
 
   return (
-    <div className="w-full max-w-[400px] rounded-lg bg-card p-5">
+    <div className="mb-5 w-full max-w-[400px] rounded-lg bg-card">
       <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h3 className="text-base font-medium">Obróbka powierzchni</h3>
+        <div className="ml-2 flex items-center gap-2">
+          <p className="flex items-center whitespace-nowrap p-[6px] text-base">
+            Obróbka powierzchni
+          </p>
 
           <Popover>
             <PopoverTrigger asChild>
@@ -255,7 +257,7 @@ const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
         </div>
       </div>
 
-      <div className="md:pl-2">
+      <div className="ml-2 md:ml-5 md:pl-2">
         <SurfaceTreatment
           setSelectedSurface={setSelectedSurface}
           data={transformedData}
