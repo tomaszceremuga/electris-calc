@@ -1,4 +1,5 @@
 import { type SelectedSurfaceType } from "./SelectedSurfaceType";
+import type ShowElementsType from "./ShowElementsType";
 import { type UploadedFile } from "./UploadedFileType";
 
 export type FormElementsType = {
@@ -17,7 +18,9 @@ export type FormElementsType = {
   info?: string;
   options?: string[];
   isImportant?: boolean;
+  isLoaded?: boolean;
   description?: string;
+  elementsToShow?: ShowElementsType;
   data?: {
     alertMesage: string;
     categories?: {

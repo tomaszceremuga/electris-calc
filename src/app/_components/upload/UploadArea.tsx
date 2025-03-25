@@ -158,7 +158,7 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
 
         if (newUploadedFiles.length > 0) {
           setUploadedFiles([
-            ...formCurrentState.uploadedFiles,
+            ...formCurrentState.filledForm.uploadedFiles,
             ...newUploadedFiles,
           ]);
 

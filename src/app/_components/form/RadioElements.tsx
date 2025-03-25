@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import InfoButton from "./InfoButton";
 import { type FormElementsType } from "~/lib/FormElementsType";
+import { useFormContext } from "~/lib/FormContext";
 
 const RadioElements: React.FC<FormElementsType> = ({
   id,
@@ -15,16 +16,37 @@ const RadioElements: React.FC<FormElementsType> = ({
   info = "",
   options = [""],
   isImportant = false,
+  elementsToShow,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(
-    typeof filled == "string" ? filled : null,
+    typeof filled === "string" ? filled : null,
   );
   const prevOption = useRef<string | null>(selectedOption);
 
+  const { setFormCurrentState } = useFormContext();
+
   const handleChange = (value: string) => {
-    if (prevOption.current !== value) {
-      setSelectedOption(value);
-    }
+    // Zaktualizuj selectedOption
+    setSelectedOption(value);
+
+    // Sprawdź, które elementy mają być pokazane lub ukryte
+    elementsToShow?.forEach((el) => {
+      if (el.option === value) {
+        // Jeśli opcja jest wybrana, pokaż element
+        setFormCurrentState((prev) => ({
+          ...prev,
+          hiddenElements: prev.hiddenElements.filter(
+            (item) => item !== el.elementToShow,
+          ),
+        }));
+      } else {
+        // Jeśli opcja nie jest wybrana, ukryj element
+        setFormCurrentState((prev) => ({
+          ...prev,
+          hiddenElements: [...prev.hiddenElements, el.elementToShow], // użyj spread operatora
+        }));
+      }
+    });
   };
 
   useEffect(() => {
@@ -35,7 +57,7 @@ const RadioElements: React.FC<FormElementsType> = ({
   }, [selectedOption, id, onChange]);
 
   useEffect(() => {
-    setSelectedOption(typeof filled == "string" ? filled : null);
+    setSelectedOption(typeof filled === "string" ? filled : null);
   }, [filled]);
 
   return (

@@ -10,6 +10,7 @@ import SelectMaterial from "./SelectMaterial";
 import type { FilledValueType } from "~/lib/FilledValueType";
 import { useFormContext } from "~/lib/FormContext";
 import InputNumber from "./InputNumber";
+import { useEffect } from "react";
 
 const FormSection = () => {
   const { formDataToGenerate, formCurrentState, setFormCurrentState } =
@@ -31,18 +32,31 @@ const FormSection = () => {
   const handleChange = (id: number, value: FilledValueType["value"]) => {
     setFormCurrentState((prev) => ({
       ...prev,
-      values: prev.values.map((item) =>
-        item.id === id ? { ...item, value } : item,
-      ),
+      filledForm: {
+        ...prev.filledForm,
+        values: prev.filledForm.values.map((item) =>
+          item.id === id ? { ...item, value } : item,
+        ),
+      },
     }));
   };
+
+  useEffect(() => {
+    setFormCurrentState((prev) => ({
+      ...prev,
+      hiddenElements: formDataToGenerate.hiddenElements,
+    }));
+  }, [formDataToGenerate.hiddenElements, setFormCurrentState]);
 
   return (
     <div className="xl:pr-16">
       {formDataToGenerate.values.map((el, index) => {
-        const filledValue = formCurrentState.values.find(
+        const filledValue = formCurrentState.filledForm.values.find(
           (item) => item.id === el.id,
         )?.value;
+
+        if (formCurrentState.hiddenElements.includes(el.id)) return null;
+
         switch (el.type) {
           case "selectGroup":
             return (
@@ -56,6 +70,7 @@ const FormSection = () => {
                 options={el.options}
                 key={index}
                 isImportant={el.isImportant}
+                // elementsToShow={el.elementsToShow}
               />
             );
           case "radioElements":
@@ -70,6 +85,7 @@ const FormSection = () => {
                 options={el.options}
                 key={index}
                 isImportant={el.isImportant}
+                elementsToShow={el.elementsToShow}
               />
             );
           case "inputNumber":
@@ -83,6 +99,7 @@ const FormSection = () => {
                 description={el.description}
                 key={index}
                 isImportant={el.isImportant}
+                isLoaded={el.isLoaded}
               />
             );
           case "textArea":
@@ -141,7 +158,7 @@ const FormSection = () => {
                 }
                 key={index}
                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
-                data={defaultData}
+                data={el.data ?? defaultData}
               />
             );
 
@@ -156,7 +173,6 @@ const FormSection = () => {
       <pre className="bg-yellow-200">
         {JSON.stringify(formCurrentState, null, 2)}
       </pre>
-      ;
     </div>
   );
 };

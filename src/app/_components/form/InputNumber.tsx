@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import InfoButton from "./InfoButton";
 import type { FormElementsType } from "~/lib/FormElementsType";
+import LoadedElement from "./LoadedElement";
 
 const InputNumber: React.FC<FormElementsType> = ({
   id,
@@ -14,6 +15,7 @@ const InputNumber: React.FC<FormElementsType> = ({
   filled,
   name,
   info = "",
+  isLoaded,
   isImportant = false,
 }) => {
   const [currentValue, setCurrentValue] = useState<number | "">("");
@@ -57,6 +59,7 @@ const InputNumber: React.FC<FormElementsType> = ({
           {name}
         </p>
         {info && <InfoButton info={info} />}{" "}
+        {isLoaded && <LoadedElement />}{" "}
       </div>
       <Input
         type="number"

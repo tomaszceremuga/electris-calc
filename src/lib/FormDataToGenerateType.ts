@@ -3,6 +3,7 @@ import { type FormElementsType } from "./FormElementsType";
 
 export type FormDataToGenerateType = {
   id: number;
+  hiddenElements: Array<number>;
   calculation: {
     price: string;
     deliveryDate: string;

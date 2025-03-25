@@ -4,6 +4,7 @@ const formData = {
     price: " id pola od ilosci * 1.2 + surfaceTreatment * 0.8",
     deliveryDate: "quantity < 100 ? 14 : 31",
   },
+  hiddenElements: [112312, 9999],
   values: [
     {
       id: 1,
@@ -126,22 +127,41 @@ const formData = {
         "Proszę określić, czy Twoja część ma gwinty wewnętrzne lub zewnętrzne.Nie ponosimy żadnego ryzyka montażowego, jeśli jest to niestandardowy gwint, chyba że wszystkie części montażowe są tutaj produkowane i montowane.",
       options: ["Nie", "Tak"],
       isImportant: true,
+      elementsToShow: [{ option: "Tak", elementToShow: 9999 }],
+    },
+    {
+      id: 9999,
+      type: "inputNumber",
+      name: "Ilość gwintowanych otowrów",
+      isLoaded: true,
+
+      description: "Proszę podać ilość gwintowanych otowrów",
     },
     {
       id: 10,
       type: "radioElements",
-      name: "Wkładki",
+      name: "Wkładki wprasowywane",
       info: "",
       description: "Proszę podać standardowe wkładki stosowane w  części.",
       options: ["Nie", "Tak"],
       isImportant: true,
+      elementsToShow: [{ option: "Tak", elementToShow: 112312 }],
     },
     {
       id: 112312,
       type: "inputNumber",
+      name: "Ilość wkładek wprasowanych",
+      info: "",
+      isLoaded: true,
+      description: "Proszę podać ilość wkładek wprasowanych",
+      isImportant: true,
+    },
+    {
+      id: 11123232323232,
+      type: "inputNumber",
       name: "Ilość gięć",
       info: "",
-      description: "Proszę podać ilość wgięć stosowanych w części.",
+      description: "Proszę podać ilość gięć",
       isImportant: true,
     },
     {
@@ -199,7 +219,7 @@ const formData = {
     values: [
       {
         id: 1,
-        value: 123,
+        value: 5,
       },
       {
         id: 2,
@@ -226,12 +246,25 @@ const formData = {
       },
       {
         id: 9,
-        value: "Tak",
+        value: "Nie",
+      },
+      {
+        id: 9999,
+        value: 0,
       },
       {
         id: 10,
-        value: "Tak",
+        value: "Nie",
       },
+      {
+        id: 112312,
+        value: 0,
+      },
+      {
+        id: 11123232323232,
+        Value: 0,
+      },
+
       {
         id: 11,
         value: "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
@@ -246,7 +279,7 @@ const formData = {
       },
       {
         id: 18,
-        value: "ewqeqwe",
+        value: "",
       },
     ],
   },

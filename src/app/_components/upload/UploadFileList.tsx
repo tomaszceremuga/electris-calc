@@ -24,7 +24,9 @@ const UploadFileList = ({
 
   const handleDeleteButton = (i: number) => {
     setUploadedFiles(
-      formCurrentState.uploadedFiles.filter((_, index) => index !== i),
+      formCurrentState.filledForm.uploadedFiles.filter(
+        (_, index) => index !== i,
+      ),
     );
   };
 

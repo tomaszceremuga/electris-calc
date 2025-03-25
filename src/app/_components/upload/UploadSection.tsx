@@ -8,7 +8,7 @@ const UploadSection = () => {
   const { setUploadedFiles } = useFormContext();
   const { formCurrentState } = useFormContext();
 
-  const uploadedFiles = formCurrentState.uploadedFiles;
+  const uploadedFiles = formCurrentState.filledForm.uploadedFiles;
 
   const count = uploadedFiles.length;
 
@@ -23,7 +23,7 @@ const UploadSection = () => {
           />
         </div>
         <UploadFileList
-          uploadedFiles={formCurrentState.uploadedFiles}
+          uploadedFiles={formCurrentState.filledForm.uploadedFiles}
           setUploadedFiles={setUploadedFiles}
         />
       </div>
