@@ -12,6 +12,7 @@ import { useFormContext } from "~/lib/FormContext";
 import InputNumber from "./InputNumber";
 import { useEffect } from "react";
 import InputText from "./InputText";
+import SelectGroupCustom from "./SelectGroupCustom";
 
 const FormSection = () => {
   const { formDataToGenerate, formCurrentState, setFormCurrentState } =
@@ -62,6 +63,22 @@ const FormSection = () => {
           case "selectGroup":
             return (
               <SelectGroup
+                id={el.id}
+                onChange={handleChange}
+                filled={typeof filledValue === "string" ? filledValue : ""}
+                name={el.name}
+                info={el.info}
+                description={el.description}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+                isLoaded={el.isLoaded}
+                elementsToShow={el.elementsToShow}
+              />
+            );
+          case "selectGroupCustom":
+            return (
+              <SelectGroupCustom
                 id={el.id}
                 onChange={handleChange}
                 filled={typeof filledValue === "string" ? filledValue : ""}

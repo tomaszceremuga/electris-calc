@@ -84,7 +84,7 @@ const formData = {
     },
     {
       id: 6,
-      type: "selectGroup",
+      type: "selectGroupCustom",
       name: "Grubość",
       info: "",
       description: "",
@@ -272,7 +272,7 @@ const formData = {
       },
       {
         id: 2,
-        value: "inch",
+        value: "mm",
       },
       {
         id: 4,
