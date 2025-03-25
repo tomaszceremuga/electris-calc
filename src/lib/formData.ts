@@ -20,7 +20,7 @@ const formData = {
       name: "Jednostki",
       info: "",
       description: "",
-      options: ["mm", "inch", "cm"],
+      options: ["mm", "inch"],
       isImportant: false,
     },
     {
@@ -30,15 +30,6 @@ const formData = {
       info: "",
       description: "",
       options: ["Aluminium 5052", "Aluminium 6061"],
-      isImportant: false,
-    },
-    {
-      id: 5,
-      type: "selectGroup",
-      name: "Kolory",
-      info: "",
-      description: "",
-      options: ["Srebrno-biały"],
       isImportant: false,
     },
     {
@@ -79,13 +70,8 @@ const formData = {
             name: "Powierzchnia",
             options: [
               { id: "standard", name: "Standardowa (Frezowana)" },
-              { id: "anodized", name: "Anodowana" },
-              { id: "brushed", name: "Szczotkowana" },
-              { id: "bead-blast", name: "Piaskowana" },
-              { id: "spray-painting", name: "Malowanie natryskowe" },
               { id: "powder-coat", name: "Malowanie proszkowe" },
-              { id: "spray-plating", name: "Natryskowe powlekanie" },
-              { id: "detail-sanding", name: "Szlifowanie detali" },
+              { id: "galvanic-coat", name: "Powłoka galwaniczna" },
             ],
           },
         ],
@@ -196,41 +182,14 @@ const formData = {
       ],
       isImportant: true,
     },
-    {
-      id: 12,
-      type: "radioElements",
-      name: "Spawanie",
-      info: "",
-      description: "",
-      options: ["Nie", "Tak"],
-      isImportant: true,
-    },
-    {
-      id: 13,
-      type: "radioElements",
-      name: "Oznaczenie części",
-      info: "Proszę wyraźnie oznaczyć zawartość sitodruku lub grawerunku laserowego w pliku CAD (DWG lub DXF). Wymagany jest również plik graficzny (Ai lub SVG).",
-      description: "",
-      options: ["Sitodruk", "Grawerowanie laserowe"],
-      isImportant: false,
-    },
-    {
-      id: 14,
-      type: "radioElements",
-      name: "Montaż części",
-      info: "Jeśli wybierzesz [Test montażu], wymagany jest rysunek 2D z instrukcjami montażu. Wyniki testu montażu zostaną przesłane e-mailem. Domyślnie zostanie wykonany tylko test. Jeśli musisz wysłać je po montażu, wybierz [Wyślij w montażu].",
-      description:
-        "Proszę określić wymagania dotyczące montażu. PCBWay nie ponosi żadnego ryzyka związanego z montażem, jeśli wybierzesz opcję Brak wymagań dotyczących montażu.",
-      options: ["Nie", "Testy montażowe", "Dostawa w formie zmontowanej"],
-      isImportant: true,
-    },
+
     {
       id: 15,
       type: "radioElements",
-      name: "Wygląd końcowy",
+      name: "Pakowanie",
       info: "",
       description: "",
-      options: ["Standard", "Premium (dodatkowe opłaty)"],
+      options: ["Standard", "Niestandardowe"],
       isImportant: false,
     },
     {
@@ -247,20 +206,6 @@ const formData = {
         "Certyfikacja materiału źródłowego",
       ],
       isImportant: false,
-    },
-    {
-      id: 17,
-      type: "selectGroup",
-      name: "Opis produktu",
-      info: "Opis produktu wymagany do odprawy celnej:1. Przestrzegaj zasad handlu międzynarodowego i podaj opisy produktów do odprawy celnej.2. Wybierz prawidłowy opis produktu zgodnie z rzeczywistym zastosowaniem produktu. Jeśli nie ma pasującego elementu, wybierz Inne.",
-      description: "",
-      options: [
-        "Sprzęt biurowy i akcesoria",
-        "Pojazdy i akcesoria",
-        "Rozrywka DIY",
-        "Sprzęt audio i wideo",
-      ],
-      isImportant: true,
     },
     {
       id: 18,
@@ -289,10 +234,7 @@ const formData = {
         id: 4,
         value: "Aluminium 5052",
       },
-      {
-        id: 5,
-        value: "Srebrno-biały",
-      },
+
       {
         id: 6,
         value: "0.8mm",
@@ -323,28 +265,12 @@ const formData = {
         value: "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
       },
       {
-        id: 12,
-        value: "Tak",
-      },
-      {
-        id: 13,
-        value: "Grawerowanie laserowe",
-      },
-      {
-        id: 14,
-        value: "Testy montażowe",
-      },
-      {
         id: 15,
         value: "Premium (dodatkowe opłaty)",
       },
       {
         id: 16,
         value: "Standardowa inspekcja (brak raportu)",
-      },
-      {
-        id: 17,
-        value: "Sprzęt biurowy i akcesoria",
       },
       {
         id: 18,
