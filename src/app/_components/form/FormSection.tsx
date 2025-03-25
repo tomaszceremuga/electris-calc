@@ -141,7 +141,7 @@ const FormSection = () => {
                 }
                 key={index}
                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
-                data={el.data ?? defaultData}
+                data={defaultData}
               />
             );
 

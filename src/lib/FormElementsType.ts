@@ -20,7 +20,7 @@ export type FormElementsType = {
   description?: string;
   data?: {
     alertMesage: string;
-    categories: {
+    categories?: {
       id: string;
       name: string;
       options: {
@@ -28,7 +28,7 @@ export type FormElementsType = {
         name: string;
       }[];
     }[];
-    tiles: {
+    tiles?: {
       id: string;
       categoryId: string;
       name: string;
@@ -36,6 +36,17 @@ export type FormElementsType = {
       image: string;
       colors: string[];
       requiredOption?: string;
+    }[];
+    treatments?: {
+      // Dodanie 'treatments'
+      id: string;
+      name: string;
+      description: string;
+      image: string;
+      hasColors?: boolean;
+      colors?: string[];
+      hasCoatings?: boolean;
+      coatings?: { id: string; name: string }[];
     }[];
   };
 };

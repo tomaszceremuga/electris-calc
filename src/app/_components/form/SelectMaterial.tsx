@@ -215,17 +215,16 @@ import SurfaceTreatment from "./SurfaceTreatment";
 import type { SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
 
 // Original data structure from the form
-interface OriginalDataStructure {
+export type OriginalDataStructure = {
   alertMesage: string;
-  categories: {
+  categories?: {
+    // Zmieniamy na opcjonalne
     id: string;
     name: string;
-    options: {
-      id: string;
-      name: string;
-    }[];
+    options: { id: string; name: string }[];
   }[];
-  tiles: {
+  tiles?: {
+    // Zmieniamy na opcjonalne
     id: string;
     categoryId: string;
     name: string;
@@ -234,7 +233,18 @@ interface OriginalDataStructure {
     colors: string[];
     requiredOption?: string;
   }[];
-}
+  treatments?: {
+    // Zmieniamy na opcjonalne
+    id: string;
+    name: string;
+    description: string;
+    image: string;
+    hasColors?: boolean;
+    colors?: string[];
+    hasCoatings?: boolean;
+    coatings?: { id: string; name: string }[];
+  }[];
+};
 
 // New data structure expected by SurfaceTreatment
 interface TransformedDataStructure {
