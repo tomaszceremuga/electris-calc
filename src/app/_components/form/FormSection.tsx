@@ -203,9 +203,9 @@ const FormSection = () => {
             );
         }
       })}
-      <pre className="bg-yellow-200">
+      {/* <pre className="bg-yellow-200">
         {JSON.stringify(formCurrentState, null, 2)}
-      </pre>
+      </pre> */}
     </div>
   );
 };

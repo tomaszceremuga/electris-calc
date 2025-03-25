@@ -218,8 +218,8 @@ const SelectGroupCustom: React.FC<FormElementsType> = ({
           value={customOption}
           onChange={handleCustomChange}
           placeholder="Własna wartość"
-          className={`my-1 inline-flex h-9 w-auto items-center justify-center gap-2 rounded-md border px-2.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${customOption && selectedOption === null ? "bg-accent-foreground text-accent" : "bg-white text-black"} ${selectedOption === null && !customOption ? "bg-white text-black" : "hover:bg-muted hover:text-muted-foreground"}`}
-          onFocus={() => setSelectedOption(null)} // Gdy pole ma fokus, traktujemy je jak zwykły input
+          className={`my-1 inline-flex h-9 w-auto items-center justify-center gap-2 rounded-md border px-2.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${customOption && selectedOption === null ? "bg-accent-foreground text-accent" : "bg-white text-black"} ${selectedOption === null && !customOption ? "bg-white text-black" : "hover:bg-muted hover:text-muted-foreground"} placeholder:text-neutral-400`}
+          onFocus={() => setSelectedOption(null)}
           style={{ width: "min-content" }}
           size={customOption.length || 10}
         />
