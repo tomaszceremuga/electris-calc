@@ -190,7 +190,7 @@ const SelectGroupCustom: React.FC<FormElementsType> = ({
   }, [filled]);
 
   return (
-    <div className="mb-5 flex flex-wrap items-center">
+    <div className="mb-5 ml-2 flex flex-wrap items-center">
       <div className="flex items-center">
         <p className="flex items-center whitespace-nowrap p-[6px] text-base">
           {isImportant && <span className="mr-1 text-red-500">*</span>}
