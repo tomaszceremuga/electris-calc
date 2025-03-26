@@ -71,7 +71,7 @@ const AccordionContent = () => {
             </div>
           </div>
         </AccordionTrigger>
-        <UI_AccordionContent className="pb-4 xl:px-4">
+        <UI_AccordionContent className="px-5 pb-4 md:px-4">
           <div className="mx-auto w-full">
             <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
               <div className="space-y-2 md:col-span-1">
