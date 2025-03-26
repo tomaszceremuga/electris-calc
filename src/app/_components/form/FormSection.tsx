@@ -255,7 +255,6 @@ const FormSection = () => {
       {/* <pre className="bg-blue-300">
         {JSON.stringify(formCurrentState, null, 2)}
       </pre> */}
-      ;
     </div>
   );
 };

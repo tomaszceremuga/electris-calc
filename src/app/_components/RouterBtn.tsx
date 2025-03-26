@@ -15,10 +15,11 @@ const RouterBtn = () => {
     <div>
       <Button
         variant="default"
+        size={"lg"}
         className="mt-4 px-6 py-3 text-lg"
         onClick={handleNavigation}
       >
-        KLIK
+        Złóż zamówienie
       </Button>
     </div>
   );

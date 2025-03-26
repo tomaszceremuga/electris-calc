@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import DeliveryOptions from "./DeliveryOptions";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+// import { Check, ShoppingBag } from "lucide-react";
 import { useCartContext } from "~/lib/CartContext";
 import { useFormContext } from "~/lib/FormContext";
 import type { GeneralInformationType } from "~/lib/GeneralInformationType";
@@ -176,8 +176,8 @@ export default function SummarySection({
             }));
           }}
         >
-          <ShoppingBag className="mr-2 h-4 w-4" />
-          Dodaj do zamówienia
+          {/* <Check className="mr-2 h-4 w-4" /> */}
+          Złóż zamówienie
         </Button>
       </div>
     </div>

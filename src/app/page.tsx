@@ -4,7 +4,7 @@
 
 import { HydrateClient } from "~/trpc/server";
 
-import Navbar from "./_components/Navbar";
+// import Navbar from "./_components/Navbar";
 
 import Image from "next/image";
 import RouterBtn from "./_components/RouterBtn";
@@ -12,9 +12,9 @@ import RouterBtn from "./_components/RouterBtn";
 export default function Home() {
   return (
     <HydrateClient>
-      <Navbar />
+      {/* <Navbar /> */}
 
-      <div className="relative min-h-[calc(100vh-4rem)] w-full">
+      <div className="relative min-h-[100vh] w-full">
         <Image
           src="/LandingPage.png"
           alt="Landing Page"

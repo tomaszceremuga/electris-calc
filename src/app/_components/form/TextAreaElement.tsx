@@ -29,6 +29,7 @@ const TextAreaElement: React.FC<FormElementsType> = ({
       <Textarea
         onBlur={(e) => onChange(id, e.target.value)}
         defaultValue={currentText}
+        placeholder="Wpisz inne specjalne wymagania..."
         className="my-[8px] xl:ml-[20px]"
       />
     </div>

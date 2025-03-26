@@ -2,7 +2,6 @@
 
 import type React from "react";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { X, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
@@ -150,9 +149,9 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                 <div
                   key={treatment.id}
                   className={cn(
-                    "group relative cursor-pointer overflow-hidden rounded-lg border transition-all",
+                    "group relative cursor-pointer overflow-hidden rounded-lg border p-3 transition-all",
                     selectedTreatment === treatment.id
-                      ? "border-primary ring-2 ring-primary/30"
+                      ? "border-neutral-950 bg-neutral-950 text-white"
                       : "hover:border-primary/50 hover:shadow-md",
                   )}
                   onClick={() => {
@@ -161,26 +160,45 @@ const SurfaceTreatment: React.FC<SurfaceTreatmentProps> = ({
                     setSelectedCoating(null);
                   }}
                 >
-                  <div className="relative aspect-video w-full overflow-hidden">
-                    <Image
-                      src={treatment.image || "/placeholder.svg"}
-                      alt={treatment.name}
-                      fill
-                      className="object-cover transition-transform group-hover:scale-105"
-                    />
-                    {selectedTreatment === treatment.id && (
-                      <div className="absolute right-2 top-2 rounded-full bg-primary p-1">
-                        <Check className="h-4 w-4 text-white" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-medium">{treatment.name}</h3>
-                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                      {treatment.description}
-                    </p>
-                  </div>
+                  <h3 className="font-medium">{treatment.name}</h3>
+                  <p className="mt-1 line-clamp-2 text-xs">
+                    {treatment.description}
+                  </p>
                 </div>
+                // <div
+                //   key={treatment.id}
+                //   className={cn(
+                //     "group relative cursor-pointer overflow-hidden rounded-lg border transition-all",
+                //     selectedTreatment === treatment.id
+                //       ? "border-primary ring-2 ring-primary/30"
+                //       : "hover:border-primary/50 hover:shadow-md",
+                //   )}
+                //   onClick={() => {
+                //     setSelectedTreatment(treatment.id);
+                //     setSelectedColor(null);
+                //     setSelectedCoating(null);
+                //   }}
+                // >
+                //   <div className="relative aspect-video w-full overflow-hidden">
+                //     <Image
+                //       src={treatment.image || "/placeholder.svg"}
+                //       alt={treatment.name}
+                //       fill
+                //       className="object-cover transition-transform group-hover:scale-105"
+                //     />
+                //     {selectedTreatment === treatment.id && (
+                //       <div className="absolute right-2 top-2 rounded-full bg-primary p-1">
+                //         <Check className="h-4 w-4 text-white" />
+                //       </div>
+                //     )}
+                //   </div>
+                //   <div className="p-3">
+                //     <h3 className="font-medium">{treatment.name}</h3>
+                //     <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                //       {treatment.description}
+                //     </p>
+                //   </div>
+                // </div>
               ))}
             </div>
 
