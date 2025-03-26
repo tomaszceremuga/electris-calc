@@ -75,7 +75,7 @@ const ThicknessTable = ({
           <TableRow className="bg-gray-50">
             <TableHead className="w-[100px] text-center">mm</TableHead>
             <TableHead className="text-center">inch</TableHead>
-            <TableHead className="text-center">Select</TableHead>
+            <TableHead className="text-center">Wybrano</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -142,8 +142,8 @@ const ThicknessTable = ({
       </div>
 
       <div className="p-3 text-sm text-gray-500">
-        Note: Thickness values are shown in both millimeters (mm) and inches
-        (&quot;). The selected value will be stored in millimeters.
+        Uwaga: Wartości grubości są podane zarówno w milimetrach (mm), jak i
+        calach (&quot;). Wybrana wartość zostanie zapisana w milimetrach.
       </div>
     </div>
   );
