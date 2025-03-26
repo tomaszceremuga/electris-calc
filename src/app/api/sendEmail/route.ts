@@ -359,12 +359,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     htmlContent += `</div></body></html>`
 
     // 🔹 Wysłanie e-maila przez Postmark
-    await postmarkClient.sendEmail({
-      From: "mateusz.knapik@electris.pl",
-      To: generalInformation.email || "szymonosielec@gmail.com",
-      Subject: "Zamówienie",
-      HtmlBody: htmlContent,
-    })
+    // await postmarkClient.sendEmail({
+    //   From: "mateusz.knapik@electris.pl",
+    //   To: generalInformation.email || "szymonosielec@gmail.com",
+    //   Subject: "Zamówienie",
+    //   HtmlBody: htmlContent,
+    // })
 
     return NextResponse.json({ success: true, message: "E-mail wysłany!" })
   } catch (error) {

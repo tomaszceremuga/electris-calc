@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useFormContext } from "~/lib/FormContext";
 import type { GeneralInformationType } from "~/lib/GeneralInformationType";
 import { calculatePrice } from "~/lib/calculation";
+import { useRouter } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,6 +37,7 @@ interface OrderResponse {
 export default function SummarySection({
   generalInformation,
 }: SummarySectionProps) {
+  const router = useRouter();
   // const { setCartState } = useCartContext();
   const { formCurrentState, formDataToGenerate } = useFormContext();
   const { filledForm } = formCurrentState; // Pobieramy tylko filledForm
@@ -143,7 +145,7 @@ export default function SummarySection({
           `Błąd API: ${response.status} - ${data.error ?? response.statusText}`,
         );
       }
-
+      router.push("/zamowienie/sukces");
       setSendStatus({
         message: data.message ?? "E-mail wysłany pomyślnie!",
         isError: false,
