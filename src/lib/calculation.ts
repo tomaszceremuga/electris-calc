@@ -1,6 +1,6 @@
 "use server";
 
-import { createParser, VariableMap } from "@adifkz/exp-p";
+import { createParser, type VariableMap } from "@adifkz/exp-p";
 
 // Definiujemy typ dla FilledFormType
 interface FilledFormType {
