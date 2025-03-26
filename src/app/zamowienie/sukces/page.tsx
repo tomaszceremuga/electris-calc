@@ -12,11 +12,13 @@ export default async function Home() {
       {/* <Navbar /> */}
 
       <div className="flex flex-wrap justify-center p-4 pt-10 lg:min-h-screen lg:flex-nowrap lg:gap-x-5 lg:bg-gray-50">
-        <div className="flex flex-col items-center justify-center">
+        <div className="mt-[10vh] flex h-min flex-col items-center justify-center rounded-lg p-8 pt-14">
           <DeliveryAnimation />
-          <p className="mt-8 text-xl">Otrzymaliśmy twoje zamówienie!</p>
+          <p className="mt-8 text-center text-2xl font-semibold text-neutral-900">
+            Otrzymaliśmy Twoje zamówienie!
+          </p>
 
-          <p className="mt-4 text-lg text-neutral-700">
+          <p className="mt-4 text-center text-lg text-neutral-600">
             Sprawdź swoją skrzynkę e-mail, aby zobaczyć potwierdzenie
             zamówienia.
           </p>
