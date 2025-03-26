@@ -32,23 +32,40 @@ export function CartItem({
     .filter((field) => field.isImportant)
     .map((field) => field.id);
 
-  const fieldsToShow = importantFieldIds
-    .slice(0, INITIAL_FIELDS_TO_SHOW)
-    .map((id) => {
-      const formField = formDataToGenerate.values.find(
-        (field) => field.id === id,
-      );
-      const filledValue = filledForm.values.find((value) => value.id === id);
+  // const fieldsToShow = importantFieldIds
+  //   .slice(0, INITIAL_FIELDS_TO_SHOW)
+  //   .map((id) => {
+  //     const formField = formDataToGenerate.values.find(
+  //       (field) => field.id === id,
+  //     );
+  //     const filledValue = filledForm.values.find((value) => value.id === id);
 
-      if (!formField || !filledValue) return null;
+  //     if (!formField || !filledValue) return null;
 
-      return {
-        name: formField.name,
-        value: filledValue.value,
-        id: formField.id,
-      };
-    })
-    .filter(Boolean);
+  //     return {
+  //       name: formField.name,
+  //       value: filledValue.value,
+  //       id: formField.id,
+  //     };
+  //   })
+  //   .filter(Boolean);
+  const fieldsToShow = (importantFieldIds || [])
+  .slice(0, INITIAL_FIELDS_TO_SHOW)
+  .map((id) => {
+    const formField = formDataToGenerate?.values?.find(
+      (field) => field.id === id
+    );
+    const filledValue = filledForm?.values?.find((value) => value.id === id);
+
+    if (!formField || !filledValue) return null;
+
+    return {
+      name: formField.name,
+      value: filledValue.value,
+      id: formField.id,
+    };
+  })
+  .filter(Boolean);
 
   const totalFields = formDataToGenerate.values.length;
   // useEffect(() => {

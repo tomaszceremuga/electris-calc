@@ -23,10 +23,22 @@ export function ItemDetailsAlert({
   const filledForm = item.filledForm as FilledFormType;
   const formDataToGenerate = item.formDataToGenerate as FormDataToGenerateType;
 
-  const allFields = formDataToGenerate.values.map((field) => {
-    const filledValue = filledForm.values.find(
-      (value) => value.id === field.id,
+  // const allFields = formDataToGenerate.values.map((field) => {
+  //   const filledValue = filledForm.values.find(
+  //     (value) => value.id === field.id,
+  //   );
+  //   return {
+  //     name: field.name,
+  //     value: filledValue ? filledValue.value : "Nie określono",
+  //     id: field.id,
+  //     isImportant: field.isImportant,
+  //   };
+  // });
+  const allFields = (formDataToGenerate?.values || []).map((field) => {
+    const filledValue = filledForm?.values?.find(
+      (value) => value.id === field.id
     );
+  
     return {
       name: field.name,
       value: filledValue ? filledValue.value : "Nie określono",

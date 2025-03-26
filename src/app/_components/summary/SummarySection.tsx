@@ -233,27 +233,33 @@ export default function SummarySection({
           className="w-full"
           size="lg"
           onClick={() => {
-            setCartState((prev) => {
-              const prevValues = prev.values || [];
+           
 
-              return {
-                generalInformation: {
-                  name: generalInformation.name,
-                  company: generalInformation.company,
-                  email: generalInformation.email,
+
+            // setCartState((prev) => [
+            //   ...prev,
+            //   {
+            //     id: Date.now(),
+            //     filledForm: formCurrentState,
+            //     formDataToGenerate: formDataToGenerate,
+            //   },
+            // ]);
+
+            setCartState((prev) => ({
+              generalInformation: {
+                name: generalInformation.name,
+                company: generalInformation.company,
+                email: generalInformation.email,
+              },
+              values: [
+                ...prev.values, // Rozpakowujemy poprzednią tablicę wartości
+                {
+                  id: Date.now(),
+                  filledForm: formCurrentState,
+                  formDataToGenerate: formDataToGenerate,
                 },
-                values: [
-                  ...prevValues,
-                  {
-                    id: Date.now(),
-                    filledForm,
-                    formDataToGenerate,
-                    calculatedPrice: priceInfo.totalPrice,
-                    deliveryDate: priceInfo.deliveryDate,
-                  },
-                ],
-              };
-            });
+              ],
+            }));
           }}
         >
           <ShoppingBag className="mr-2 h-4 w-4" />
