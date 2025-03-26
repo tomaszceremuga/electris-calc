@@ -13,7 +13,7 @@ const formData = {
       info: "",
       description: "",
       options: [],
-      isImportant: true,
+      isImportant: false,
     },
     {
       id: 2,
@@ -40,7 +40,7 @@ const formData = {
       info: "Wybierz materiał, z którego wykonana jest część.",
       description: "",
       options: ["Miedź", "Aluminium", "Stal", "Inne"],
-      isImportant: true,
+      isImportant: false,
       elementsToShow: [
         { option: "Miedź", elementToShow: 21 },
         { option: "Aluminium", elementToShow: 22 },
@@ -54,7 +54,7 @@ const formData = {
       name: "Rodzaj Miedzi",
       info: "",
       options: ["CU-ETP", "CU-OFF"],
-      isImportant: true,
+      isImportant: false,
       isLoaded: true,
     },
     {
@@ -63,7 +63,7 @@ const formData = {
       name: "Rodzaj Aluminium",
       info: "",
       options: ["1050", "6062"],
-      isImportant: true,
+      isImportant: false,
       isLoaded: true,
     },
     {
@@ -72,7 +72,7 @@ const formData = {
       name: "Rodzaj Stali",
       info: "",
       options: ["Czarna", "Nierdzewna"],
-      isImportant: true,
+      isImportant: false,
       isLoaded: true,
     },
     {
@@ -98,7 +98,7 @@ const formData = {
         "3.0mm",
         "4.0mm",
       ],
-      isImportant: true,
+      isImportant: false,
     },
     {
       id: 777,
@@ -175,7 +175,7 @@ const formData = {
       description:
         "Proszę określić, czy Twoja część ma gwinty wewnętrzne lub zewnętrzne.Nie ponosimy żadnego ryzyka montażowego, jeśli jest to niestandardowy gwint, chyba że wszystkie części montażowe są tutaj produkowane i montowane.",
       options: ["Nie", "Tak"],
-      isImportant: true,
+      isImportant: false,
       elementsToShow: [{ option: "Tak", elementToShow: 9999 }],
     },
     {
@@ -193,7 +193,7 @@ const formData = {
       info: "",
       description: "Proszę podać standardowe wkładki stosowane w  części.",
       options: ["Nie", "Tak"],
-      isImportant: true,
+      isImportant: false,
       elementsToShow: [{ option: "Tak", elementToShow: 112312 }],
     },
     {
@@ -203,7 +203,7 @@ const formData = {
       info: "",
       isLoaded: true,
       description: "Proszę podać ilość wkładek wprasowanych",
-      isImportant: true,
+      isImportant: false,
     },
     {
       id: 11123232323232,
@@ -211,7 +211,7 @@ const formData = {
       name: "Ilość gięć",
       info: "",
       description: "Proszę podać ilość gięć",
-      isImportant: true,
+      isImportant: false,
     },
     {
       id: 11,
@@ -224,7 +224,7 @@ const formData = {
         "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
         "Wymagane są węższe tolerancje",
       ],
-      isImportant: true,
+      isImportant: false,
     },
 
     {
@@ -274,11 +274,6 @@ const formData = {
         id: 2,
         value: "mm",
       },
-      {
-        id: 4,
-        value: "Aluminium 5052",
-      },
-
       {
         id: 6,
         value: "0.8mm",
