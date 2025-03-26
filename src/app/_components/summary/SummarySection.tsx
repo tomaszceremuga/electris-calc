@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import DeliveryOptions from "./DeliveryOptions";
 import { Button } from "@/components/ui/button";
-// import { Check, ShoppingBag } from "lucide-react";
-import { useCartContext } from "~/lib/CartContext";
 import { useFormContext } from "~/lib/FormContext";
 import type { GeneralInformationType } from "~/lib/GeneralInformationType";
 import { calculatePrice } from "~/lib/calculation";
@@ -19,12 +17,24 @@ interface PriceInfo {
   unitPrice: number;
 }
 
+interface OrderResponse {
+  message?: string;
+  error?: string;
+}
+
 export default function SummarySection({
   generalInformation,
 }: SummarySectionProps) {
-  const { setCartState } = useCartContext();
+  // const { setCartState } = useCartContext();
   const { formCurrentState, formDataToGenerate } = useFormContext();
   const { filledForm } = formCurrentState; // Pobieramy tylko filledForm
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isSending, setIsSending] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [sendStatus, setSendStatus] = useState<{
+    message: string;
+    isError: boolean;
+  } | null>(null);
 
   const [priceInfo, setPriceInfo] = useState<PriceInfo>({
     totalPrice: 0,
@@ -76,6 +86,69 @@ export default function SummarySection({
   const getQuantity = (): number | string => {
     const value = filledForm.values.find((v) => v.id === 1)?.value;
     return typeof value === "string" || typeof value === "number" ? value : 0;
+  };
+
+
+  const handleSendEmail = async () => {
+    if (formCurrentState.filledForm.values.length === 0) {
+      setSendStatus({
+        message: "Koszyk jest pusty",
+        isError: true,
+      });
+      return;
+    }
+
+    setIsSending(true);
+    setSendStatus(null);
+
+    try {
+      // Wysyłamy całą strukturę cartState bez modyfikacji
+      // console.log("Wysyłane dane:", JSON.stringify({ cartItems: cartState }, null, 2))
+      console.log('Cart state',formCurrentState)
+      const response = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartItems: formCurrentState,
+          generalInformation: generalInformation,
+          formDataToGenerate:formDataToGenerate
+        }),
+      });
+
+      const responseText = await response.text();
+      console.log("Odpowiedź serwera (tekst):", responseText);
+
+      let data: OrderResponse;
+      try {
+        data = JSON.parse(responseText) as OrderResponse;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (e) {
+        throw new Error(`Nieprawidłowa odpowiedź serwera: ${responseText}`);
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          `Błąd API: ${response.status} - ${data.error ?? response.statusText}`,
+        );
+      }
+
+      setSendStatus({
+        message: data.message ?? "E-mail wysłany pomyślnie!",
+        isError: false,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania e-maila:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      setSendStatus({
+        message: `Wystąpił błąd: ${errorMessage}`,
+        isError: true,
+      });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -149,32 +222,7 @@ export default function SummarySection({
         <Button
           className="w-full"
           size="lg"
-          onClick={() => {
-            // setCartState((prev) => [
-            //   ...prev,
-            //   {
-            //     id: Date.now(),
-            //     filledForm: formCurrentState,
-            //     formDataToGenerate: formDataToGenerate,
-            //   },
-            // ]);
-
-            setCartState((prev) => ({
-              generalInformation: {
-                name: generalInformation.name,
-                company: generalInformation.company,
-                email: generalInformation.email,
-              },
-              values: [
-                ...prev.values, // Rozpakowujemy poprzednią tablicę wartości
-                {
-                  id: Date.now(),
-                  filledForm: formCurrentState,
-                  formDataToGenerate: formDataToGenerate,
-                },
-              ],
-            }));
-          }}
+          onClick={handleSendEmail}
         >
           {/* <Check className="mr-2 h-4 w-4" /> */}
           Złóż zamówienie

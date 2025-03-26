@@ -171,10 +171,10 @@ const formData = {
     {
       id: 9999,
       type: "inputNumber",
-      name: "Ilość gwintowanych otowrów",
+      name: "Ilość gwintowanych otworów",
       isLoaded: true,
 
-      description: "Proszę podać ilość gwintowanych otowrów",
+      description: "Proszę podać ilość gwintowanych otworów",
     },
     {
       id: 10,
@@ -314,7 +314,7 @@ const formData = {
       },
       {
         id: 24,
-        value: "",
+        value: "Cos",
       },
 
       {
