@@ -4,11 +4,11 @@ import React from "react";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 
-const RouterBtn = () => {
+const OrderAgainBtn = () => {
   const router = useRouter();
 
   const handleNavigation = () => {
-    router.push("/zamowienie");
+    router.push("../zamowienie");
   };
 
   return (
@@ -19,10 +19,10 @@ const RouterBtn = () => {
         className="mt-4 px-6 py-3 text-lg"
         onClick={handleNavigation}
       >
-        Złóż zamówienie
+        Złóż kolejne zamówienie
       </Button>
     </div>
   );
 };
 
-export default RouterBtn;
+export default OrderAgainBtn;

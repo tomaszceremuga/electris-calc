@@ -230,10 +230,12 @@ export default function SummarySection({
         </p>
 
         <AlertDialog>
-          <AlertDialogTrigger className="w-full">
-            <Button className="w-full" size="lg">
-              Złóż zamówienie
-            </Button>
+          <AlertDialogTrigger asChild>
+            <div className="w-full">
+              <Button className="w-full" size="lg">
+                Złóż zamówienie
+              </Button>
+            </div>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
