@@ -258,7 +258,7 @@ const formData = {
     values: [
       {
         id: 1,
-        value: 5,
+        value: 1,
       },
       // to ma zmieniac select
       {
@@ -267,7 +267,7 @@ const formData = {
       },
       {
         id: 6,
-        value: 15,
+        value: 0.8,
       },
       {
         id: 777,

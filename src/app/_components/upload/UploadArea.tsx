@@ -208,35 +208,7 @@ const UploadArea = ({ setUploadedFiles, count }: UploadAreaProps) => {
       {isUploading ? (
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg
-                className="animate-progress-circular h-16 w-16"
-                viewBox="0 0 100 100"
-              >
-                <circle
-                  className="text-primary/20"
-                  strokeWidth="8"
-                  stroke="currentColor"
-                  fill="transparent"
-                  r="42"
-                  cx="50"
-                  cy="50"
-                />
-                <circle
-                  className="text-primary"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  stroke="currentColor"
-                  fill="transparent"
-                  r="42"
-                  cx="50"
-                  cy="50"
-                  strokeDasharray="264, 264"
-                  strokeDashoffset="264"
-                />
-              </svg>
-            </div>
-            <FileUp size={40} className="mx-auto text-primary/70" />
+            <FileUp size={40} className="mx-auto text-muted-foreground" />
           </div>
           <div className="text-center">
             <p className="font-medium text-primary">Przesyłanie plików</p>
