@@ -6,6 +6,17 @@ import { Button } from "@/components/ui/button";
 import { useFormContext } from "~/lib/FormContext";
 import type { GeneralInformationType } from "~/lib/GeneralInformationType";
 import { calculatePrice } from "~/lib/calculation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface SummarySectionProps {
   generalInformation: GeneralInformationType;
@@ -88,7 +99,6 @@ export default function SummarySection({
     return typeof value === "string" || typeof value === "number" ? value : 0;
   };
 
-
   const handleSendEmail = async () => {
     if (formCurrentState.filledForm.values.length === 0) {
       setSendStatus({
@@ -104,7 +114,7 @@ export default function SummarySection({
     try {
       // Wysyłamy całą strukturę cartState bez modyfikacji
       // console.log("Wysyłane dane:", JSON.stringify({ cartItems: cartState }, null, 2))
-      console.log('Cart state',formCurrentState)
+      console.log("Cart state", formCurrentState);
       const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
@@ -113,7 +123,7 @@ export default function SummarySection({
         body: JSON.stringify({
           cartItems: formCurrentState,
           generalInformation: generalInformation,
-          formDataToGenerate:formDataToGenerate
+          formDataToGenerate: formDataToGenerate,
         }),
       });
 
@@ -219,14 +229,31 @@ export default function SummarySection({
           <sup className="font-medium">*</sup>W cenę wliczony jest podatek VAT
         </p>
 
-        <Button
-          className="w-full"
-          size="lg"
-          onClick={handleSendEmail}
-        >
-          {/* <Check className="mr-2 h-4 w-4" /> */}
+        <AlertDialog>
+          <AlertDialogTrigger className="w-full">
+            <Button className="w-full" size="lg">
+              Złóż zamówienie
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Czy napewno?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Jesteś pewny/a że wszystkie dane zostały uzupełnione poprawnie?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Anuluj</AlertDialogCancel>
+              <AlertDialogAction onClick={handleSendEmail}>
+                Potwierdź
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* <Button className="w-full" size="lg" onClick={handleSendEmail}>
           Złóż zamówienie
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

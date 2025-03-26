@@ -8,7 +8,7 @@ const RouterBtn = () => {
   const router = useRouter();
 
   const handleNavigation = () => {
-    router.push("/zamowienie");
+    router.push("/sukces");
   };
 
   return (
