@@ -252,9 +252,9 @@ const FormSection = () => {
             return null;
         }
       })}
-      <pre className="bg-blue-300">
+      {/* <pre className="bg-blue-300">
         {JSON.stringify(formCurrentState, null, 2)}
-      </pre>
+      </pre> */}
       ;
     </div>
   );
