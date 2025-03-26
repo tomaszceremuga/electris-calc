@@ -25,7 +25,6 @@ export type UploadedFile = {
   url: string;
 };
 
-// Define the response type from the API
 interface BlobResponse {
   url: string;
   pathname: string;

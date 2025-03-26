@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import type React from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,11 +13,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import InfoButton from "./InfoButton";
-import QuantityTable from "./QuantityTable";
-import { type FormElementsType } from "~/lib/FormElementsType";
+import ThicknessTable from "./ThicknessTable";
+import type { FormElementsType } from "~/lib/FormElementsType";
 import { X } from "lucide-react";
 
-const QuantityElement: React.FC<FormElementsType> = ({
+const ThicknessElement: React.FC<FormElementsType> = ({
   id,
   onChange,
   filled,
@@ -29,27 +30,37 @@ const QuantityElement: React.FC<FormElementsType> = ({
     return isNaN(result) ? 0 : result;
   };
 
-  const [quantity, setQuantity] = useState<number>(
+  const [thickness, setThickness] = useState<number>(
     convertToNumber(filled ?? ""),
   );
-  const prevQuantity = useRef<number>(quantity);
-  const [finalQuantity, setFinalQuantity] = useState<number>(
+  const prevThickness = useRef<number>(thickness);
+  const [finalThickness, setFinalThickness] = useState<number>(
     convertToNumber(filled ?? ""),
   );
 
   useEffect(() => {
-    if (prevQuantity.current !== quantity && onChange) {
-      onChange(id, quantity);
-      prevQuantity.current = quantity;
+    if (prevThickness.current !== thickness && onChange) {
+      onChange(id, thickness);
+      prevThickness.current = thickness;
     }
-  }, [quantity, id, onChange]);
+  }, [thickness, id, onChange]);
 
   useEffect(() => {
-    setQuantity(typeof filled == "number" ? filled : 0);
+    const newThickness =
+      typeof filled === "number"
+        ? filled
+        : typeof filled === "string"
+          ? Number.parseFloat(filled)
+          : 0;
+
+    setThickness(isNaN(newThickness) ? 0 : newThickness);
+    setFinalThickness(isNaN(newThickness) ? 0 : newThickness);
   }, [filled]);
 
+  console.log("wartosc grubosc");
+  console.log(filled);
   return (
-    <div className="mb-2 flex flex-wrap items-center">
+    <div className="mb-5 flex flex-wrap items-center">
       <div className="ml-2 flex flex-wrap gap-2">
         <div className="flex items-center">
           <p className="whitespace-nowrap p-[6px] text-base">
@@ -61,35 +72,35 @@ const QuantityElement: React.FC<FormElementsType> = ({
         <AlertDialog>
           <AlertDialogTrigger>
             <div className="inline-flex h-10 w-32 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
-              {quantity === 0 ? "" : `${quantity} szt.`}
+              {thickness > 0 ? `${thickness} mm` : ""}
             </div>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
               <div className="flex items-center justify-between">
-                <AlertDialogTitle>Wybierz ilość</AlertDialogTitle>
+                <AlertDialogTitle>Wybierz grubość</AlertDialogTitle>
                 <AlertDialogCancel
                   className="w-min border-none"
-                  onClick={() => setQuantity(finalQuantity)}
+                  onClick={() => setThickness(finalThickness)}
                 >
                   <X />
                 </AlertDialogCancel>
               </div>
               <div className="w-full max-w-[700px]">
-                <QuantityTable
-                  setQuantity={setQuantity}
+                <ThicknessTable
+                  setThickness={setThickness}
                   filled={
                     typeof filled === "number" ? filled : Number(filled ?? 0)
                   }
-                  finalQuantity={finalQuantity}
+                  finalThickness={finalThickness}
                 />
               </div>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setQuantity(finalQuantity)}>
+              <AlertDialogCancel onClick={() => setThickness(finalThickness)}>
                 Anuluj
               </AlertDialogCancel>
-              <AlertDialogAction onClick={() => setFinalQuantity(quantity)}>
+              <AlertDialogAction onClick={() => setFinalThickness(thickness)}>
                 Zapisz
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -100,4 +111,4 @@ const QuantityElement: React.FC<FormElementsType> = ({
   );
 };
 
-export default QuantityElement;
+export default ThicknessElement;

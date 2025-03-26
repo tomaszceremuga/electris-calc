@@ -7,8 +7,6 @@ import { FieldRow } from "./FieldRow";
 import { type CartElementType } from "~/lib/CartElementType";
 import { type FilledFormType } from "~/lib/FilledFormType";
 import { type FormDataToGenerateType } from "~/lib/FormDataToGenerateType";
-// import { useFormContext } from "~/lib/FormContext";
-// import { useEffect } from "react";
 
 interface CartItemProps {
   item: CartElementType;
@@ -68,9 +66,7 @@ export function CartItem({
   .filter(Boolean);
 
   const totalFields = formDataToGenerate.values.length;
-  // useEffect(() => {
-  //   console.log("Aktualny stan formularza:", formCurrentState);
-  // }, [formCurrentState]);
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-4">
@@ -79,8 +75,7 @@ export function CartItem({
             variant="ghost"
             size="icon"
             onClick={() => {
-              onEdit(item.id)
-              // generateForm(formDataToGenerate, filledForm);
+              onEdit(item.id);
             }}
             className="h-8 w-8"
           >
@@ -89,7 +84,6 @@ export function CartItem({
           </Button>
           <Button
             variant="ghost"
-
             size="icon"
             onClick={() => onRemove(item.id)}
             className="h-8 w-8 text-destructive hover:text-destructive"

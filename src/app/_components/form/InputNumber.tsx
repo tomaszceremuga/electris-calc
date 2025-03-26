@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import InfoButton from "./InfoButton";
 import type { FormElementsType } from "~/lib/FormElementsType";
-import LoadedElement from "./LoadedElement";
 
 const InputNumber: React.FC<FormElementsType> = ({
   id,
@@ -15,13 +14,11 @@ const InputNumber: React.FC<FormElementsType> = ({
   filled,
   name,
   info = "",
-  isLoaded,
   isImportant = false,
 }) => {
   const [currentValue, setCurrentValue] = useState<number | "">("");
 
   useEffect(() => {
-    // Convert filled to number if possible, or use empty string
     if (typeof filled === "number") {
       setCurrentValue(filled);
     } else if (
@@ -47,7 +44,6 @@ const InputNumber: React.FC<FormElementsType> = ({
   };
 
   const handleBlur = () => {
-    // Pass the numeric value to onChange
     onChange(id, currentValue);
   };
 
@@ -59,7 +55,6 @@ const InputNumber: React.FC<FormElementsType> = ({
           {name}
         </p>
         {info && <InfoButton info={info} />}{" "}
-        {isLoaded && <LoadedElement />}{" "}
       </div>
       <Input
         type="number"
@@ -67,7 +62,7 @@ const InputNumber: React.FC<FormElementsType> = ({
         onChange={handleChange}
         onBlur={handleBlur}
         step="1"
-        className="my-[8px] w-32 xl:ml-[20px]"
+        className="mb-[8px] mt-1 w-32 xl:ml-[20px]"
       />
     </div>
   );

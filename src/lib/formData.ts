@@ -17,8 +17,8 @@ const formData = {
     },
     {
       id: 2,
-      type: "selectGroup",
-      name: "Jednostki",
+      type: "",
+      name: "Jednostka",
       info: "",
       description: "",
       options: ["mm", "inch"],
@@ -84,20 +84,10 @@ const formData = {
     },
     {
       id: 6,
-      type: "selectGroupCustom",
+      type: "tickness",
       name: "Grubość",
       info: "",
       description: "",
-      options: [
-        "0.8mm",
-        "1.0mm",
-        "1.2mm",
-        "1.5mm",
-        "2.0mm",
-        "2.5mm",
-        "3.0mm",
-        "4.0mm",
-      ],
       isImportant: false,
     },
     {
@@ -270,13 +260,14 @@ const formData = {
         id: 1,
         value: 5,
       },
+      // to ma zmieniac select
       {
         id: 2,
         value: "mm",
       },
       {
         id: 6,
-        value: "0.8mm",
+        value: 15,
       },
       {
         id: 777,
