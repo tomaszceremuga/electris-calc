@@ -57,11 +57,11 @@ export function FormProvider({ children }: { children: ReactNode }) {
     filledForm: FilledFormType;
     hiddenElements: number[];
   }>({
-    filledForm: formData.defaultFilledFormData,
+    filledForm: formData.defaultFilledFormData as FilledFormType,
     hiddenElements: [],
   });
   const [formDataToGenerate, setFormDataToGenerate] =
-    useState<FormDataToGenerateType>(formData);
+    useState<FormDataToGenerateType>(formData as FormDataToGenerateType);
 
   const setUploadedFiles = (uploadedFiles: UploadedFile[]) => {
     setFormCurrentState((prevState) => ({
