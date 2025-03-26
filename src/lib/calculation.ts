@@ -1,6 +1,6 @@
 "use server";
 
-import { createParser } from "@adifkz/exp-p";
+import { createParser, VariableMap } from "@adifkz/exp-p";
 
 // Definiujemy typ dla FilledFormType
 interface FilledFormType {
@@ -45,6 +45,7 @@ type ParserVariables = Record<
 >;
 
 // Tworzymy parser
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 const parserInstance = createParser();
 
 // Definiujemy niestandardowe funkcje dla parsera
@@ -62,6 +63,7 @@ const customFunctions = {
 
 // Bezpiecznie ustawiamy funkcje parsera
 try {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   parserInstance.setFunctions(customFunctions);
 } catch {
   // Ignorujemy błąd, parser będzie używał domyślnych funkcji
@@ -90,7 +92,12 @@ function safeEvaluate(
   variables: Record<string, unknown>,
 ): number | string | boolean | undefined {
   try {
-    return parserInstance.evaluate(expr, variables as any);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    return parserInstance.evaluate(expr, variables as VariableMap) as
+      | number
+      | string
+      | boolean
+      | undefined;
   } catch {
     return Number.NaN;
   }
@@ -255,21 +262,19 @@ export async function calculatePrice(
 
     // Zwracamy obliczoną cenę i datę dostawy
     const totalPrice =
-      typeof results.totalPrice === "number" &&
-      !isNaN(results.totalPrice as number)
-        ? (results.totalPrice as number)
+      typeof results.totalPrice === "number" && !isNaN(results.totalPrice)
+        ? results.totalPrice
         : 0;
 
     const deliveryDate =
-      typeof results.deliveryDate === "number" &&
-      !isNaN(results.deliveryDate as number)
-        ? (results.deliveryDate as number)
+      typeof results.deliveryDate === "number" && !isNaN(results.deliveryDate)
+        ? results.deliveryDate
         : 14;
 
     const unitPrice =
       typeof results.totalUnitPrice === "number" &&
-      !isNaN(results.totalUnitPrice as number)
-        ? (results.totalUnitPrice as number)
+      !isNaN(results.totalUnitPrice)
+        ? results.totalUnitPrice
         : 0;
 
     return {
