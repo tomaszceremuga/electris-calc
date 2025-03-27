@@ -1,36 +1,32 @@
 "use client";
-import React, { useState } from "react";
-import Requirements from "./Requirements";
+
 import UploadArea from "./UploadArea";
 import UploadFileList from "./UploadFileList";
-// import { Button } from "~/components/ui/button";
+import { useFormContext } from "~/lib/FormContext";
 
 const UploadSection = () => {
-  const [fileList, setFileList] = useState<string[]>([]);
-  const [fileSize, setFileSize] = useState<number[]>([]);
-  const [count, setCount] = useState<number>(0);
+  const { setUploadedFiles } = useFormContext();
+  const { formCurrentState } = useFormContext();
+
+  const uploadedFiles = formCurrentState.filledForm.uploadedFiles;
+
+  const count = uploadedFiles.length;
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-6 md:flex-row md:justify-between md:gap-6 ">
-        <div className="w-full md:w-[48%]">
+    <div className="flex flex-col gap-6 p-5">
+      <div className="flex flex-col gap-6 md:flex-row md:justify-between md:gap-6">
+        <div className="w-full md:w-1/2">
           <UploadArea
-            setFileList={setFileList}
-            setFileSize={setFileSize}
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
             count={count}
-            setCount={setCount}
           />
         </div>
-        <div className="w-full md:w-[48%]">
-          <Requirements />
-        </div>
+        <UploadFileList
+          uploadedFiles={formCurrentState.filledForm.uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+        />
       </div>
-      <UploadFileList
-        fileList={fileList}
-        setFileList={setFileList}
-        fileSize={fileSize}
-        setFileSize={setFileSize}
-        setCount={setCount}
-      />
     </div>
   );
 };

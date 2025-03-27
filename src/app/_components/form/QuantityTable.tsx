@@ -62,10 +62,10 @@ const QuantityTable = ({
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-50">
-            <TableHead className="w-[100px] text-center">Qty</TableHead>
-            <TableHead className="text-center">Unit Price</TableHead>
-            <TableHead className="text-center">Total Price</TableHead>
-            <TableHead className="text-center">Select</TableHead>
+            <TableHead className="w-[100px] text-center">Ilość</TableHead>
+            <TableHead className="text-center">Cena jednostkowa</TableHead>
+            <TableHead className="text-center">Cena całkowita</TableHead>
+            <TableHead className="text-center">Wybrano</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -127,9 +127,9 @@ const QuantityTable = ({
         </div>
       </div>
       <div className="p-3 text-sm text-gray-500">
-        Note: Bulk orders are customized quotes with the most favorable price.
-        Unit price would decrease as quantity increases. VAT and freight are
-        excluded.
+        Uwaga: Zamówienia hurtowe są wyceniane indywidualnie z najkorzystniejszą
+        ceną. Cena jednostkowa maleje wraz ze wzrostem ilości. Podane ceny nie
+        zawierają VAT i kosztów transportu.
       </div>
     </div>
   );

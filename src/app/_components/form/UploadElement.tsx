@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useState, useEffect, useRef } from "react";
-import { Upload, X, FileText, File } from "lucide-react";
+import { Upload, X, FileText, File, Loader2 } from "lucide-react";
 
 import InfoButton from "./InfoButton";
 import { Button } from "@/components/ui/button";
@@ -18,31 +18,55 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { type formElementsInterface } from "~/lib/formElementsInterface";
 
-const UploadElement: React.FC<formElementsInterface> = ({
+export type UploadedFile = {
+  name: string;
+  size: number;
+  url: string;
+};
+
+interface BlobResponse {
+  url: string;
+  pathname: string;
+  contentType: string;
+  contentDisposition?: string;
+  downloadUrl?: string;
+}
+
+interface UploadElementProps {
+  id: number;
+  onChange: (id: number, value: UploadedFile[]) => void;
+  filled: UploadedFile[] | [];
+  name?: string;
+  info?: string;
+  options?: string[];
+  isImportant?: boolean;
+  description?: string;
+}
+
+const UploadElement: React.FC<UploadElementProps> = ({
   id,
   onChange,
+  filled,
   name,
   description = "",
   info = "",
   isImportant = false,
 }) => {
   const [files, setFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>(filled);
   const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const prevOption = useRef<File[] | null>(files);
+  const prevUploadedFiles = useRef<UploadedFile[] | null>(uploadedFiles);
 
   useEffect(() => {
-    const fileNames = files.map((file) => file.name).join(";");
-
-    if (prevOption.current !== files) {
-      onChange(id, fileNames);
-      prevOption.current = files;
+    if (prevUploadedFiles.current !== uploadedFiles) {
+      onChange(id, uploadedFiles);
+      prevUploadedFiles.current = uploadedFiles;
     }
-  }, [files, id, onChange]);
+  }, [uploadedFiles, id, onChange]);
 
   const getDate = (): string => {
     const actualDate = new Date();
@@ -100,11 +124,67 @@ const UploadElement: React.FC<formElementsInterface> = ({
     });
   };
 
+  const handleRemoveUploadedFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+    toast("Plik został usunięty", {
+      description: getDate(),
+    });
+  };
+
   const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
+
+  const uploadFilesToBlobStorage = async () => {
+    setIsUploading(true);
+
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const response = await fetch(
+          `/api/upload?filename=uploads/${encodeURIComponent(file.name)}`,
+          {
+            method: "POST",
+            body: file,
+          },
+        );
+
+        if (!response.ok) {
+          const errorData = (await response.json()) as { error: string };
+          throw new Error(errorData.error || "Failed to upload file");
+        }
+
+        const result = (await response.json()) as BlobResponse;
+
+        return {
+          name: file.name,
+          size: file.size,
+          url: result.url,
+        };
+      });
+
+      const uploadedResults = await Promise.all(uploadPromises);
+
+      setUploadedFiles((prev) => [...prev, ...uploadedResults]);
+      setFiles([]);
+
+      toast.success("Pliki zostały przesłane", {
+        description: getDate(),
+      });
+    } catch (error) {
+      console.error("Błąd podczas przesyłania plików:", error);
+      toast.error("Wystąpił błąd podczas przesyłania plików", {
+        description:
+          error instanceof Error ? error.message : "Spróbuj ponownie później",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+  useEffect(() => {
+    setUploadedFiles(filled);
+  }, [filled]);
 
   return (
     <div className="mb-5 p-2">
@@ -200,34 +280,46 @@ const UploadElement: React.FC<formElementsInterface> = ({
               <AlertDialogFooter className="mt-4">
                 <AlertDialogCancel>Anuluj</AlertDialogCancel>
                 <AlertDialogAction
-                  disabled={files.length === 0}
-                  onClick={() => {
-                    // tutaj przesyłanie na backend
-                  }}
+                  disabled={files.length === 0 || isUploading}
+                  onClick={uploadFilesToBlobStorage}
                 >
-                  Zatwierdź
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Przesyłanie...
+                    </>
+                  ) : (
+                    "Zatwierdź"
+                  )}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
 
-          {files.length === 0 ? (
+          {uploadedFiles.length === 0 ? (
             <span className="text-sm text-muted-foreground">
               Nie przesłano żadnych plików
             </span>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {files.map((file, index) => (
+              {uploadedFiles.map((file, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-1 rounded-md border bg-muted/30 px-2 py-1 text-sm"
                 >
                   <File className="h-3.5 w-3.5" />
-                  <span className="max-w-[150px] truncate">{file.name}</span>
+                  <a
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="max-w-[150px] truncate hover:underline"
+                  >
+                    {file.name}
+                  </a>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleRemoveFile(index)}
+                    onClick={() => handleRemoveUploadedFile(index)}
                     className="ml-1 h-5 w-5"
                   >
                     <X className="h-3 w-3" />

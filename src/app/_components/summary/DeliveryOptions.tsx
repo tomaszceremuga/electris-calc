@@ -3,77 +3,142 @@
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Truck, Package } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const DeliveryOptions = () => {
-  const [selectedOption, setSelectedOption] = useState("option-one");
+interface DeliveryOptionsProps {
+  onOptionChange?: (option: string) => void;
+}
+
+const DeliveryOptions = ({ onOptionChange }: DeliveryOptionsProps) => {
+  const [selectedOption, setSelectedOption] = useState("exw");
 
   const deliveryOptions = [
-    { id: "option-one", days: "3 - 5 dni", price: 15.99 },
-    { id: "option-two", days: "6 - 10 dni", price: 9.99 },
-    { id: "option-three", days: "< 14 dni", price: 0 },
+    {
+      id: "exw",
+      days: "Odbiór własny",
+      price: 0,
+      icon: Package,
+      label: "EXW (Ex Works)",
+      description: "Odbiór własny z naszego magazynu",
+    },
+    {
+      id: "dap",
+      days: "2 - 5 dni roboczych",
+      price: 19.99,
+      icon: Truck,
+      label: "DAP (Delivered at Place)",
+      description: "Dostawa do wskazanego miejsca",
+    },
   ];
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
+    if (onOptionChange) {
+      onOptionChange(value);
+    }
   };
 
   const EstimatedDeliveryDate = (option: string) => {
     const today = new Date();
-    let day = 0;
+    let days = 0;
 
     switch (option) {
-      case "option-one":
-        day = 5;
-        break;
-      case "option-two":
-        day = 10;
-        break;
-      case "option-three":
-        day = 14;
+      case "exw":
+        return "Dostępne od zaraz";
+      case "dap":
+        days = 5;
         break;
       default:
-        day = 5;
+        days = 3;
     }
 
     const deliveryDate = new Date(today);
-    deliveryDate.setDate(today.getDate() + day);
+    deliveryDate.setDate(today.getDate() + days);
 
-    return deliveryDate.toLocaleDateString("pl-PL");
+    return deliveryDate.toLocaleDateString("pl-PL", {
+      day: "numeric",
+      month: "long",
+      weekday: "long",
+    });
   };
 
   return (
-    <div>
-      <h3 className="mb-5 text-xl font-semibold text-neutral-700">
-        Opcje Dostawy
-      </h3>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h3 className="text-xl font-semibold">Wybierz sposób dostawy</h3>
+        <p className="text-sm text-muted-foreground">
+          Wszystkie przesyłki są ubezpieczone
+        </p>
+      </div>
 
       <RadioGroup
-        defaultValue="option-one"
+        defaultValue="exw"
         value={selectedOption}
         onValueChange={handleOptionChange}
+        className="space-y-3"
       >
-        {deliveryOptions.map((option) => (
-          <div key={option.id} className="mb-3 flex items-center space-x-2">
-            <RadioGroupItem value={option.id} id={option.id} />
-            <Label htmlFor={option.id} className="text-lg font-semibold">
-              {option.days}
-              {option.price > 0 && (
-                <span className="text-xs text-neutral-500">{`(+ ${option.price.toFixed(2)} zł)`}</span>
+        {deliveryOptions.map((option) => {
+          const Icon = option.icon;
+          return (
+            <Label
+              key={option.id}
+              htmlFor={option.id}
+              className={cn(
+                "flex cursor-pointer items-start rounded-lg border-2 p-4 transition-all hover:bg-accent",
+                selectedOption === option.id
+                  ? "border-primary bg-primary/5 shadow-sm"
+                  : "border-border",
               )}
+            >
+              <RadioGroupItem
+                value={option.id}
+                id={option.id}
+                className="sr-only"
+              />
+              <Icon
+                className={cn(
+                  "mt-1 h-5 w-5 shrink-0",
+                  selectedOption === option.id
+                    ? "text-primary"
+                    : "text-muted-foreground",
+                )}
+              />
+              <div className="ml-4 flex flex-1 flex-col space-y-1">
+                <div className="flex items-center justify-between">
+                  <p className="font-medium">{option.label}</p>
+                  {/* <div className="text-right">
+                    {option.price > 0 ? (
+                      <p className="font-medium">
+                        {option.price.toFixed(2)} zł
+                      </p>
+                    ) : (
+                      <p className="font-medium text-primary">Za darmo</p>
+                    )}
+                  </div> */}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {option.description}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Czas dostawy: {option.days}
+                </p>
+              </div>
             </Label>
-          </div>
-        ))}
+          );
+        })}
       </RadioGroup>
 
-      <div className="mt-4 text-sm text-neutral-600">
-        <p>
-          Szacowana data dostawy:{" "}
+      <div className="rounded-lg bg-accent/50 p-4">
+        <p className="flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">
+            Przewidywana data dostawy:
+          </span>
           <span className="font-medium">
             {EstimatedDeliveryDate(selectedOption)}
           </span>
         </p>
       </div>
-      {/* <OrderDetails /> */}
     </div>
   );
 };

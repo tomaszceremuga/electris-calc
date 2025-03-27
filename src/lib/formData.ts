@@ -1,6 +1,11 @@
 const formData = {
   id: 1,
-  formElements: [
+  calculation: {
+    price: " id pola od ilosci * 1.2 + surfaceTreatment * 0.8",
+    deliveryDate: "quantity < 100 ? 14 : 31",
+  },
+  hiddenElements: [112312, 9999, 21, 22, 23, 24],
+  values: [
     {
       id: 1,
       type: "quantity",
@@ -8,87 +13,83 @@ const formData = {
       info: "",
       description: "",
       options: [],
-      isImportant: true,
+      isImportant: false,
     },
     {
       id: 2,
-      type: "selectGroup",
-      name: "Jednostki",
+      type: "",
+      name: "Jednostka",
       info: "",
       description: "",
-      options: ["mm", "inch", "cm"],
+      options: ["mm", "inch"],
       isImportant: false,
     },
+    // {
+    //   id: 4,
+    //   type: "selectGroup",
+    //   name: "Rodzaj aluminium",
+    //   info: "",
+    //   description: "",
+    //   options: ["Aluminium 5052", "Aluminium 6061"],
+    //   isImportant: false,
+    // },
     {
-      id: 3,
+      id: 20,
       type: "selectGroup",
       name: "Materiał",
-      info: "",
+      info: "Wybierz materiał, z którego wykonana jest część.",
       description: "",
-      options: [
-        "Aluminium",
-        "Stal nierdzewna",
-        "Stal miękka",
-        "Miedź",
-        "PMMA(Akryl)",
-        "Włókno węglowe",
+      options: ["Miedź", "Aluminium", "Stal", "Inne"],
+      isImportant: false,
+      elementsToShow: [
+        { option: "Miedź", elementToShow: 21 },
+        { option: "Aluminium", elementToShow: 22 },
+        { option: "Stal", elementToShow: 23 },
+        { option: "Inne", elementToShow: 24 },
       ],
-      isImportant: true,
     },
     {
-      id: 4,
+      id: 21,
       type: "selectGroup",
-      name: "Rodzaj aluminium",
+      name: "Rodzaj Miedzi",
       info: "",
-      description: "",
-      options: ["Aluminium 5052", "Aluminium 6061"],
+      options: ["CU-ETP", "CU-OFF"],
       isImportant: false,
+      isLoaded: true,
     },
     {
-      id: 5,
+      id: 22,
       type: "selectGroup",
-      name: "Kolory",
+      name: "Rodzaj Aluminium",
       info: "",
-      description: "",
-      options: ["Srebrno-biały"],
+      options: ["1050", "6062"],
       isImportant: false,
+      isLoaded: true,
+    },
+    {
+      id: 23,
+      type: "selectGroup",
+      name: "Rodzaj Stali",
+      info: "",
+      options: ["Czarna", "Nierdzewna"],
+      isImportant: false,
+      isLoaded: true,
+    },
+    {
+      id: 24,
+      type: "inputText",
+      name: "Podaj własny rodzaj",
+      isLoaded: true,
+      description: "Proszę podać własny rodzaj",
     },
     {
       id: 6,
-      type: "selectGroup",
+      type: "tickness",
       name: "Grubość",
       info: "",
       description: "",
-      options: [
-        "0.8mm",
-        "1.0mm",
-        "1.2mm",
-        "1.5mm",
-        "2.0mm",
-        "2.5mm",
-        "3.0mm",
-        "4.0mm",
-      ],
-      isImportant: true,
+      isImportant: false,
     },
-    // {
-    //   id: 6,
-    //   type: "radioElements",
-    //   name: "Grubość",
-    //   info: "",
-    //   options: [
-    //     "0.8mm",
-    //     "1.0mm",
-    //     "1.2mm",
-    //     "1.5mm",
-    //     "2.0mm",
-    //     "2.5mm",
-    //     "3.0mm",
-    //     "4.0mm",
-    //   ],
-    //   isImportant: true,
-    // },
-
     {
       id: 777,
       type: "selectMaterial",
@@ -101,32 +102,23 @@ const formData = {
         rates: 2051,
       },
       data: {
-        alertMesage: "Uważaj aby wybrać coś tam",
-
-        categories: [
+        alertMesage:
+          "Wybór obróbki powierzchni wpływa na wygląd, trwałość i właściwości produktu końcowego.",
+        treatments: [
           {
-            id: "surface",
-            name: "Powierzchnia",
-            options: [
-              { id: "standard", name: "Standardowa (Frezowana)" },
-              { id: "anodized", name: "Anodowana" },
-              { id: "brushed", name: "Szczotkowana" },
-              { id: "bead-blast", name: "Piaskowana" },
-              { id: "spray-painting", name: "Malowanie natryskowe" },
-              { id: "powder-coat", name: "Malowanie proszkowe" },
-              { id: "spray-plating", name: "Natryskowe powlekanie" },
-              { id: "detail-sanding", name: "Szlifowanie detali" },
-            ],
-          },
-        ],
-        tiles: [
-          {
-            id: "bead-blast-anodized",
-            categoryId: "surface",
-            name: "Piaskowanie + Anodowanie",
+            id: "standard",
+            name: "Standardowa",
             description:
-              "Anodowanie tworzy powłokę odporną na korozję. Części mogą być anodowane w różnych kolorach — przezroczysty, czarny, czerwony i złoty są najczęściej spotykane — i zwykle jest związane z aluminium. A dzięki piaskowaniu powierzchnia części pozostaje gładka, z matowym wyglądem.",
-            image: "/placeholder.svg?height=150&width=250",
+              "Standardowe wykończenie frezowane zapewnia podstawową obróbkę powierzchni bez dodatkowego przetwarzania. Powierzchnia zachowuje naturalny wygląd materiału z widocznymi śladami obróbki mechanicznej.",
+            image: "/placeholder.svg?height=200&width=300",
+          },
+          {
+            id: "powder-coat",
+            name: "Malowanie proszkowe",
+            description:
+              "Malowanie proszkowe tworzy trwałą, odporną na korozję powłokę dostępną w różnych kolorach. Proces ten zapewnia równomierną, wytrzymałą powłokę, która jest odporna na odpryski, zarysowania i blaknięcie.",
+            image: "/placeholder.svg?height=200&width=300",
+            hasColors: true,
             colors: [
               "blue",
               "black",
@@ -139,70 +131,19 @@ const formData = {
               "brown",
               "beige",
             ],
-            requiredOption: "anodized",
           },
           {
-            id: "bead-blast-anodized12",
-            categoryId: "surface",
-            name: "Piaskowanie + b;lblblblb",
+            id: "galvanic-coat",
+            name: "Powłoka galwaniczna",
             description:
-              "Anodowanie tworzy powłokę odporną na korozję. Części mogą być anodowane w różnych kolorach — przezroczysty, czarny, czerwony i złoty są najczęściej spotykane — i zwykle jest związane z aluminium. A dzięki piaskowaniu powierzchnia części pozostaje gładka, z matowym wyglądem.",
-            image: "/placeholder.svg?height=150&width=250",
-            colors: [
-              "blue",
-              "black",
-              "gray",
-              "yellow",
-              "orange",
-              "red",
-              "teal",
-              "purple",
-              "brown",
-              "beige",
+              "Powłoka galwaniczna to proces elektrochemiczny, który nakłada cienką warstwę metalu na powierzchnię, poprawiając jej właściwości. Zwiększa odporność na korozję, poprawia przewodność elektryczną i nadaje estetyczny wygląd.",
+            image: "/placeholder.svg?height=200&width=300",
+            hasCoatings: true,
+            coatings: [
+              { id: "zinc", name: "Cynowanie" },
+              { id: "silver", name: "Srebrzenie" },
+              { id: "nickel", name: "Niklowanie" },
             ],
-            requiredOption: "anodized",
-          },
-
-          {
-            id: "anodized-simple",
-            categoryId: "surface",
-            name: "Anodowanie",
-            description:
-              "Anodowanie tworzy powłokę odporną na korozję. Części mogą być anodowane w różnych kolorach — przezroczysty, czarny, czerwony i złoty są najczęściej spotykane — i zwykle jest związane z aluminium.",
-            image: "/placeholder.svg?height=150&width=250",
-            colors: [
-              "blue",
-              "black",
-              "gray",
-              "yellow",
-              "orange",
-              "red",
-              "teal",
-              "purple",
-              "brown",
-              "beige",
-            ],
-            requiredOption: "anodized",
-          },
-          {
-            id: "standard-finish",
-            categoryId: "surface",
-            name: "Wykończenie standardowe",
-            description:
-              "Standardowe wykończenie frezowane zapewnia podstawową obróbkę powierzchni bez dodatkowego przetwarzania.",
-            image: "/placeholder.svg?height=150&width=250",
-            colors: [],
-            requiredOption: "standard",
-          },
-          {
-            id: "brushed-finish",
-            categoryId: "surface",
-            name: "Wykończenie szczotkowane",
-            description:
-              "Wykończenie szczotkowane tworzy serię drobnych linii na powierzchni, nadając jej charakterystyczny wygląd i teksturę.",
-            image: "/placeholder.svg?height=150&width=250",
-            colors: [],
-            requiredOption: "brushed",
           },
         ],
       },
@@ -224,65 +165,65 @@ const formData = {
       description:
         "Proszę określić, czy Twoja część ma gwinty wewnętrzne lub zewnętrzne.Nie ponosimy żadnego ryzyka montażowego, jeśli jest to niestandardowy gwint, chyba że wszystkie części montażowe są tutaj produkowane i montowane.",
       options: ["Nie", "Tak"],
-      isImportant: true,
+      isImportant: false,
+      elementsToShow: [{ option: "Tak", elementToShow: 9999 }],
+    },
+    {
+      id: 9999,
+      type: "inputNumber",
+      name: "Ilość gwintowanych otworów",
+      isLoaded: true,
+
+      description: "Proszę podać ilość gwintowanych otworów",
     },
     {
       id: 10,
       type: "radioElements",
-      name: "Wkładki",
+      name: "Wkładki wprasowywane",
       info: "",
       description: "Proszę podać standardowe wkładki stosowane w  części.",
       options: ["Nie", "Tak"],
-      isImportant: true,
+      isImportant: false,
+      elementsToShow: [{ option: "Tak", elementToShow: 112312 }],
+    },
+    {
+      id: 112312,
+      type: "inputNumber",
+      name: "Ilość wkładek wprasowanych",
+      info: "",
+      isLoaded: true,
+      description: "Proszę podać ilość wkładek wprasowanych",
+      isImportant: false,
+    },
+    {
+      id: 11123232323232,
+      type: "inputNumber",
+      name: "Ilość gięć",
+      info: "",
+      description: "Proszę podać ilość gięć",
+      isImportant: false,
     },
     {
       id: 11,
       type: "radioElements",
       name: "Tolerancja",
       info: "",
-      decription:
+      description:
         "Tolerancje będą kontrolowane zgodnie z normą ISO 2768-1. W przypadku innych, węższych tolerancji, wymagany będzie rysunek techniczny w celu wskazania krytycznych wymiarów.",
       options: [
         "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
         "Wymagane są węższe tolerancje",
       ],
-      isImportant: true,
-    },
-    {
-      id: 12,
-      type: "radioElements",
-      name: "Spawanie",
-      info: "",
-      decription: "",
-      options: ["Nie", "Tak"],
-      isImportant: true,
-    },
-    {
-      id: 13,
-      type: "radioElements",
-      name: "Oznaczenie części",
-      info: "Proszę wyraźnie oznaczyć zawartość sitodruku lub grawerunku laserowego w pliku CAD (DWG lub DXF). Wymagany jest również plik graficzny (Ai lub SVG).",
-      decription: "",
-      options: ["Sitodruk", "Grawerowanie laserowe"],
       isImportant: false,
     },
-    {
-      id: 14,
-      type: "radioElements",
-      name: "Montaż części",
-      info: "Jeśli wybierzesz [Test montażu], wymagany jest rysunek 2D z instrukcjami montażu. Wyniki testu montażu zostaną przesłane e-mailem. Domyślnie zostanie wykonany tylko test. Jeśli musisz wysłać je po montażu, wybierz [Wyślij w montażu].",
-      decription:
-        "Proszę określić wymagania dotyczące montażu. PCBWay nie ponosi żadnego ryzyka związanego z montażem, jeśli wybierzesz opcję Brak wymagań dotyczących montażu.",
-      options: ["Nie", "Testy montażowe", "Dostawa w formie zmontowanej"],
-      isImportant: true,
-    },
+
     {
       id: 15,
       type: "radioElements",
-      name: "Wygląd końcowy",
+      name: "Pakowanie",
       info: "",
-      decription: "",
-      options: ["Standard", "Premium (dodatkowe opłaty)"],
+      description: "",
+      options: ["Standard", "Niestandardowe"],
       isImportant: false,
     },
     {
@@ -290,7 +231,7 @@ const formData = {
       type: "radioElements",
       name: "Kontrola",
       info: "",
-      decription:
+      description:
         "Raport z inspekcji nie zostanie wysłany wraz z częściami, chyba że będzie Ci potrzebny.",
       options: [
         "Standardowa inspekcja (brak raportu)",
@@ -301,30 +242,104 @@ const formData = {
       isImportant: false,
     },
     {
-      id: 17,
-      type: "selectGroup",
-      name: "Opis produktu",
-      info: "Opis produktu wymagany do odprawy celnej:1. Przestrzegaj zasad handlu międzynarodowego i podaj opisy produktów do odprawy celnej.2. Wybierz prawidłowy opis produktu zgodnie z rzeczywistym zastosowaniem produktu. Jeśli nie ma pasującego elementu, wybierz Inne.",
-      decription: "",
-      options: [
-        "Sprzęt biurowy i akcesoria",
-        "Pojazdy i akcesoria",
-        "Rozrywka DIY",
-        "Sprzęt audio i wideo",
-      ],
-      isImportant: true,
-    },
-    {
       id: 18,
       type: "textArea",
       name: "Inne specjalne wymagania",
       info: "",
-      decription:
+      description:
         "Wypełnij wymaganiami dotyczącymi produkcji, pakowania i dostarczenia",
       options: [],
       isImportant: false,
     },
   ],
+  defaultFilledFormData: {
+    id: 1,
+    uploadedFiles: [],
+    values: [
+      {
+        id: 1,
+        value: 1,
+      },
+      // to ma zmieniac select
+      {
+        id: 2,
+        value: "mm",
+      },
+      {
+        id: 6,
+        value: 0.8,
+      },
+      {
+        id: 777,
+        value: {
+          treatment: "standard",
+        },
+      },
+      {
+        id: 8,
+        value: [],
+      },
+      {
+        id: 9,
+        value: "Nie",
+      },
+      {
+        id: 9999,
+        value: 0,
+      },
+      {
+        id: 10,
+        value: "Nie",
+      },
+      {
+        id: 112312,
+        value: 0,
+      },
+      {
+        id: 20,
+        value: "Miedź",
+      },
+      {
+        id: 21,
+        value: "CU-ETP",
+      },
+
+      {
+        id: 22,
+        value: "1050",
+      },
+      {
+        id: 23,
+        value: "Czarna",
+      },
+      {
+        id: 24,
+        value: "Cos",
+      },
+
+      {
+        id: 11123232323232,
+        Value: 0,
+      },
+
+      {
+        id: 11,
+        value: "Nie są wymagane żadne węższe tolerancje (ISO 2768-1)",
+      },
+      {
+        id: 15,
+        value: "Standard",
+      },
+      {
+        id: 16,
+        value: "Standardowa inspekcja (brak raportu)",
+      },
+      {
+        id: 18,
+        value: "",
+      },
+    ],
+  },
 };
 
 export default formData;

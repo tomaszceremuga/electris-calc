@@ -1,21 +1,66 @@
-import React, { useState, useRef, useEffect } from "react";
+"use client";
 
-import Image from "next/image";
-import { Star } from "lucide-react";
-import { Button } from "~/components/ui/button";
+import type React from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { TriangleAlert } from "lucide-react";
+import { Button } from "~/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import SurfaceTreatment from "./SurfaceTreatment";
+import type { SelectedSurfaceType } from "~/lib/SelectedSurfaceType";
+
+export type OriginalDataStructure = {
+  alertMesage: string;
+  categories?: {
+    id: string;
+    name: string;
+    options: { id: string; name: string }[];
+  }[];
+  tiles?: {
+    id: string;
+    categoryId: string;
+    name: string;
+    description: string;
+    image: string;
+    colors: string[];
+    requiredOption?: string;
+  }[];
+  treatments?: {
+    id: string;
+    name: string;
+    description: string;
+    image: string;
+    hasColors?: boolean;
+    colors?: string[];
+    hasCoatings?: boolean;
+    coatings?: { id: string; name: string }[];
+  }[];
+};
+
+interface TransformedDataStructure {
+  alertMesage: string;
+  treatments: {
+    id: string;
+    name: string;
+    description: string;
+    image: string;
+    hasColors?: boolean;
+    hasCoatings?: boolean;
+    colors?: string[];
+    coatings?: {
+      id: string;
+      name: string;
+    }[];
+  }[];
+}
 
 interface SurfaceTreatmentProps {
   id: number;
-  onChange: (id: number, value: string) => void;
-  filled: string;
-
+  onChange: (id: number, value: SelectedSurfaceType) => void;
+  filled: SelectedSurfaceType | object;
   selectedMaterial: {
     image: string;
     name: string;
@@ -23,96 +68,186 @@ interface SurfaceTreatmentProps {
     rate: number;
     rates: number;
   };
-  data: {
-    alertMesage: string;
-    categories: {
-      id: string;
-      name: string;
-      options: {
-        id: string;
-        name: string;
-      }[];
-    }[];
-    tiles: {
-      id: string;
-      categoryId: string;
-      name: string;
-      description: string;
-      image: string;
-      colors: string[];
-      requiredOption?: string;
-    }[];
-  };
+  data: OriginalDataStructure;
 }
+
+const transformData = (
+  originalData: OriginalDataStructure,
+): TransformedDataStructure => {
+  const galvanicCoatings = [
+    { id: "zinc", name: "Cynowanie" },
+    { id: "silver", name: "Srebrzenie" },
+    { id: "nickel", name: "Niklowanie" },
+  ];
+
+  const treatments = [
+    {
+      id: "standard",
+      name: "Standardowa",
+      description:
+        "Standardowe wykończenie frezowane zapewnia podstawową obróbkę powierzchni bez dodatkowego przetwarzania. Powierzchnia zachowuje naturalny wygląd materiału z widocznymi śladami obróbki mechanicznej.",
+      image: "/placeholder.svg?height=200&width=300",
+    },
+    {
+      id: "powder-coat",
+      name: "Malowanie proszkowe",
+      description:
+        "Malowanie proszkowe tworzy trwałą, odporną na korozję powłokę dostępną w różnych kolorach. Proces ten zapewnia równomierną, wytrzymałą powłokę, która jest odporna na odpryski, zarysowania i blaknięcie.",
+      image: "/placeholder.svg?height=200&width=300",
+      hasColors: true,
+      colors: [
+        "blue",
+        "black",
+        "gray",
+        "yellow",
+        "orange",
+        "red",
+        "teal",
+        "purple",
+        "brown",
+        "beige",
+      ],
+    },
+    {
+      id: "galvanic-coat",
+      name: "Powłoka galwaniczna",
+      description:
+        "Powłoka galwaniczna to proces elektrochemiczny, który nakłada cienką warstwę metalu na powierzchnię, poprawiając jej właściwości. Zwiększa odporność na korozję, poprawia przewodność elektryczną i nadaje estetyczny wygląd.",
+      image: "/placeholder.svg?height=200&width=300",
+      hasCoatings: true,
+      coatings: galvanicCoatings,
+    },
+  ];
+
+  return {
+    alertMesage: originalData.alertMesage,
+    treatments,
+  };
+};
+
+const transformSelectedSurface = (
+  selectedSurface: SelectedSurfaceType,
+): { category: string; option: string; tile: string; color: string } => {
+  const category = "surface";
+  let option = "";
+  let tile = "";
+  const color = selectedSurface.color ?? "";
+
+  if (selectedSurface.treatment === "standard") {
+    option = "standard";
+    tile = "standard-finish";
+  } else if (selectedSurface.treatment === "powder-coat") {
+    option = "powder-coat";
+    tile = "powder-coat-finish";
+  } else if (selectedSurface.treatment === "galvanic-coat") {
+    option = "galvanic-coat";
+    tile = selectedSurface.coating ? `galvanic-${selectedSurface.coating}` : "";
+  }
+
+  return {
+    category,
+    option,
+    tile,
+    color,
+  };
+};
 
 const SelectMaterial: React.FC<SurfaceTreatmentProps> = ({
   id,
   onChange,
   filled,
-  selectedMaterial,
   data,
 }) => {
-  const [selectedSurface, setSelectedSurface] = useState<string>("");
+  const transformedData = useMemo(() => transformData(data), [data]);
 
-  const prevSurface = useRef<string | null>(selectedSurface);
+  const [selectedSurface, setSelectedSurface] = useState<SelectedSurfaceType>(
+    {},
+  );
+  const prevSurface = useRef<SelectedSurfaceType>(selectedSurface);
+
+  const transformedFilled = useMemo(() => {
+    if (!filled || Object.keys(filled).length === 0) return {};
+
+    if ("category" in filled && "option" in filled) {
+      const oldFormat = filled as {
+        category: string;
+        option: string;
+        tile: string;
+        color: string;
+      };
+
+      let treatment = "";
+      const color = oldFormat.color || "";
+      let coating = "";
+
+      if (oldFormat.option === "standard") {
+        treatment = "standard";
+      } else if (
+        oldFormat.option === "powder-coat" ||
+        oldFormat.tile?.includes("powder")
+      ) {
+        treatment = "powder-coat";
+      } else if (
+        oldFormat.option === "galvanic-coat" ||
+        oldFormat.tile?.includes("galvanic")
+      ) {
+        treatment = "galvanic-coat";
+
+        if (oldFormat.tile) {
+          if (oldFormat.tile.includes("zinc")) coating = "zinc";
+          else if (oldFormat.tile.includes("silver")) coating = "silver";
+          else if (oldFormat.tile.includes("nickel")) coating = "nickel";
+        }
+      }
+
+      return { treatment, color, coating };
+    }
+
+    return filled;
+  }, [filled]);
 
   useEffect(() => {
     if (prevSurface.current !== selectedSurface) {
-      onChange(id, selectedSurface ?? "");
+      const originalFormat = transformSelectedSurface(selectedSurface);
+      onChange(id, originalFormat);
       prevSurface.current = selectedSurface;
     }
   }, [selectedSurface, id, onChange]);
 
   return (
-    <div className="flex flex-wrap sm:flex-nowrap h-min w-full p-3">
-      <div className="w-full">
-        <p className="">Wybrany materiał</p>
-        <div className="flex h-full items-center sm:border-r">
-          <div className="flex h-full items-center">
-            <Image
-              src={selectedMaterial.image}
-              width={120}
-              height={120}
-              alt="Materiał"
-            />
-          </div>
-          <div className="h-fit w-full">
-            <p className="mb-1 font-bold">{selectedMaterial.name}</p>
-            <a href="#" className="hover:underline">
-              Pokaż więcej informacji
-            </a>
-            <div className="mt-3 flex items-center gap-[6px]">
-              <Star className="w-4" />
-              <p className="font-semibold">{selectedMaterial.rate} </p>
-              <p className="ml-1">({selectedMaterial.rates} ocen)</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="mb-5 w-full max-w-[400px] rounded-lg bg-card">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="ml-2 flex items-center gap-2">
+          <p className="flex items-center whitespace-nowrap p-[6px] text-base">
+            Obróbka powierzchni
+          </p>
 
-      <div className="mt-6 grid min-h-full w-full md:px-6 py-1">
-        <div className="flex items-center gap-2">
-          <p>Wykończenie - {data.tiles.length} opcje</p>
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                variant="link"
+                variant="ghost"
                 size="icon"
-                className="h-6 w-6 rounded-full bg-background p-0 px-2 text-neutral-500 hover:bg-neutral-500 hover:text-primary-foreground"
-                aria-label="Information"
+                className="h-6 w-6 rounded-full"
+                aria-label="Informacje o obróbce powierzchni"
               >
-                <TriangleAlert className="h-6 w-6" />
+                <TriangleAlert className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent className="max-w-xs text-sm">
               <p>{data.alertMesage}</p>
             </PopoverContent>
           </Popover>
+          <span className="text-xs text-muted-foreground">
+            {transformedData.treatments.length} dostępne opcje
+          </span>
         </div>
+      </div>
+
+      <div className="ml-2 md:ml-5 md:pl-2">
         <SurfaceTreatment
           setSelectedSurface={setSelectedSurface}
-          data={data}
-          filled={filled.split(";")}
+          data={transformedData}
+          filled={transformedFilled}
         />
       </div>
     </div>

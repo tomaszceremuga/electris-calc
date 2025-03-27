@@ -1,6 +1,4 @@
-
-
-import React, { useEffect, useState } from "react";
+"use client";
 
 import SelectGroup from "./SelectGroup";
 import RadioElements from "./RadioElements";
@@ -9,23 +7,19 @@ import UploadElement from "./UploadElement";
 import QuantityElement from "./QuantityElement";
 import SelectMaterial from "./SelectMaterial";
 
-import formData from "~/lib/formData";
+import type { FilledValueType } from "~/lib/FilledValueType";
+import { useFormContext } from "~/lib/FormContext";
+import InputNumber from "./InputNumber";
+import { useEffect, useState } from "react";
+import InputText from "./InputText";
+import SelectGroupCustom from "./SelectGroupCustom";
+import ThicknessElement from "./ThicknessElement";
 
-type FormResultState = {
-  id: number;
-  values: Record<number, string>[]; 
-};
+const FormSection = () => {
+  const { formDataToGenerate, formCurrentState, setFormCurrentState } =
+    useFormContext();
+  const [initialized, setInitialized] = useState(false);
 
-type FilledFormData = {
-  id: number;
-  values: Array<Record<string, string>>;
-};
-
-type FormSectionProps = {
-  filledFormData: FilledFormData;
-};
-
-const FormSection = ({ filledFormData }: FormSectionProps) => {
   const defaultMaterial = {
     image: "",
     name: "Unknown",
@@ -39,58 +33,104 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
     tiles: [],
   };
 
-  const [formResult, setFormResult] = useState<FormResultState>({
-    id: formData.id,
-    values: [],
-  });
-
- 
-  useEffect(() => {
-    const initialState: FormResultState = {
-      id: formData.id,
-      values: formData.formElements.map((element) => {
-
-        const filledValue = filledFormData.values.find(
-          (item) => item[element.id],
-        );
-        return {
-          [element.id]: filledValue ? (filledValue[element.id] ?? "") : "", 
-        };
-      }),
-    };
-
-    setFormResult(initialState);
-  }, [filledFormData]);
-
-
-  const handleChange = (id: number, value: string) => {
-    setFormResult((prev) => ({
+  const handleChange = (id: number, value: FilledValueType["value"]) => {
+    setFormCurrentState((prev) => ({
       ...prev,
-      values: prev.values.map((item) =>
-        item[id] !== undefined ? { ...item, [id]: value } : item,
-      ),
+      filledForm: {
+        ...prev.filledForm,
+        values: prev.filledForm.values.map((item) =>
+          item.id === id ? { ...item, value } : item,
+        ),
+      },
     }));
   };
 
+  useEffect(() => {
+    if (!initialized) {
+      setFormCurrentState((prev) => ({
+        ...prev,
+        hiddenElements: [...formDataToGenerate.hiddenElements],
+      }));
+
+      setInitialized(true);
+    }
+  }, [formDataToGenerate.hiddenElements, initialized, setFormCurrentState]);
+
+  useEffect(() => {
+    if (initialized) {
+      const initialValues = formCurrentState.filledForm.values;
+
+      formDataToGenerate.values.forEach((formElement) => {
+        if (formElement.elementsToShow) {
+          const filledValue = initialValues.find(
+            (v) => v.id === formElement.id,
+          )?.value;
+
+          if (filledValue && typeof filledValue === "string") {
+            formElement.elementsToShow.forEach((showConfig) => {
+              if (showConfig.option === filledValue) {
+                setFormCurrentState((prev) => {
+                  if (prev.hiddenElements.includes(showConfig.elementToShow)) {
+                    return {
+                      ...prev,
+                      hiddenElements: prev.hiddenElements.filter(
+                        (id) => id !== showConfig.elementToShow,
+                      ),
+                    };
+                  }
+                  return prev;
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+  }, [
+    initialized,
+    formCurrentState.filledForm.values,
+    formDataToGenerate.values,
+    setFormCurrentState,
+  ]);
+
   return (
     <div className="xl:pr-16">
-      {formData.formElements.map((el, index) => {
-        const filledValue =
-          filledFormData.values.find((item) => item[el.id])?.[el.id] ?? ""; 
+      {formDataToGenerate.values.map((el, index) => {
+        const filledValue = formCurrentState.filledForm.values.find(
+          (item) => item.id === el.id,
+        )?.value;
 
+        if (formCurrentState.hiddenElements.includes(el.id)) return null;
         switch (el.type) {
           case "selectGroup":
             return (
               <SelectGroup
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "string" ? filledValue : ""}
                 name={el.name}
                 info={el.info}
-                description={el.decription}
+                description={el.description}
                 options={el.options}
                 key={index}
                 isImportant={el.isImportant}
+                elementsToShow={el.elementsToShow}
+              />
+            );
+
+          case "selectGroupCustom":
+            return (
+              <SelectGroupCustom
+                id={el.id}
+                onChange={handleChange}
+                filled={typeof filledValue === "string" ? filledValue : ""}
+                name={el.name}
+                info={el.info}
+                description={el.description}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+                elementsToShow={el.elementsToShow}
               />
             );
           case "radioElements":
@@ -98,11 +138,38 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <RadioElements
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "string" ? filledValue : ""}
                 name={el.name}
                 info={el.info}
-                description={el.decription}
+                description={el.description}
                 options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+                elementsToShow={el.elementsToShow}
+              />
+            );
+          case "inputNumber":
+            return (
+              <InputNumber
+                id={el.id}
+                onChange={handleChange}
+                filled={typeof filledValue === "number" ? filledValue : 0}
+                name={el.name}
+                info={el.info}
+                description={el.description}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+          case "inputText":
+            return (
+              <InputText
+                id={el.id}
+                onChange={handleChange}
+                filled={typeof filledValue === "number" ? filledValue : 0}
+                name={el.name}
+                info={el.info}
+                description={el.description}
                 key={index}
                 isImportant={el.isImportant}
               />
@@ -112,10 +179,10 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <TextAreaElement
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "string" ? filledValue : ""}
                 name={el.name}
                 info={el.info}
-                description={el.decription}
+                description={el.description}
                 options={el.options}
                 key={index}
                 isImportant={el.isImportant}
@@ -126,10 +193,24 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <QuantityElement
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={typeof filledValue === "number" ? filledValue : 0}
                 name={el.name}
                 info={el.info}
-                description={el.decription}
+                description={el.description}
+                options={el.options}
+                key={index}
+                isImportant={el.isImportant}
+              />
+            );
+          case "tickness":
+            return (
+              <ThicknessElement
+                id={el.id}
+                onChange={handleChange}
+                filled={typeof filledValue === "number" ? filledValue : 0}
+                name={el.name}
+                info={el.info}
+                description={el.description}
                 options={el.options}
                 key={index}
                 isImportant={el.isImportant}
@@ -140,10 +221,10 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <UploadElement
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={Array.isArray(filledValue) ? filledValue : []}
                 name={el.name}
                 info={el.info}
-                description={el.decription}
+                description={el.description}
                 options={el.options}
                 key={index}
                 isImportant={el.isImportant}
@@ -154,18 +235,26 @@ const FormSection = ({ filledFormData }: FormSectionProps) => {
               <SelectMaterial
                 id={el.id}
                 onChange={handleChange}
-                filled={filledValue}
+                filled={
+                  typeof filledValue === "object" &&
+                  filledValue !== null &&
+                  !Array.isArray(filledValue)
+                    ? filledValue
+                    : {}
+                }
                 key={index}
                 selectedMaterial={el.selectedMaterial ?? defaultMaterial}
                 data={el.data ?? defaultData}
               />
             );
+
           default:
-            return <p className="bg-red-600">Błędny element</p>;
+            return null;
         }
       })}
-
-      <pre className="bg-purple-300">{JSON.stringify(formResult, null, 2)}</pre>
+      {/* <pre className="bg-blue-300">
+        {JSON.stringify(formCurrentState, null, 2)}
+      </pre> */}
     </div>
   );
 };
