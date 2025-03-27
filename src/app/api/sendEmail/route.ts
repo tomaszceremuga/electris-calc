@@ -129,12 +129,20 @@ export async function POST(request: Request): Promise<NextResponse> {
     <html>
     <head>
       <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: auto; }
-        h2 { color: #333; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { width: 100%; max-width: 600px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        h2 { text-align: center; color: #333; }
+        h3 { color: #555; margin-top: 0; }
+        p { color: #555; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
         th { background-color: #f4f4f4; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 5px 0; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .summary { margin-top: 20px; background-color: #f9f9f9; padding: 15px; border-radius: 5px; }
+        .summary p { font-size: 16px; }
       </style>
     </head>
     <body>
@@ -366,30 +374,33 @@ export async function POST(request: Request): Promise<NextResponse> {
         htmlContent += `</tbody></table>`
       })
     }
-    htmlContent+=`
-      <p>
-      Załączone pliki
+    if (data.values[0]?.filledForm.filledForm.uploadedFiles && data.values[0]?.filledForm.filledForm.uploadedFiles.length > 0) {
+      htmlContent += `
+      <p>Załączone pliki:</p>
       <ul>
+      `;
     
-    `
-    if (data.values[0]?.filledForm.filledForm.uploadedFiles) {
-      data.values[0]?.filledForm.filledForm.uploadedFiles.forEach((el:FileValue) => {
-        // console.log(el.name)
-        // console.log(el.url)
-        htmlContent+=`
-        <li><a href=${el.url}>${el.name}</a></li>
-      `
-      })
+      data.values[0]?.filledForm.filledForm.uploadedFiles.forEach((el: FileValue) => {
+        htmlContent += `
+        <li><a href="${el.url}">${el.name}</a></li>
+        `;
+      });
+    
+      htmlContent += `
+      </ul>
+      `;
     }
+    
     htmlContent+=`
     </ul></p>`
 
     htmlContent+=`
+      <section class="summary">
       <h3>Podsumumowanie zamówienia</h3>
       <p>Cena zamówienia: ${price.totalPrice.toFixed(2)} zł</p>
       <p>Cena za sztukę towaru: ${price.unitPrice.toFixed(2)} zł</p>
       <p>Czas dostawy: ${price.deliveryDate} dni</p>
-     
+     </summary>
     `
 
     htmlContent += `</div></body></html>`
@@ -442,3 +453,290 @@ const translateColor = (color: string): string => {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { ServerClient } from "postmark" 
+// import { NextResponse } from "next/server"
+// import { type FormElementsType } from "~/lib/FormElementsType"
+// import { type FilledFormType } from "~/lib/FilledFormType"
+
+// // Interfejs dla pliku
+// interface FileValue {
+//   name: string
+//   url: string
+// }
+
+// // Interfejs dla wartości wykończenia
+// interface FinishingValue {
+//   category: string
+//   option: string
+//   tile: string
+//   color: string
+// }
+
+// interface FormValue {
+//   id: number
+//   value: string | FinishingValue | FileValue[] | undefined
+// }
+
+// interface FormDataValue {
+//   id: number
+//   name: string
+//   data?: {
+//     categories?: Array<{
+//       id: string
+//       name: string
+//       options: Array<{
+//         id: string
+//         name: string
+//       }>
+//     }>
+//     tiles?: Array<{
+//       id: string
+//       name: string
+//     }>
+//   }
+// }
+
+// interface FilledForm {
+//   values: FormValue[]
+//   uploadedFiles?: FileValue[];
+// }
+
+// interface FormDataToGenerate {
+//   values: FormDataValue[]
+// }
+
+// interface generalInformation {
+//   name: string
+//   company: string
+//   email: string
+// }
+
+// interface formDataToGenerate {
+//   id: number;
+//   hiddenElements: Array<number>;
+//   calculation: {
+//     price: string;
+//     deliveryDate: string;
+//   };
+//   values: Array<FormElementsType>;
+//   defaultFilledFormData: FilledFormType;
+// }
+
+// interface CartItemValue {
+//   id: number
+//   filledForm?: {
+//     filledForm: FilledForm
+//   }
+//   formDataToGenerate?: FormDataToGenerate
+// }
+
+// interface CartItems {
+//   filledForm: FilledForm
+//   values: CartItemValue[]
+//   generalInformation: generalInformation
+// }
+
+// interface priceInfo {
+//   totalPrice: number,
+//   deliveryDate: number,
+//   unitPrice: number,
+// }
+
+// interface RequestData {
+//   cartItems: CartItems
+//   generalInformation: generalInformation
+//   formDataToGenerate: formDataToGenerate
+//   priceInfo: priceInfo
+// }
+
+// export async function POST(request: Request): Promise<NextResponse> {
+//   try {
+//     const requestData: RequestData = (await request.json()) as RequestData
+//     const cartItems = requestData.cartItems
+//     const generalInformation = requestData.generalInformation
+//     const formDataToGenerate = requestData.formDataToGenerate
+//     const price = requestData.priceInfo
+
+//     const data = {
+//       generalInformation: generalInformation,
+//       values: [
+//         {
+//           filledForm: cartItems,
+//           formDataToGenerate: formDataToGenerate
+//         }
+//       ]
+//     }
+
+//     const postmarkToken = process.env.POSTMARK_TOKEN
+//     if (!postmarkToken) {
+//       return NextResponse.json({ error: "Brak tokena Postmark w konfiguracji serwera" }, { status: 500 })
+//     }
+
+//     const postmarkClient = new ServerClient(postmarkToken)
+
+//     // 🔹 Generowanie treści HTML e-maila
+//     let htmlContent = `
+//     <!DOCTYPE html>
+//     <html lang="pl">
+//     <head>
+//       <meta charset="UTF-8">
+//       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//       <style>
+//         body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4; }
+//         .container { width: 100%; max-width: 600px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+//         h2 { text-align: center; color: #333; }
+//         h3 { color: #555; margin-top: 0; }
+//         p { color: #555; }
+//         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+//         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+//         th { background-color: #f4f4f4; }
+//         ul { list-style: none; padding: 0; }
+//         li { padding: 5px 0; }
+//         a { color: #007bff; text-decoration: none; }
+//         a:hover { text-decoration: underline; }
+//         .summary { margin-top: 20px; background-color: #f9f9f9; padding: 15px; border-radius: 5px; }
+//         .summary p { font-size: 16px; }
+//       </style>
+//     </head>
+//     <body>
+//       <div class="container">
+//         <h2>Szczegóły zamówienia</h2>
+
+//         <section>
+//           <h3>Dane kontaktowe</h3>
+//           <p><strong>Imię i nazwisko:</strong> ${data.generalInformation.name}</p>
+//           <p><strong>Nazwa firmy:</strong> ${data.generalInformation.company}</p>
+//           <p><strong>Adres email:</strong> ${data.generalInformation.email}</p>
+//         </section>
+
+//         <section>
+//           <h3>Parametry zamówienia</h3>
+//           <table>
+//             <thead>
+//               <tr>
+//                 <th>Parametr</th>
+//                 <th>Wartość</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//     `;
+
+//     // Deklaracja mapy id do nazw
+//     const idToNameMap = new Map<number, string>([
+//       [1, "Nazwa1"],
+//       [2, "Nazwa2"],
+//       [3, "Nazwa3"],
+//       // Dodaj kolejne wartości w zależności od potrzeb
+//     ]);
+
+//     // Dodanie wartości formularzy
+//     if (Array.isArray(data.values)) {
+//       data.values.forEach((item) => {
+//         const formDataValues = item.formDataToGenerate?.values;
+//         const surfaceData = formDataValues[8]?.data?.treatments ?? [];
+
+//         const optionsArray = new Map<string, string>();
+//         surfaceData.forEach((el) => {
+//           optionsArray.set(el.id, el.name);
+//         });
+
+//         formDataValues?.forEach((el) => {
+//           const displayName = idToNameMap.get(el.id) ?? `ID: ${el.id}`;
+//           htmlContent += `
+//             <tr>
+//               <td>${displayName}</td>
+//               <td>${typeof el.value === "object" ? JSON.stringify(el.value) : String(el.value)}</td>
+//             </tr>
+//           `;
+//         });
+//       });
+//     }
+
+//     htmlContent += `
+//             </tbody>
+//           </table>
+//         </section>
+
+//         <section>
+//           <h3>Załączone pliki</h3>
+//           <ul>
+//     `;
+
+//     // Dodanie załączników
+//     if (data.values[0]?.filledForm.filledForm.uploadedFiles) {
+//       data.values[0]?.filledForm.filledForm.uploadedFiles.forEach((el: FileValue) => {
+//         htmlContent += `
+//           <li><a href="${el.url}">${el.name}</a></li>
+//         `;
+//       });
+//     }
+
+//     htmlContent += `
+//           </ul>
+//         </section>
+
+//         <section class="summary">
+//           <h3>Podsumowanie zamówienia</h3>
+//           <p><strong>Cena zamówienia:</strong> ${price.totalPrice.toFixed(2)} zł</p>
+//           <p><strong>Cena za sztukę:</strong> ${price.unitPrice.toFixed(2)} zł</p>
+//           <p><strong>Czas dostawy:</strong> ${price.deliveryDate} dni</p>
+//         </section>
+
+//       </div>
+//     </body>
+//     </html>
+//     `;
+
+//     // 🔹 Wysłanie e-maila przez Postmark
+//     await postmarkClient.sendEmail({
+//       From: "mateusz.knapik@electris.pl",
+//       To: generalInformation.email || "szymonosielec@gmail.com",
+//       Subject: "Zamówienie",
+//       HtmlBody: htmlContent,
+//     });
+
+//     return NextResponse.json({ success: true, message: "E-mail wysłany!" });
+//   } catch (error: unknown) {
+//     if (error instanceof Error) {
+//       console.error("Błąd:", error.message);
+//     } else {
+//       console.error("Błąd:", error);
+//     }
+//     return NextResponse.json(
+//       {
+//         error: "Błąd podczas przetwarzania zamówienia",
+//         details: error instanceof Error ? error.message : "Nieznany błąd",
+//       },
+//       { status: 500 },
+//     );
+//   }
+// }
