@@ -43,6 +43,7 @@ interface FormDataValue {
 
 interface FilledForm {
   values: FormValue[]
+  uploadedFiles?: FileValue[];
 }
 
 interface FormDataToGenerate {
@@ -147,12 +148,13 @@ export async function POST(request: Request): Promise<NextResponse> {
       data.values.forEach((item) => {
         // console.log(item.formDataToGenerate.values)
         // htmlContent += `<h3>Numer zamówienia: ${item.id}</h3>`
-        
+          
         // Sprawdź, czy mamy dostęp do danych kategorii
         const formDataValues = item.formDataToGenerate?.values
         // const surfaceData = formDataValues[8].data.treatments
         const surfaceData = formDataValues[8]?.data?.treatments ?? []
-
+        // console.log(item.filledForm.filledForm.uploadedFiles)
+        
         
         const optionsArray = new Map<string, string>()
         surfaceData.forEach((el) => {
@@ -245,7 +247,7 @@ export async function POST(request: Request): Promise<NextResponse> {
             
             // Pomiń pole "Ilość gwintowanych otworów" jeśli gwintowanie jest ustawione na "Nie"
             if (displayName === "Ilość gwintowanych otworów" && requiresThreading === "Nie") {
-              console.log("aswssasad")
+          
               return
             }
 
@@ -351,20 +353,35 @@ export async function POST(request: Request): Promise<NextResponse> {
         } else {
           htmlContent += `<tr><td colspan="2">Brak danych</td></tr>`
         }
-
+        
+        
         htmlContent += `</tbody></table>`
       })
     }
-
-    htmlContent += `</div></body></html>`
+    htmlContent+=`
+      <p>
+      Załączone pliki
+      <ul>
+    
+    `
+    if (data.values[0]?.filledForm.filledForm.uploadedFiles) {
+      data.values[0]?.filledForm.filledForm.uploadedFiles.forEach((el:FileValue) => {
+        // console.log(el.name)
+        // console.log(el.url)
+        htmlContent+=`
+        <li><a href=${el.url}>${el.name}</a></li>
+      `
+      })
+    }
+    htmlContent += `</ul></p></div></body></html>`
 
     // 🔹 Wysłanie e-maila przez Postmark
-    // await postmarkClient.sendEmail({
-    //   From: "mateusz.knapik@electris.pl",
-    //   To: generalInformation.email || "szymonosielec@gmail.com",
-    //   Subject: "Zamówienie",
-    //   HtmlBody: htmlContent,
-    // })
+    await postmarkClient.sendEmail({
+      From: "mateusz.knapik@electris.pl",
+      To: generalInformation.email || "szymonosielec@gmail.com",
+      Subject: "Zamówienie",
+      HtmlBody: htmlContent,
+    })
 
     return NextResponse.json({ success: true, message: "E-mail wysłany!" })
   } catch (error) {
