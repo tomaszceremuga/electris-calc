@@ -80,10 +80,17 @@ interface CartItems {
   generalInformation: generalInformation
 }
 
+interface priceInfo{
+    totalPrice: number,
+    deliveryDate: number,
+    unitPrice: number,
+}
+
 interface RequestData {
   cartItems: CartItems
   generalInformation:generalInformation
   formDataToGenerate:formDataToGenerate
+  priceInfo:priceInfo
   
 }
 
@@ -93,6 +100,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     const cartItems = requestData.cartItems
     const generalInformation = requestData.generalInformation
     const formDataToGenerate=requestData.formDataToGenerate
+    const price=requestData.priceInfo
 
     const data={
       
@@ -141,7 +149,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         <p><strong>Nazwa firmy:</strong> ${data.generalInformation.company}</p>
         <p><strong>Adres email:</strong> ${data.generalInformation.email}</p>
     `
-    
+    console.log(price)
     // 🔹 Przetwarzanie zamówień
     if (Array.isArray(data.values)) {
       
@@ -373,7 +381,18 @@ export async function POST(request: Request): Promise<NextResponse> {
       `
       })
     }
-    htmlContent += `</ul></p></div></body></html>`
+    htmlContent+=`
+    </ul></p>`
+
+    htmlContent+=`
+      <h3>Podsumumowanie zamówienia</h3>
+      <p>Cena zamówienia: ${price.totalPrice.toFixed(2)} zł</p>
+      <p>Cena za sztukę towaru: ${price.unitPrice.toFixed(2)} zł</p>
+      <p>Czas dostawy: ${price.deliveryDate} dni</p>
+     
+    `
+
+    htmlContent += `</div></body></html>`
 
     // 🔹 Wysłanie e-maila przez Postmark
     await postmarkClient.sendEmail({

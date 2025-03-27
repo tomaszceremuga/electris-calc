@@ -126,6 +126,7 @@ export default function SummarySection({
           cartItems: formCurrentState,
           generalInformation: generalInformation,
           formDataToGenerate: formDataToGenerate,
+          priceInfo:priceInfo
         }),
       });
 
